@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/public.css') }}">
+</head>
+
+<body>
+<div class="header">公用物品借閱系統</div>
+<hr width="100%" />
+<!-- 顯示訊息 -->
+<ul>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+       {% for message in messages %}
+       <li class="error">{{ message }}</li>
+       {% endfor %}
+{% endif %}
+{% endwith %}
+</ul>
+
+<!-- 頁面内容訊息 -->
+{% block body %}
+{% endblock %}
+<div class="footer">
+  <hr  width="100%" />
+  Copyright © Flask第一組  All Rights Reserved </div>
+</body>
+</html>

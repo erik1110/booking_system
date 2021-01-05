@@ -1,0 +1,34 @@
+{% extends "base1.html" %}
+{% block title %}主頁面{% endblock %}
+{% block body %}
+<style type="text/css">
+a:link {
+	font-size: 18px;
+	color: #DB8400;
+	text-decoration: none;
+	font-weight: bolder;
+}
+a:visited {
+	font-size: 18px;
+	color: #DB8400;
+	text-decoration: none;
+	font-weight: bolder;
+}
+a:hover {
+	font-size: 18px;
+	color: #DB8400;
+	text-decoration: underline;
+	font-weight: bolder;
+}
+</style>
+
+<div>
+  <p class="text1"> <img src="{{ url_for('static', filename='images/4.jpg') }}"   align="absmiddle" /> <a href="/list">商品列表</a> </p>
+  <p class="text2"> 您可以把瀏覽需要借用的物品 </p>
+</div>
+<hr width="100%" />
+<div>
+  <p class="text1"> <img src="{{ url_for('static', filename='images/mycar1.jpg') }}" align="absmiddle"  /> <a href="/cart">购物车</a> </p>
+  <p class="text2"> 您可以把需要的物品暫時放在購物車中 </p>
+</div>
+{% endblock %}
