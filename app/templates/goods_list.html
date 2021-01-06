@@ -41,14 +41,16 @@
 <br>
 <table width="100%" border="0" align="center">
     <tr bgcolor="#b4c8ed">
-        <th>物品名稱</th>
-        <th width="5%">物品價格</th>
+		<th>借用物品名稱</th>
+		<th>借用物品描述</th>
+        <th width="5%">借用物品價格</th>
         <th width="15%">添加到購物車</th>
     </tr>
   {% for goods in list %}
     <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
+		<td class="col1"><a href="/detail?id={{ goods.id }}">{{ goods.name }}</a></td>
         <td class="col1"><a href="/detail?id={{ goods.id }}">{{ goods.description }}</a></td>
-        <td class="col2">￥{{ goods.price}}</td>
+        <td class="col2"> NT${{ goods.price}}</td>
         <td class="col3"><a href="/add?id={{ goods.id }}&name={{ goods.name }}&price={{ goods.price }}">添加到购物车</a></td>
     </tr>
   {% endfor %}
