@@ -13,7 +13,7 @@ def create_tables():
             print('數據庫初始化成功')
         except Exception as e:
             print('數據庫初始化失敗')
-            print(e)
+            print('失敗原因：', e)
         finally:
             conn.close()
 
@@ -29,6 +29,6 @@ def load_data():
             print('數據庫插入資料成功')
         except Exception as e:
             print('數據庫插入資料失敗')
-            print(e)
+            print('失敗原因：', e)
         finally:
             conn.close()
