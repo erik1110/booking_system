@@ -1,58 +1,66 @@
-
-drop table if exists Customers;
-
-drop table if exists OrderLineItems;
-
-drop table if exists Goods;
-
-drop table if exists Orders;
+drop table if exists users;
+drop table if exists items;
+drop table if exists items_info;
+drop table if exists records;
+drop table if exists reservation;
 
 /*==============================================================*/
-/* Table: Customers                                             */
+/* Table: users                                                 */
 /*==============================================================*/
-create table Customers
+create table users
 (
-   id                  varchar(20) primary key,
-   name                 varchar(50) not null,
-   password             varchar(20) not null,
-   address              varchar(100),
-   phone                varchar(20),
-   birthday             varchar(20)
+   user_id             varchar(20) primary key,
+   name                varchar(50) not null,
+   password            varchar(20) not null,
+   address             varchar(100),
+   phone               varchar(20),
+   birthday            varchar(20)
 );
 
 /*==============================================================*/
-/* Table: Goods                                                 */
+/* Table: items                                                 */
 /*==============================================================*/
-create table Goods
+create table items
 (
-   id                  integer  primary key autoincrement,
+   item_id             integer primary key autoincrement,
    name                varchar(100) not null,
-   price                float,
-   description          varchar(200),
-   location             varchar(10),
-   image                varchar(100)
+   price               float,
+   description         varchar(200),
+   available_day       integer,
+   location            varchar(10),
+   image               varchar(100)
 );
 
 /*==============================================================*/
-/* Table: Orders                                                */
+/* Table: items_info                                            */
 /*==============================================================*/
-create table Orders
+create table items_info
 (
-   id                   varchar(20) primary key,
-   order_date           varchar(20),
-   status               integer default 1,
-   total                float
+   item_id              integer primary key,
+   user_id              varchar(20) not null references users(user_id),
+   borrow_date          date format 'YYYY-MM-DD',
+   status               integer default 0
 );
 
 
 /*==============================================================*/
-/* Table: OrderLineItems                                        */
+/* Table: records                                               */
 /*==============================================================*/
-create table OrderLineItems
+create table records
 (
-   id                   integer primary key autoincrement,
-   goodsid              integer not null references Goods(id),
-   orderid              integer not null references Orders(id) ,
-   quantity             integer,
-   sub_total            float
+   records_id           integer primary key autoincrement,
+   item_id              integer not null references items_info(item_id),
+   user_id              integer not null references users(user_id),
+   borrow_date          date format 'YYYY-MM-DD',
+   status               integer not null
+);
+/*==============================================================*/
+/* Table: reservation                                           */
+/*==============================================================*/
+create table reservation
+(
+   reservation_id       integer primary key autoincrement,
+   item_id              integer not null references items_info(item_id),
+   user_id              integer not null references users(user_id),
+   remind_date          date format 'YYYY-MM-DD'
 );
