@@ -26,7 +26,7 @@ services:
     depends_on:
       - db
     volumes:
-      - /Users/danny/Desktop/booking_system:/home/jovyan
+      - ./:/home/jovyan
     ports:
       - 8888:8888
       - 8000:8000
