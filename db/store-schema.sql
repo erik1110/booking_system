@@ -53,6 +53,7 @@ create table records
    user_id              integer not null references users(user_id),
    borrow_date          date format 'YYYY-MM-DD',
    status               integer not null
+   etl_date             date format 'YYYY-MM-DD',
 );
 /*==============================================================*/
 /* Table: reservation                                           */
@@ -62,5 +63,5 @@ create table reservation
    reservation_id       integer primary key autoincrement,
    item_id              integer not null references items_info(item_id),
    user_id              integer not null references users(user_id),
-   remind_date          date format 'YYYY-MM-DD'
+   etl_date             date format 'YYYY-MM-DD'
 );
