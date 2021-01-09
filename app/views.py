@@ -1,7 +1,7 @@
 from flask import Flask, request, session, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from app.forms import CustomerRegForm, LoginForm
-from app.models import Customer, Goods, Orders, OrderLineItem
+from app.models import Users, Items, Records, Reservation
 import config
 import random
 import datetime
@@ -17,8 +17,8 @@ def register():
     form = CustomerRegForm()
     if request.method == 'POST':
         if form.validate():
-            new_customer = Customer()
-            new_customer.id = form.userid.data
+            new_customer = Users()
+            new_customer.user_id = form.userid.data
             new_customer.name = form.name.data
             new_customer.password = form.password.data
             new_customer.address = form.address.data
@@ -30,8 +30,6 @@ def register():
 
             print('註冊成功')
             return render_template('customer_reg_success.html', form=form)
-        # else:
-        #     return render_template('customer_reg.html', form=form)
 
     return render_template('customer_reg.html', form=form)
 
@@ -42,11 +40,11 @@ def login():
     form = LoginForm()
     if request.method == 'POST':
         if form.validate():
-            c = db.session.query(Customer).filter_by(id=form.userid.data).first()
+            c = db.session.query(Users).filter_by(user_id=form.userid.data).first()
             if c is not None and c.password == form.password.data:
                 print('登入成功')
                 customer = {}
-                customer['id'] = c.id
+                customer['id'] = c.user_id
                 customer['name'] = c.name
                 customer['password'] = c.password
                 customer['address'] = c.address
@@ -72,128 +70,128 @@ def main():
 
 # 顯示借用物品列表
 @app.route('/list')
-def show_goods_list():
+def show_items_list():
     if 'customer' not in session.keys():
         flash('您還沒有登入哦！')
         return redirect(url_for('login'))
 
-    goodslist = db.session.query(Goods).all()
-    return render_template('goods_list.html', list=goodslist)
+    items_list = db.session.query(Items).all()
+    return render_template('items_list.html', list=items_list)
 
 
-# 顯示借用物品詳細資訊
-@app.route('/detail')
-def show_goods_detail():
-    if 'customer' not in session.keys():
-        flash('您還沒有登入哦！')
-        return redirect(url_for('login'))
+# # 顯示借用物品詳細資訊
+# @app.route('/detail')
+# def show_goods_detail():
+#     if 'customer' not in session.keys():
+#         flash('您還沒有登入哦！')
+#         return redirect(url_for('login'))
 
-    goodsid = request.args['id']
-    goods = db.session.query(Goods).filter_by(id=goodsid).first()
+#     item_id = request.args['id']
+#     item = db.session.query(Items).filter_by(item_id=item_id).first()
 
-    return render_template('goods_detail.html', goods=goods)
+#     return render_template('goods_detail.html', goods=goods)
 
-# 添加購物車
-@app.route('/add')
-def add_cart():
-    if 'customer' not in session.keys():
-        flash('您還沒有登入哦！')
-        return redirect(url_for('login'))
+# # 添加購物車
+# @app.route('/add')
+# def add_cart():
+#     if 'customer' not in session.keys():
+#         flash('您還沒有登入哦！')
+#         return redirect(url_for('login'))
 
-    goodsid = int(request.args['id'])
-    goodsname = request.args['name']
-    goodsprice = float(request.args['price'])
+#     goodsid = int(request.args['id'])
+#     goodsname = request.args['name']
+#     goodsprice = float(request.args['price'])
 
-    # 判斷Session中是否有購物車數據
-    if 'cart' not in session.keys():
-        session['cart'] = []  
+#     # 判斷Session中是否有購物車數據
+#     if 'cart' not in session.keys():
+#         session['cart'] = []  
 
-    cart = session['cart']
-    # flag 如果0表示購物車中没有當前商品,1表示購物車代表有當前商品
-    flag = 0
-    for item in cart:
-        if item[0] == goodsid:  # item[0]保存在購物車的商品id
-            item[3] += 1  # item[3]保存在購物車的商品數量,對當前數量+1
-            flag = 1
-            break
+#     cart = session['cart']
+#     # flag 如果0表示購物車中没有當前商品,1表示購物車代表有當前商品
+#     flag = 0
+#     for item in cart:
+#         if item[0] == goodsid:  # item[0]保存在購物車的商品id
+#             item[3] += 1  # item[3]保存在購物車的商品數量,對當前數量+1
+#             flag = 1
+#             break
 
-    if flag == 0:
-        # 第一次添加商品到購物車數量是1
-        cart.append([goodsid, goodsname, goodsprice, 1])
+#     if flag == 0:
+#         # 第一次添加商品到購物車數量是1
+#         cart.append([goodsid, goodsname, goodsprice, 1])
 
-    session['cart'] = cart
+#     session['cart'] = cart
 
-    print(cart)
+#     print(cart)
 
-    flash('已經添加商品【' + goodsname + '】到購物車')
-    return redirect(url_for('show_goods_list'))
-
-
-# 查看购物车
-@app.route('/cart')
-def show_cart():
-    if 'customer' not in session.keys():
-        flash('您還沒有登入哦！')
-        return redirect(url_for('login'))
-
-    if 'cart' not in session.keys():
-        return render_template('cart.html', list=[], total=0.0)
-
-    cart = session['cart']
-    list = []
-    total = 0.0
-    for item in cart:
-        # 購物車每一个元素[商品id, 商品名稱, 商品價格, 商品數量]
-        # 添加一个小計
-        subtotal = item[2] * item[3]
-        total += subtotal
-        new_item = (item[0], item[1], item[2], item[3], subtotal)
-        list.append(new_item)
-
-    return render_template('cart.html', list=list, total=total)
+#     flash('已經添加商品【' + goodsname + '】到購物車')
+#     return redirect(url_for('show_goods_list'))
 
 
-# 提交訂單
-@app.route('/submit_order', methods=['POST'])
-def submit_order():
-    # 從表單中取出數據添加到Orders模式對象中
-    orders = Orders()
-    # 生成訂單id，規則為當前時間戳記+一位隨機數
-    n = random.randint(0, 9)
-    d = datetime.datetime.today()
-    orderid = str(int(d.timestamp() * 1e6)) + str(n)
-    orders.id = orderid
-    orders.orderdate = d.strftime('%Y-%m-%d %H:%M:%S')
-    orders.status = 1  # 1 待付款 0 已付款
+# # 查看购物车
+# @app.route('/cart')
+# def show_cart():
+#     if 'customer' not in session.keys():
+#         flash('您還沒有登入哦！')
+#         return redirect(url_for('login'))
 
-    db.session.add(orders)
-    # 購物車每一個元素[商品id, 商品名稱, 商品價格, 商品数量]
-    cart = session['cart']
-    total = 0.0
-    for item in cart:
-        quantity = request.form['quantity_' + str(item[0])]
-        try:
-            quantity = int(quantity)
-        except:
-            quantity = 0
+#     if 'cart' not in session.keys():
+#         return render_template('cart.html', list=[], total=0.0)
 
-        # 小計
-        subtotal = item[2] * quantity
-        total += subtotal
+#     cart = session['cart']
+#     list = []
+#     total = 0.0
+#     for item in cart:
+#         # 購物車每一个元素[商品id, 商品名稱, 商品價格, 商品數量]
+#         # 添加一个小計
+#         subtotal = item[2] * item[3]
+#         total += subtotal
+#         new_item = (item[0], item[1], item[2], item[3], subtotal)
+#         list.append(new_item)
 
-        order_line_item = OrderLineItem()
-        order_line_item.quantity = quantity
-        order_line_item.goodsid = item[0]
-        order_line_item.orderid = orderid
-        order_line_item.subtotal = subtotal
+#     return render_template('cart.html', list=list, total=total)
 
-        db.session.add(order_line_item)
 
-    orders.total = total
-    # 提交事務
-    db.session.commit()
+# # 提交訂單
+# @app.route('/submit_order', methods=['POST'])
+# def submit_order():
+#     # 從表單中取出數據添加到Orders模式對象中
+#     orders = Orders()
+#     # 生成訂單id，規則為當前時間戳記+一位隨機數
+#     n = random.randint(0, 9)
+#     d = datetime.datetime.today()
+#     orderid = str(int(d.timestamp() * 1e6)) + str(n)
+#     orders.id = orderid
+#     orders.orderdate = d.strftime('%Y-%m-%d %H:%M:%S')
+#     orders.status = 1  # 1 待付款 0 已付款
 
-    # 清除購物車
-    session.pop('cart', None)
+#     db.session.add(orders)
+#     # 購物車每一個元素[商品id, 商品名稱, 商品價格, 商品数量]
+#     cart = session['cart']
+#     total = 0.0
+#     for item in cart:
+#         quantity = request.form['quantity_' + str(item[0])]
+#         try:
+#             quantity = int(quantity)
+#         except:
+#             quantity = 0
 
-    return render_template('order_finish.html', orderid=orderid)
+#         # 小計
+#         subtotal = item[2] * quantity
+#         total += subtotal
+
+#         order_line_item = OrderLineItem()
+#         order_line_item.quantity = quantity
+#         order_line_item.goodsid = item[0]
+#         order_line_item.orderid = orderid
+#         order_line_item.subtotal = subtotal
+
+#         db.session.add(order_line_item)
+
+#     orders.total = total
+#     # 提交事務
+#     db.session.commit()
+
+#     # 清除購物車
+#     session.pop('cart', None)
+
+#     return render_template('order_finish.html', orderid=orderid)
