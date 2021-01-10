@@ -28,21 +28,12 @@ create table items
    description         varchar(200),
    available_day       integer,
    location            varchar(10),
-   image               varchar(100)
+   image               varchar(100),
+   user_id             varchar(20),
+   borrow_date         date format 'YYYY-MM-DD',
+   return_date         date format 'YYYY-MM-DD',
+   status              integer default '未借出'
 );
-
-/*==============================================================*/
-/* Table: items_info                                            */
-/*==============================================================*/
-create table items_info
-(
-   item_id              integer primary key,
-   user_id              varchar(20) not null references users(user_id),
-   borrow_date          date format 'YYYY-MM-DD',
-   return_date          date format 'YYYY-MM-DD',
-   status               integer default 0
-);
-
 
 /*==============================================================*/
 /* Table: records                                               */
@@ -50,7 +41,7 @@ create table items_info
 create table records
 (
    records_id           integer primary key autoincrement,
-   item_id              integer not null references items_info(item_id),
+   item_id              integer not null references items(item_id),
    user_id              integer not null references users(user_id),
    borrow_date          date format 'YYYY-MM-DD',
    return_date          date format 'YYYY-MM-DD',
@@ -62,7 +53,7 @@ create table records
 create table reservation
 (
    reservation_id       integer primary key autoincrement,
-   item_id              integer not null references items_info(item_id),
+   item_id              integer not null references items(item_id),
    user_id              integer not null references users(user_id),
    reverse_date         date format 'YYYY-MM-DD'
 );
