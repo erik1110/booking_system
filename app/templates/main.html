@@ -23,12 +23,20 @@ a:hover {
 </style>
 
 <div>
-  <p class="text1"> <img src="{{ url_for('static', filename='images/4.jpg') }}"   align="absmiddle" /> <a href="/list">商品列表</a> </p>
-  <p class="text2"> 您可以把瀏覽需要借用的物品 </p>
+  <p class="text1"> <img src="{{ url_for('static', filename='images/4.jpg') }}"   align="absmiddle" /> <a href="/list">借用物品列表</a> </p>
+  <p class="text2"> 借用物品一覽表 </p>
 </div>
 <hr width="100%" />
 <div>
-  <p class="text1"> <img src="{{ url_for('static', filename='images/mycar1.jpg') }}" align="absmiddle"  /> <a href="/cart">购物车</a> </p>
-  <p class="text2"> 您可以把需要的物品暫時放在購物車中 </p>
+  <p class="text1"> <img src="{{ url_for('static', filename='images/mycar1.jpg') }}" align="absmiddle"  /> <a href="/cart">借用單</a> </p>
+  <p class="text2"> 查看借用單 </p>
+</div>
+<div>
+	<p class="text1"> <img src="{{ url_for('static', filename='images/mycar1.jpg') }}" align="absmiddle"  /> <a href="/cart">歸還單</a> </p>
+	<p class="text2"> 查看歸還單 </p>
+</div>
+<div>
+	<p class="text1"> <img src="{{ url_for('static', filename='images/mycar1.jpg') }}" align="absmiddle"  /> <a href="/cart">預約單</a> </p>
+	<p class="text2"> 查看預約單 </p>
 </div>
 {% endblock %}
