@@ -1,7 +1,7 @@
 from flask import Flask, request, session, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from app.forms import CustomerRegForm, LoginForm
-from app.models import Customer, Goods, Orders, OrderLineItem
+from app.models import Users, Items, Records, Reservation
 import config
 import random
 import datetime
@@ -17,8 +17,8 @@ def register():
     form = CustomerRegForm()
     if request.method == 'POST':
         if form.validate():
-            new_customer = Customer()
-            new_customer.id = form.userid.data
+            new_customer = Users()
+            new_customer.user_id = form.userid.data
             new_customer.name = form.name.data
             new_customer.password = form.password.data
             new_customer.address = form.address.data
@@ -30,8 +30,6 @@ def register():
 
             print('註冊成功')
             return render_template('customer_reg_success.html', form=form)
-        # else:
-        #     return render_template('customer_reg.html', form=form)
 
     return render_template('customer_reg.html', form=form)
 
@@ -42,11 +40,11 @@ def login():
     form = LoginForm()
     if request.method == 'POST':
         if form.validate():
-            c = db.session.query(Customer).filter_by(id=form.userid.data).first()
+            c = db.session.query(Users).filter_by(user_id=form.userid.data).first()
             if c is not None and c.password == form.password.data:
                 print('登入成功')
                 customer = {}
-                customer['id'] = c.id
+                customer['id'] = c.user_id
                 customer['name'] = c.name
                 customer['password'] = c.password
                 customer['address'] = c.address
@@ -72,13 +70,13 @@ def main():
 
 # 顯示借用物品列表
 @app.route('/list')
-def show_goods_list():
+def show_items_list():
     if 'customer' not in session.keys():
         flash('您還沒有登入哦！')
         return redirect(url_for('login'))
 
-    goodslist = db.session.query(Goods).all()
-    return render_template('goods_list.html', list=goodslist)
+    items_list = db.session.query(Items).all()
+    return render_template('items_list.html', list=items_list)
 
 
 # 顯示借用物品詳細資訊
@@ -88,8 +86,8 @@ def show_goods_detail():
         flash('您還沒有登入哦！')
         return redirect(url_for('login'))
 
-    goodsid = request.args['id']
-    goods = db.session.query(Goods).filter_by(id=goodsid).first()
+    item_id = request.args['id']
+    item = db.session.query(Items).filter_by(item_id=item_id).first()
 
     return render_template('goods_detail.html', goods=goods)
 
