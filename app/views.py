@@ -89,7 +89,10 @@ def show_goods_detail():
     item_id = request.args['id']
     item = db.session.query(Items).filter_by(item_id=item_id).first()
 
-    return render_template('goods_detail.html', goods=goods)
+    if item.status == '未借出':
+        return render_template('items_detail.html', goods=item)
+    elif item.status == '已借出':
+        return render_template('items_detail_borrow.html', goods=item)
 
 # 添加購物車
 @app.route('/add')
