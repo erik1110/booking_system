@@ -91,6 +91,25 @@ def show_goods_detail():
 
     return render_template('goods_detail.html', goods=goods)
 
+# 歸還頁
+@app.route('/returns', methods=['GET', 'POST'])
+def returns():
+    if 'customer' not in session.keys():
+        flash('您還沒有登入哦！')
+        return redirect(url_for('login'))
+    else:
+        c_all = db.session.query(Records).filter_by(user_id=session['customer']['id'],return_date='').all()
+        return render_template('returns.html',c_all=c_all)
+    return render_template('login.html', form=form)
+
+# 歸還完成頁
+@app.route('/return_ok/<record>', methods=['GET', 'POST'])
+def return_ok(record):
+    c = db.session.query(Records).filter_by(records_id=record).first()
+    c.return_date=date.today()
+    db.session.commit()
+    return render_template('return_ok.html')
+
 # 添加購物車
 @app.route('/add')
 def add_cart():
