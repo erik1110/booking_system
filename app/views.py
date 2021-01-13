@@ -110,6 +110,41 @@ def return_ok(record):
     db.session.commit()
     return render_template('return_ok.html')
 
+@app.route('/test', methods=['GET', 'POST'])
+def test():
+    # add into records
+    records = Records()
+    time_now = datetime.datetime.now()
+    records.records_id = int(time_now.strftime("%Y%m%d%H%M%S"))
+    records.item_id = int(request.args['id'])
+    records.user_id = session['customer']['id']
+    records.borrow_date = time_now.strftime("%Y-%m-%d")
+    records.return_date = ' '
+    records.status = 'go'
+    
+    db.session.add(records)
+    db.session.commit()
+
+    # update items info
+    item = db.session.query(Items).filter_by(item_id=records.item_id).first()
+    item.status = '已借出'
+    item.borrow_date = records.borrow_date
+    available_day = datetime.datetime.now()+datetime.timedelta(days=int(item.available_day))
+    item.return_date = available_day.strftime("%Y-%m-%d")
+    item.user_id = session['customer']['id']
+    db.session.commit()
+
+    return 'c.user_id'
+
+@app.route('/check', methods=['GET', 'POST'])
+def check():
+    c = db.session.query(Records).filter_by(user_id=session['customer']['id']).all()
+    for i in c:
+        print(i.records_id, i.item_id, i.borrow_date, i.user_id, i.status)
+    c = db.session.query(Items).filter_by(user_id=session['customer']['id']).all()
+    for i in c:
+        print(i.item_id, i.borrow_date, i.user_id, i.return_date, i.status)
+    return str(session['customer']['id'])
 # 添加購物車
 @app.route('/add')
 def add_cart():
