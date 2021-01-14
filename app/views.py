@@ -122,6 +122,7 @@ def test():
     records.return_date = ' '
     records.status = 'go'
     
+    
     db.session.add(records)
     db.session.commit()
 
@@ -138,6 +139,8 @@ def test():
 
 @app.route('/check', methods=['GET', 'POST'])
 def check():
+    print(Records.__table__.columns)
+    print(Items.__table__.columns)
     c = db.session.query(Records).filter_by(user_id=session['customer']['id']).all()
     for i in c:
         print(i.records_id, i.item_id, i.borrow_date, i.user_id, i.status)
