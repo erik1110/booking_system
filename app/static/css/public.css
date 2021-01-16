@@ -75,3 +75,7 @@ div.footer {
 .success {
     color: green;
 }
+
+body {
+    font-size: 10px;
+  }

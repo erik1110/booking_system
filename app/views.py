@@ -68,7 +68,7 @@ def main():
         return redirect(url_for('login'))
     return render_template('main.html')
 
-#歸還頁
+# 歸還頁面
 @app.route('/returns', methods=['GET', 'POST'])
 def returns():
     if 'customer' not in session.keys():
@@ -83,6 +83,23 @@ def returns():
 @app.route('/return_ok/<record>', methods=['GET', 'POST'])
 def return_ok(record):
     c = db.session.query(Records).filter_by(records_id=record).first()
+    c.return_date=date.today()
+    db.session.commit()
+    return render_template('return_ok.html')
+
+# 預約頁面
+@app.route('/reservations', methods=['GET', 'POST'])
+def reservations():
+    if 'customer' not in session.keys():
+        flash('您還沒有登入哦！')
+        return redirect(url_for('login'))
+    else:
+        res_list = db.session.query(Reservation).filter_by(user_id=session['customer']['id']).all()
+        return render_template('reservations.html', res_list=res_list)
+    
+@app.route('/reserve_ok/<record>', methods=['GET', 'POST'])
+def reserve_ok(record):
+    res_list = db.session.query(Records).filter_by(records_id=record).first()
     c.return_date=date.today()
     db.session.commit()
     return render_template('return_ok.html')
