@@ -1,6 +1,5 @@
 drop table if exists users;
 drop table if exists items;
-drop table if exists items_info;
 drop table if exists records;
 drop table if exists reservation;
 
