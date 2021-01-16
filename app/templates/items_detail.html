@@ -10,10 +10,11 @@
     </tr>
 </table>
 <hr width="100%"/>
+{% for item in list %}
 <table width="100%" border="0" align="center">
     <tr>
         <td width="40%" align="right">
-            <div><img src="{{ url_for('static', filename='goods_images/') }}{{ goods.image }}" width="360px"
+            <div><img src="{{ url_for('static', filename='goods_images/') }}{{ item.image }}" width="360px"
                       height="360px"/></div>
             <br></td>
         <td>
@@ -21,37 +22,38 @@
                 <tbody>
                 <tr>
                     <td class="text5">類型：</td>
-                    <td class="text6">{{ goods.name }}</td>
+                    <td class="text6">{{ item.name }}</td>
                 </tr>
                 <tr>
                     <td class="text5">描述：</td>
-                    <td class="text6">{{ goods.description }}</td>
+                    <td class="text6">{{ item.description }}</td>
                 </tr>
                 <tr>
                     <td class="text5">位置：</td>
-                    <td class="text6">{{ goods.location }}</td>
+                    <td class="text6">{{ item.location }}</td>
                 </tr>
                 <tr>
                     <td class="text5">價格：</td>
-                    <td class="text6">{{ goods.price }}</td>
+                    <td class="text6">{{ item.price }}</td>
                 </tr>
                 <tr>
                     <td class="text5">可借天數：</td>
-                    <td class="text6">{{ goods.available_day }}</td>
+                    <td class="text6">{{ item.available_day }}</td>
                 </tr>
                 <tr>
                     <td class="text5">狀態：</td>
-                    <td class="text6">{{ goods.status }}</td>
+                    <td class="text6">{{ item.status }}</td>
                 </tr>
                 </tbody>
             </table>
             <br>
             <br>
-            <div><a href="/add?id={{ goods.id }}&name={{ goods.name }}&price={{ goods.price }}">
+            <div><a href="/add?id={{ item.id }}&name={{ item.name }}&price={{ item.price }}">
                 <input type="button" value="我要借用" style="width:150px;height:50px;font-size:20px;">
             </a>
             </div>
         </td>
     </tr>
+{% endfor %}
 </table>
 {% endblock %}

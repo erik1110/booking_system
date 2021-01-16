@@ -14,7 +14,6 @@ class Users(Base):
     phone = Column('phone', String(20))
     birthday = Column('birthday', String(20))
 
-
 # 定義 Items 模型
 class Items(Base):
     __tablename__ = 'items'
@@ -29,7 +28,8 @@ class Items(Base):
     borrow_date = Column('borrow_date', String(20))
     return_date = Column('return_date', String(20))
     status = Column('status', String(20))
-    
+
+# 定義 Recodes 模型
 class Records(Base):
     __tablename__ = 'records'
     records_id = Column('records_id', Integer, primary_key=True)
@@ -38,6 +38,7 @@ class Records(Base):
     borrow_date = Column('borrow_date', String(20))
     return_date = Column('return_date', String(20))
 
+# 定義 Reservation 模型
 class Reservation(Base):
     __tablename__ = 'reservation'
     reservation_id = Column('reservation_id', Integer, primary_key=True)
