@@ -1,5 +1,5 @@
 {% extends "base2.html" %}
-{% block title %}購物車{% endblock %}
+{% block title %}租借清單{% endblock %}
 {% block body %}
 <style type="text/css">
        table {
@@ -26,9 +26,6 @@
 </style>
 
 <table width="100%" border="0" align="center">
-    <tr>
-        <td width="616"><img src="{{ url_for('static', filename='images/mycar.jpg') }}"/></td>
-    </tr>
 </table>
 <hr width="100%"/>
 <div class="text3" align="center">歸還清單</div>
@@ -39,22 +36,26 @@
             <td height="20" align="center" class="theader">單號</td>
             <td width="20%" align="center" class="theader">物品代號</td>
             <td width="20%" align="center" class="theader">借用日</td>
-            <td width="20%" align="center" class="theader">狀態</td>
-        </tr>
+            <td width="20%" align="center" class="theader">狀態</td>            
+        </tr>  
       {% for item in c_all %}
         <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
             <td align="center"> {{ item.records_id}} </td>
             <td align="center"> {{ item.item_id}} </td>
-            <td align="center"> {{ item.borrow_date}} </td>
+            <td align="center"> {{ item.borrow_date}} </td>      
             <td align="center">
-            <a href="{{ url_for('return_ok',record=item.records_id) }}">我要歸還</a>
+                {% if item.return_date =='' %}
+                <a href="{{ url_for('return_ok',record=item.records_id) }}"><font color="#FF0000"><big><big>我要歸還</big></big></font></a>
+                {% else %}
+                {{item.return_date}}已歸還
+                {% endif %}
             </td>
         </tr>
       {% endfor %}
     </table>
     <br>
     <div align="center">
-        <input type="image" src="{{ url_for('static', filename='images/submit_order.jpg') }}" />&nbsp;&nbsp;
+        <a href="/main"><big>返回主頁面</big></a>
     </div>
 </form>
 {% endblock %}
