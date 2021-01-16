@@ -28,12 +28,26 @@
 		text-align: center;
 	}
 
+	/*物品列表第4列*/
+	.col4 {
+	padding-top: 5px;
+	border-top: 1px dashed #666666;
+	text-align: center;
+	}
+
+	/*物品列表第5列*/
+	.col5 {
+	padding-top: 5px;
+	border-top: 1px dashed #666666;
+	text-align: center;
+	}
+
 </style>
 
 <table width="100%" border="0" align="center">
     <tr>
         <td width="616"><img src="{{ url_for('static', filename='images/list.jpg') }}" align="absmiddle"/></td>
-        {% include 'goods_header.html' %}
+        {% include 'items_header.html' %}
     </tr>
 </table>
 <hr width="100%"/>
@@ -41,18 +55,22 @@
 <br>
 <table width="100%" border="0" align="center">
     <tr bgcolor="#b4c8ed">
-		<th>借用物品名稱</th>
-		<th>借用物品描述</th>
-        <th width="5%">借用物品價格</th>
-        <th width="15%">添加到購物車</th>
+        <th width="10%">物品名稱</th>
+		<th width="5%">物品狀態</th>
+		<th width="15%">借用日</th>
+		<th width="15%">預約到期日</th>
+		<th width="15%">借用</th>
+		<th width="15%">預約</th>
     </tr>
-  {% for goods in list %}
+  {% for item in list %}
     <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
-		<td class="col1"><a href="/detail?id={{ goods.id }}">{{ goods.name }}</a></td>
-        <td class="col1"><a href="/detail?id={{ goods.id }}">{{ goods.description }}</a></td>
-        <td class="col2"> NT${{ goods.price}}</td>
-        <td class="col3"><a href="/add?id={{ goods.id }}&name={{ goods.name }}&price={{ goods.price }}">添加到购物车</a></td>
-    </tr>
+        <td class="col1"><a href="/detail?id={{ item.item_id }}">{{ item.name }}</a></td>
+		<td class="col2"> {{ item.status}} </td>
+		<td class="col3"> {{ item.borrow_date}} </td>
+		<td class="col4"> {{ item.return_date}} </td>
+        <td class="col5"><a href="/add?id={{ item.item_id }}"> 我要借用</a></td>
+        <td class="col6"><a href="/add?id={{ item.item_id }}"> 我要預約</a></td>
+	</tr>
   {% endfor %}
 </table>
 {% endblock %}
