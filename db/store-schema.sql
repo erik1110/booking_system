@@ -32,7 +32,7 @@ create table items
    user_id             varchar(20),
    borrow_date         date format 'YYYY-MM-DD',
    return_date         date format 'YYYY-MM-DD',
-   status              integer default '未借出'
+   status              varchar(20)
 );
 
 /*==============================================================*/
@@ -45,7 +45,7 @@ create table records
    user_id              integer not null references users(user_id),
    borrow_date          date format 'YYYY-MM-DD',
    return_date          date format 'YYYY-MM-DD',
-   status               integer not null
+   status               varchar(20)
 );
 /*==============================================================*/
 /* Table: reservation                                           */
