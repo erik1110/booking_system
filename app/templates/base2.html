@@ -5,7 +5,12 @@
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/public.css') }}">
 </head>
-
+<table width="100%" border="0" align="center">
+    <tr>
+        {% include 'items_header.html' %}
+    </tr>
+</table>
+<p align="right" style="font-size:14px;">今天日期 {{ now }}</p>
 <body>
 
 <!-- 顯示訊息 -->
