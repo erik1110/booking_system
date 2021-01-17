@@ -40,7 +40,7 @@
 			{% if item.return_date =='' %}
 			<a href="/add?id={{ item.item_id }}"> 我要借用</a>
 			{% else %}
-			<a href="/add?id={{ item.item_id }}"> 我要預約</a>
+			<a href="/add_reservation?item_id={{ item.item_id }}"> 我要預約</a>
 			{% endif %}
 		</td>
 	</tr>
