@@ -3,18 +3,11 @@
 {% block body %}
 
 
-<table width="100%" border="0" align="center">
-    <tr>
-        <td width="616"><img src="{{ url_for('static', filename='images/info.jpg') }}" align="absmiddle"/></td>
-        {% include 'items_header.html' %}
-    </tr>
-</table>
 <hr width="100%"/>
-{% for item in list %}
 <table width="100%" border="0" align="center">
     <tr>
         <td width="40%" align="right">
-            <div><img src="{{ url_for('static', filename='goods_images/') }}{{ item.image }}" width="360px"
+            <div><img src="{{ url_for('static', filename='images/') }}{{ item.image }}" width="360px"
                       height="360px"/></div>
             <br></td>
         <td>
@@ -49,11 +42,15 @@
             <br>
             <br>
             <div><a href="/add?id={{ item.id }}&name={{ item.name }}&price={{ item.price }}">
+
+                {% if item.return_date =='' %}
                 <input type="button" value="我要借用" style="width:150px;height:50px;font-size:20px;">
+                {% else %}
+                <input type="button" value="我要預約" style="width:150px;height:50px;font-size:20px;">
+                {% endif %}
             </a>
             </div>
         </td>
     </tr>
-{% endfor %}
 </table>
 {% endblock %}
