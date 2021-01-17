@@ -4,7 +4,7 @@ DB_FILES = './db/database.db'
 
 # 創建數據庫中的表
 def create_tables():
-    f_name = './db/store-schema.sql'
+    f_name = 'db/store-schema.sql'
     with open(f_name, 'r', encoding='utf-8') as f:
         sql = f.read()
         conn = sqlite3.connect(DB_FILES)

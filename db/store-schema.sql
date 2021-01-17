@@ -34,12 +34,13 @@ create table items
    return_date         date format 'YYYY-MM-DD',
    status              integer default '未借出'
 );
+
 /*==============================================================*/
 /* Table: records                                               */
 /*==============================================================*/
 create table records
 (
-   records_id           integer primary key,
+   records_id           integer primary key autoincrement,
    item_id              integer not null references items(item_id),
    user_id              integer not null references users(user_id),
    borrow_date          date format 'YYYY-MM-DD',

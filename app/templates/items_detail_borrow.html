@@ -43,12 +43,20 @@
                     <td class="text5">狀態：</td>
                     <td class="text6">{{ goods.status }}</td>
                 </tr>
+                <tr>
+                    <td class="text5">借用人：</td>
+                    <td class="text6">{{ goods.user_id }}</td>
+                </tr>
+                <tr>
+                    <td class="text5">借用日期：</td>
+                    <td class="text6">{{ goods.borrow_date }}</td>
+                </tr>
                 </tbody>
             </table>
             <br>
             <br>
             <div><a href="/add?id={{ goods.id }}&name={{ goods.name }}&price={{ goods.price }}">
-                <input type="button" value="我要借用" style="width:150px;height:50px;font-size:20px;">
+                <input type="button" value="我要預約" style="width:150px;height:50px;font-size:20px;">
             </a>
             </div>
         </td>
