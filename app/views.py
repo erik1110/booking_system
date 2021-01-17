@@ -176,3 +176,79 @@ def add_reservation():
 
     flash('已經添加物品【' + name + '】到預約清單')
     return redirect(url_for('show_items_list'))
+
+# 顯示用戶資訊
+@app.route('/account')
+def account():
+    if 'customer' not in session.keys():
+        flash('您還沒有登入哦！')
+        return redirect(url_for('login'))
+    acn = db.session.query(Users).filter_by(user_id=session['customer']['id']).first()
+    return render_template('account.html', acn=acn)
+
+# 添加借用頁面
+@app.route('/add_borrows')
+def add_borrows():
+    if 'customer' not in session.keys():
+        flash('您還沒有登入哦！')
+        return redirect(url_for('login'))
+
+    item_id = int(request.args['item_id'])
+    item = db.session.query(Items).filter_by(item_id=item_id).first()
+    name = item.name
+    available_day = item.available_day
+    return_date = item.return_date
+    # 判斷Session中是否有購物車數據
+    if 'borrows' not in session.keys():
+        session['borrows'] = []
+    elif item_id in ([x[0] for x in session['borrows']]):
+        flash('物品ID=【'+str(item_id)+'】的【'+ name + '】：已加入過借用清單')
+    else:
+        # Add session
+        session['borrows'].append([item_id, name, available_day, return_date, 1])
+        print(session['borrows'])
+        flash('物品ID=【'+str(item_id)+'】的【'+ name + '】：成功加入借用清單')
+
+    return redirect(url_for('show_items_list'))
+
+# 借用頁面
+@app.route('/borrows', methods=['GET', 'POST'])
+def borrows():
+    if 'customer' not in session.keys():
+        flash('您還沒有登入哦！')
+        return redirect(url_for('login'))
+  
+    if 'borrows' not in session.keys():
+        return render_template('borrows.html', list=[])
+    
+    borrows = session['borrows']
+    list = []
+    for item in borrows:
+        # 購物車每一个元素[商品id, 商品名稱, 商品價格, 商品數量]
+        new_item = (item[0], item[1], item[2], item[3])
+        list.append(new_item)
+    print('list:', list)
+    print(list[0][1])
+    return render_template('borrows.html', list=list)
+    
+@app.route('/submit_borrows', methods=['POST'])
+def submit_borrows():
+    # 從表單中取出數據添加到Orders模式對象中
+    borrows = Records()
+    borrows_list = request.form.getlist('check')
+    print("borrows_list:", borrows_list)
+    print('session:', session['customer'])
+    # for item in reservation_list:
+    #     # 生成訂單id，規則為當前時間戳記+一位隨機數
+    #     n = random.randint(0, 9)
+    #     d = datetime.datetime.today()
+    #     reservation_id = str(int(d.timestamp() * 1e6)) + str(n)
+    #     reserve.reservation_id = reservation_id
+    #     reserve.item_id = 
+    #     reserve.user_id = session['customer']['id']
+    #     reserve.reverse_date = d.strftime('%Y-%m-%d %H:%M:%S')
+    #     db.session.add(reserve)
+    # db.session.commit()
+    # 清除購物車
+    session.pop('borrows', None)
+    return render_template('borrows_ok.html')
