@@ -247,4 +247,4 @@ def submit_borrows():
     # db.session.commit()
     # 清除購物車
     session.pop('borrows', None)
-    return render_template('borrows_ok.html')
+    return render_template('return_ok.html')

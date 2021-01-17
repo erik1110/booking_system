@@ -44,11 +44,7 @@
             <td align="center"> {{ item[1]}} </td>
             <td align="center"> {{ item[2]}} </td>
             <td align="center">
-                {% if item[3] =='' %}
-                <input type="checkbox" name="check" value='{{ item[0] }}'>
-                {% else %}
-                已借用
-                {% endif %}
+                <input type="checkbox" name="check" value={{ item[0] }}>
             </td>
         </tr>
       {% endfor %}
