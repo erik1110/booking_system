@@ -106,12 +106,27 @@ def reservations():
     print('list:', list)
     return render_template('reservations.html', list=list)
     
-@app.route('/reserve_ok/<record>', methods=['GET', 'POST'])
-def reserve_ok(record):
-    res_list = db.session.query(Records).filter_by(records_id=record).first()
-    c.return_date=date.today()
-    db.session.commit()
-    return render_template('return_ok.html')
+@app.route('/submit_reservations', methods=['POST'])
+def submit_reservations():
+    # 從表單中取出數據添加到Orders模式對象中
+    reserve = Reservation()
+    reservation_list = request.form.getlist("reservation_list")
+    print("reservation_list:", reservation_list)
+    print('session:', session['customer'])
+    # for item in reservation_list:
+    #     # 生成訂單id，規則為當前時間戳記+一位隨機數
+    #     n = random.randint(0, 9)
+    #     d = datetime.datetime.today()
+    #     reservation_id = str(int(d.timestamp() * 1e6)) + str(n)
+    #     reserve.reservation_id = reservation_id
+    #     reserve.item_id = 
+    #     reserve.user_id = session['customer']['id']
+    #     reserve.reverse_date = d.strftime('%Y-%m-%d %H:%M:%S')
+    #     db.session.add(reserve)
+    # db.session.commit()
+    # 清除購物車
+    session.pop('reservations', None)
+    return render_template('reserve_ok.html')
 
 # 顯示借用物品列表
 @app.route('/list')
