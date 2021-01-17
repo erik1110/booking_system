@@ -37,6 +37,8 @@ class Records(Base):
     user_id = Column('user_id', ForeignKey('users.user_id'))
     borrow_date = Column('borrow_date', String(20))
     return_date = Column('return_date', String(20))
+    status = Column('status', String(20))
+
 
 class Reservation(Base):
     __tablename__ = 'reservation'
