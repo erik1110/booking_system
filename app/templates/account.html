@@ -1,0 +1,41 @@
+{% extends "base2.html" %}
+{% block title %}借用物品詳細資訊{% endblock %}
+{% block body %}
+
+
+<hr width="100%"/>
+<table width="100%" border="0" align="center">
+    <tr>
+        <td width="40%" align="right">
+            <div><img src="/static/images/user_pic.png" width="360px"
+                      height="330px"/></div>
+            <br></td>
+        <td>
+            <table height="200" border="0">
+                <tbody>
+                <tr>
+                    <td class="text5">員工編號：</td>
+                    <td class="text6">{{ acn.user_id }}</td>
+                </tr>
+                <tr>
+                    <td class="text5">姓名：</td>
+                    <td class="text6">{{ acn.name }}</td>
+                </tr>
+                <tr>
+                    <td class="text5">位置：</td>
+                    <td class="text6">{{ acn.address }}</td>
+                </tr>
+                <tr>
+                    <td class="text5">電話：</td>
+                    <td class="text6">{{ acn.phone }}</td>
+                </tr>
+                <tr>
+                    <td class="text5">生日：</td>
+                    <td class="text6">{{ acn.birthday }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+</table>
+{% endblock %}
