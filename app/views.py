@@ -317,8 +317,8 @@ def return_ok(record):
     db.session.commit()
     return render_template('return_ok.html')
 
-@app.route('/test', methods=['GET', 'POST'])
-def test():
+@app.route('/borrow', methods=['GET', 'POST'])
+def borrow():
     # add into records
     records = Records()
     time_now = datetime.datetime.now()
