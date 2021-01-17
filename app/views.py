@@ -6,11 +6,16 @@ import config
 import random
 import datetime
 from datetime import date
+from datetime import datetime
+
 
 app = Flask(__name__)
 app.config.from_object(config)
 db = SQLAlchemy(app)
 
+@app.context_processor
+def inject_now():
+    return {'now': datetime.now().strftime('%Y-%m-%d')}
 
 # 註冊
 @app.route('/reg', methods=['GET', 'POST'])
@@ -123,5 +128,14 @@ def show_items_detail():
         return redirect(url_for('login'))
     item_id = request.args['item_id']
     item_info = db.session.query(Items).filter_by(item_id=item_id).first()
-    print("item_info:", item_info)
-    return render_template('items_detail.html', list=item_info)
+    return render_template('items_detail.html', item=item_info)
+
+@app.route('/account', methods=['GET', 'POST'])
+def account():
+    if 'customer' not in session.keys():
+        flash('您還沒有登入哦！')
+        return redirect(url_for('login'))
+    else:
+        acn_list = db.session.query(Users).filter_by(user_id=session['customer']['id']).first()
+        print('yoyoyo',acn_list)
+        return render_template('account.html', acn=acn_list)
