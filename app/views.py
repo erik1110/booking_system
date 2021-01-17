@@ -122,6 +122,5 @@ def show_items_detail():
         flash('您還沒有登入哦！')
         return redirect(url_for('login'))
     item_id = request.args['item_id']
-    item_info = db.session.query(Items).filter_by(item_id=item_id).first()
-    print("item_info:", item_info)
-    return render_template('items_detail.html', list=item_info)
+    item = db.session.query(Items).filter_by(item_id=item_id).first()
+    return render_template('items_detail.html', item=item)
