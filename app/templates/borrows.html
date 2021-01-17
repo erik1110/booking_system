@@ -35,7 +35,7 @@
         <tr bgcolor="#A5D3FF">
             <td width="20%" align="center" class="theader">物品代號</td>
             <td width="20%" align="center" class="theader">物品名稱</td>
-            <td width="20%" align="center" class="theader">預計歸還日</td>
+            <td width="20%" align="center" class="theader">可借用天數</td>
             <td width="20%" align="center" class="theader">借用</td>            
         </tr>  
       {% for item in list %}
@@ -50,9 +50,10 @@
       {% endfor %}
     </table>
     <br>
-
-    <button type="submit" name="submit" value="submit">確定借用</button>
-
+    <div align="center">
+    <input type="submit" value="提交">
+    </div>
+    <br>
     <div align="center">
         <a href="/main"><big>返回主頁面</big></a>
     </div>

@@ -201,11 +201,12 @@ def add_borrows():
     # 判斷Session中是否有購物車數據
     if 'borrows' not in session.keys():
         session['borrows'] = []
-    elif item_id in ([x[0] for x in session['borrows']]):
+
+    if item_id in ([x[0] for x in session['borrows']]):
         flash('物品ID=【'+str(item_id)+'】的【'+ name + '】：已加入過借用清單')
     else:
         # Add session
-        session['borrows'].append([item_id, name, available_day, return_date, 1])
+        session['borrows'].append([item_id, name, available_day, return_date])
         print(session['borrows'])
         flash('物品ID=【'+str(item_id)+'】的【'+ name + '】：成功加入借用清單')
 
@@ -234,21 +235,38 @@ def borrows():
 @app.route('/submit_borrows', methods=['POST'])
 def submit_borrows():
     # 從表單中取出數據添加到Orders模式對象中
-    borrows = Records()
     borrows_list = request.form.getlist('check')
     print("borrows_list:", borrows_list)
     print('session:', session['customer'])
-    # for item in reservation_list:
-    #     # 生成訂單id，規則為當前時間戳記+一位隨機數
-    #     n = random.randint(0, 9)
-    #     d = datetime.datetime.today()
-    #     reservation_id = str(int(d.timestamp() * 1e6)) + str(n)
-    #     reserve.reservation_id = reservation_id
-    #     reserve.item_id = 
-    #     reserve.user_id = session['customer']['id']
-    #     reserve.reverse_date = d.strftime('%Y-%m-%d %H:%M:%S')
-    #     db.session.add(reserve)
-    # db.session.commit()
+    data = []
+    for item in borrows_list:
+        # 生成訂單id，規則為當前時間戳記+一位隨機數
+        records = Records()
+        print('yoyo', records)
+        n = random.randint(0, 9)
+        d = datetime.today()
+        records_id = str(int(d.timestamp() * 1e6)) + str(n)
+        records.records_id = records_id
+        records.item_id = int(item)
+        records.user_id = session['customer']['id']
+        records.borrow_date = d.strftime('%Y-%m-%d')
+        records.return_date = ''
+        print('yoyo', records.borrow_date)
+        data.append(records)
+        print(data)
+    db.session.add_all(data)
+    db.session.commit()
     # 清除購物車
     session.pop('borrows', None)
-    return render_template('return_ok.html')
+
+    for item in borrows_list:
+        # 生成訂單id，規則為當前時間戳記+一位隨機數
+        record = db.session.query(Records).filter_by(item_id=int(item)).order_by(Records.records_id.desc()).first()
+        print('yoyo', int(item), record.user_id, record.borrow_date, record.return_date)
+        db.session.query(Items).filter_by(item_id=int(item)).update(dict(user_id=record.user_id,
+                                                                         borrow_date=record.borrow_date,
+                                                                         return_date=record.return_date,
+                                                                         status='已借出'))
+        db.session.commit()
+
+    return render_template('borrows_ok.html')

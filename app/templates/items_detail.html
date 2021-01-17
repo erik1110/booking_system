@@ -43,12 +43,12 @@
             <br>
             <div><a href="/add?id={{ item.id }}&name={{ item.name }}&price={{ item.price }}">
 
-                {% if item.return_date =='' %}
+                {% if item.status =='未借出' %}
                 <a href="/add_borrows?item_id={{ item.item_id }}">
                 <input type="button" value="我要借用" style="width:150px;height:50px;font-size:20px;">
                 </a>
                 {% else %}
-                <a href="/add_reservation?item_id={{ item.item_id }}"></a>
+                <a href="/add_reservation?item_id={{ item.item_id }}">
                 <input type="button" value="我要預約" style="width:150px;height:50px;font-size:20px;">
                 </a>
                 {% endif %}

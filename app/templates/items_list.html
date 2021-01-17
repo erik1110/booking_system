@@ -37,7 +37,7 @@
 		<td class="col"> {{ item.borrow_date}} </td>
 		<td class="col"> {{ item.return_date}} </td>
 		<td class="col">
-			{% if item.return_date =='' %}
+			{% if item.status =='未借出' %}
 			<a href="/add_borrows?item_id={{ item.item_id }}"> 我要借用</a>
 			{% else %}
 			<a href="/add_reservation?item_id={{ item.item_id }}"> 我要預約</a>
