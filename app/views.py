@@ -98,9 +98,18 @@ def reservations():
     if 'customer' not in session.keys():
         flash('您還沒有登入哦！')
         return redirect(url_for('login'))
-    else:
-        res_list = db.session.query(Reservation).filter_by(user_id=session['customer']['id']).all()
-        return render_template('reservations.html', res_list=res_list)
+  
+    if 'reservations' not in session.keys():
+        return render_template('reservations.html', list=[])
+    
+    reservations = session['reservations']
+    list = []
+    for item in reservations:
+        # 購物車每一个元素[商品id, 商品名稱, 商品價格, 商品數量]
+        new_item = (item[0], item[1])
+        list.append(new_item)
+    print('list:', list)
+    return render_template('reservations.html', list=list)
     
 @app.route('/reserve_ok/<record>', methods=['GET', 'POST'])
 def reserve_ok(record):
@@ -127,15 +136,37 @@ def show_items_detail():
         flash('您還沒有登入哦！')
         return redirect(url_for('login'))
     item_id = request.args['item_id']
-    item_info = db.session.query(Items).filter_by(item_id=item_id).first()
-    return render_template('items_detail.html', item=item_info)
+    item = db.session.query(Items).filter_by(item_id=item_id).first()
+    return render_template('items_detail.html', item=item)
 
-@app.route('/account', methods=['GET', 'POST'])
-def account():
+# 添加預約頁面
+@app.route('/add_reservation')
+def add_reservation():
     if 'customer' not in session.keys():
         flash('您還沒有登入哦！')
         return redirect(url_for('login'))
-    else:
-        acn_list = db.session.query(Users).filter_by(user_id=session['customer']['id']).first()
-        print('yoyoyo',acn_list)
-        return render_template('account.html', acn=acn_list)
+
+    item_id = int(request.args['item_id'])
+    item = db.session.query(Items).filter_by(item_id=item_id).first()
+    name = item.name
+    # 判斷Session中是否有購物車數據
+    if 'reservations' not in session.keys():
+        session['reservations'] = []  
+
+    reservations = session['reservations']
+    # flag 如果0表示預約單中没有當前商品,1表示預約單代表有當前商品
+    flag = 0
+    for item in reservations:
+        if item[0] == item_id:  # item[0]保存在預約單的物品id
+            item[2] += 1  # item[3]保存在預約單的物品數量,對當前數量+1
+            flag = 1
+            break
+
+    if flag == 0:
+        # 第一次添加商品到預約數量是1
+        reservations.append([item_id, name, 1])
+
+    session['reservations'] = reservations
+
+    flash('已經添加物品【' + name + '】到預約清單')
+    return redirect(url_for('show_items_list'))
