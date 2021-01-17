@@ -1,39 +1,55 @@
 {% extends "base2.html" %}
-{% block title %}借用物品詳細資訊{% endblock %}
+{% block title %}用戶資訊{% endblock %}
 {% block body %}
 
+<style type="text/css">
+	body {font-size: 16px;}
+	table {border-collapse: collapse;}
+	/*用戶列表第1列*/
+	.col {
+		padding-top: 5px;
+		border-top: 1px dashed #666666;
+        text-align: center;
+	}	
+</style>
 
 <hr width="100%"/>
 <table width="100%" border="0" align="center">
     <tr>
         <td width="40%" align="right">
-            <div><img src="/static/images/user_pic.png" width="360px"
-                      height="330px"/></div>
-            <br></td>
-        <td>
-            <table height="200" border="0">
-                <tbody>
-                <tr>
-                    <td class="text5">員工編號：</td>
-                    <td class="text6">{{ acn.user_id }}</td>
+            <div>
+                <img src="/static/images/user_pic.png"
+                     width="360px"
+                     height="330px"/>
+            </div>
+        <td width="10%"></td>
+        <td width="50%" align="left">
+            <table width="500" height="280">
+            <tbody>
+                <tr bgcolor="#b4c8ed">
+                    <td class='col' colspan="2"><b>用戶資訊</b></td>
+                </tr>
+                <tr bgcolor="#edf8ff">
+                    <td class='col'>員工編號：</td>
+                    <td class='col'>{{ acn.user_id }}</td>
                 </tr>
                 <tr>
-                    <td class="text5">姓名：</td>
-                    <td class="text6">{{ acn.name }}</td>
+                    <td class='col'>姓名：</td>
+                    <td class='col'>{{ acn.name }}</td>
+                </tr>
+                <tr bgcolor="#edf8ff">
+                    <td class='col'>位置：</td>
+                    <td class='col'>{{ acn.address }}</td>
                 </tr>
                 <tr>
-                    <td class="text5">位置：</td>
-                    <td class="text6">{{ acn.address }}</td>
+                    <td class='col'>電話：</td>
+                    <td class='col'>{{ acn.phone }}</td>
                 </tr>
-                <tr>
-                    <td class="text5">電話：</td>
-                    <td class="text6">{{ acn.phone }}</td>
+                <tr bgcolor="#edf8ff">
+                    <td class='col'>生日：</td>
+                    <td class='col'>{{ acn.birthday }}</td>
                 </tr>
-                <tr>
-                    <td class="text5">生日：</td>
-                    <td class="text6">{{ acn.birthday }}</td>
-                </tr>
-                </tbody>
+            </tbody>
             </table>
         </td>
     </tr>

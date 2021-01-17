@@ -47,19 +47,18 @@ div.footer {
 	font-weight: bolder;
 	color: #333333;
 }
-.text4 {
-}
 
 
 /*物品詳細文字*/
 .text5 {
     border-bottom: 1px dashed #666666;
-    text-align: right;
+    text-align: center;
 }
 
 /*物品詳細文*/
 .text6 {
     border-bottom: 1px dashed #666666;
+    text-align: center;
 }
 
 .text7 {
