@@ -5,9 +5,7 @@ from app.models import Users, Items, Records, Reservation
 import config
 import random
 import datetime
-from datetime import date
-from datetime import datetime
-
+from datetime import date, datetime
 
 app = Flask(__name__)
 app.config.from_object(config)
@@ -115,23 +113,20 @@ def reservations():
 def submit_reservations():
     # 從表單中取出數據添加到Orders模式對象中
     reserve = Reservation()
-    reservation_list = request.form.getlist("reservation_list")
-    for key in request.form:
-         print("key:", key)
-    for checkbox in reservation_list:
-        print("checkbox:", checkbox)
-    #print("reservation_list:", reservation_list)
-    # for item in reservation_list:
-    #     # 生成訂單id，規則為當前時間戳記+一位隨機數
-    #     n = random.randint(0, 9)
-    #     d = datetime.datetime.today()
-    #     reservation_id = str(int(d.timestamp() * 1e6)) + str(n)
-    #     reserve.reservation_id = reservation_id
-    #     reserve.item_id = 
-    #     reserve.user_id = session['customer']['id']
-    #     reserve.reverse_date = d.strftime('%Y-%m-%d %H:%M:%S')
-    #     db.session.add(reserve)
-    # db.session.commit()
+    reservation_list = request.form.getlist("check")
+    print("reservation_list:", reservation_list)
+    for item in reservation_list:
+        # 生成訂單id，規則為當前時間戳記+一位隨機數
+        n = random.randint(0, 9)
+        d = datetime.today()
+        reservation_id = str(int(d.timestamp() * 1e6)) + str(n)
+        reserve.reservation_id = reservation_id
+        reserve.item_id = item[0]
+        reserve.user_id = session['customer']['id']
+        reserve.reverse_date = d.strftime('%Y-%m-%d %H:%M:%S')
+        print("reserver:", reserve)
+        db.session.add(reserve)
+        db.session.commit()
     # 清除預約清單
     session.pop('reservations', None)
     return render_template('reserve_ok.html')
@@ -169,12 +164,13 @@ def add_reservation():
     name = item.name
     # 判斷Session中是否有購物車數據
     if 'reservations' not in session.keys():
-        session['reservations'] = []  
-
-    # Add session
-    session['reservations'].append([item_id, name, 1])
-
-    flash('已經添加物品【' + name + '】到預約清單')
+        session['reservations'] = []
+    elif item_id in ([x[0] for x in session['reservations']]):
+        flash('物品ID=【'+str(item_id)+'】的【'+ name + '】：已加入過預約清單')
+    else:
+        # Add session
+        session['reservations'].append([item_id, name])
+        flash('已經添加物品【' + name + '】到預約清單')
     return redirect(url_for('show_items_list'))
 
 # 顯示用戶資訊
