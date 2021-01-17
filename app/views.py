@@ -106,13 +106,22 @@ def reservations():
         # 購物車每一个元素[商品id, 商品名稱, 商品價格, 商品數量]
         new_item = (item[0], item[1])
         list.append(new_item)
-    print('list:', list)
     return render_template('reservations.html', list=list)
     
 @app.route('/submit_reservations', methods=['POST'])
 def submit_reservations():
-    # 從表單中取出數據添加到Orders模式對象中
+    user_id = session['customer']['id']
+    # 從表單中取出數據添加到 Reservation模式對象中
     reservation_list = request.form.getlist("check")
+    print("reservation_list:", reservation_list)
+    # 檢查是否有被預約
+    for item in reservation_list:
+        query = db.session.query(Reservation).filter_by(user_id=user_id, item_id=item[0])
+        if query is not None:
+            item = db.session.query(Items).filter_by(item_id=item[0]).first()
+            flash('您已經添加過【' + item.name + '】到預約清單')
+            return redirect(url_for('reservations'))
+    # 寫入Resevation
     data = []
     for item in reservation_list:
         reserve = Reservation()
@@ -124,7 +133,6 @@ def submit_reservations():
         reserve.user_id = session['customer']['id']
         reserve.reverse_date = d.strftime('%Y-%m-%d %H:%M:%S')
         data.append(reserve)
-    print("data:", data)
     db.session.add_all(data)
     db.session.commit()
     # 清除預約清單
