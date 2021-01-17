@@ -112,21 +112,21 @@ def reservations():
 @app.route('/submit_reservations', methods=['POST'])
 def submit_reservations():
     # 從表單中取出數據添加到Orders模式對象中
-    reserve = Reservation()
     reservation_list = request.form.getlist("check")
-    print("reservation_list:", reservation_list)
+    data = []
     for item in reservation_list:
-        # 生成訂單id，規則為當前時間戳記+一位隨機數
+        reserve = Reservation()
+        # 生成預約id，規則為當前時間戳記+一位隨機數
         n = random.randint(0, 9)
         d = datetime.today()
-        reservation_id = str(int(d.timestamp() * 1e6)) + str(n)
-        reserve.reservation_id = reservation_id
+        reserve.reservation_id = str(int(d.timestamp() * 1e6)) + str(n)
         reserve.item_id = item[0]
         reserve.user_id = session['customer']['id']
         reserve.reverse_date = d.strftime('%Y-%m-%d %H:%M:%S')
-        print("reserver:", reserve)
-        db.session.add(reserve)
-        db.session.commit()
+        data.append(reserve)
+    print("data:", data)
+    db.session.add_all(data)
+    db.session.commit()
     # 清除預約清單
     session.pop('reservations', None)
     return render_template('reserve_ok.html')
@@ -165,7 +165,7 @@ def add_reservation():
     # 判斷Session中是否有購物車數據
     if 'reservations' not in session.keys():
         session['reservations'] = []
-    elif item_id in ([x[0] for x in session['reservations']]):
+    if item_id in ([x[0] for x in session['reservations']]):
         flash('物品ID=【'+str(item_id)+'】的【'+ name + '】：已加入過預約清單')
     else:
         # Add session

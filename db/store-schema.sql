@@ -53,6 +53,6 @@ create table reservation
 (
    reservation_id       integer primary key autoincrement,
    item_id              integer not null references items(item_id),
-   user_id              integer not null references users(user_id),
+   user_id              varchar(20) not null references users(user_id),
    reverse_date         date format 'YYYY-MM-DD'
 );
