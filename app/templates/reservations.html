@@ -1,0 +1,57 @@
+{% extends "base2.html" %}
+{% block title %}預約清單{% endblock %}
+{% block body %}
+<style type="text/css">
+       table {
+            border-collapse: collapse;
+        }
+
+        .threeboder {
+            border: 1px solid #5B96D0;
+        }
+
+        .trow {
+            border-right: 1px solid #5B96D0;
+            border-bottom: 1px solid #5A96D6;
+        }
+
+        .theader {
+            background-color: #A5D3FF;
+            font-size: 14px;
+            border-right: 1px solid #5B96D0;
+            border-bottom: 1px solid #5A96D6;
+        }
+
+
+</style>
+
+<table width="100%" border="0" align="center">
+</table>
+<hr width="100%"/>
+<div class="text3" align="center">預約清單</div>
+<br>
+<form action="/submit_reservations" method="post">
+    <table width="100%" border="0" align="center" class="threeboder">
+        <tr bgcolor="#A5D3FF">
+            <td width="10%" align="center" class="theader">借用id</td>
+            <td width="20%" align="center" class="theader">物品名稱</td>
+            <td width="10%" align="center" class="theader">確認</td>           
+        </tr>  
+      {% for item in list %}
+        <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
+            <td align="center" > {{ item[0]}} </td>
+            <td align="center" > {{ item[1]}} </td>
+            <td align="center"> <input type="checkbox" name="reservation_list" value="{{ item[0]}}"> </td>      
+        </tr>
+      {% endfor %}
+    </table>
+    <br>
+    <div align="center">
+    <input type="submit" value="提交">
+    </div>
+    <br>
+    <div align="center">
+        <a href="/main"><big>返回主頁面</big></a>
+    </div>
+</form>
+{% endblock %}

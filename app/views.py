@@ -116,8 +116,11 @@ def submit_reservations():
     # 從表單中取出數據添加到Orders模式對象中
     reserve = Reservation()
     reservation_list = request.form.getlist("reservation_list")
-    print("reservation_list:", reservation_list)
-    print('session:', session['customer'])
+    for key in request.form:
+         print("key:", key)
+    for checkbox in reservation_list:
+        print("checkbox:", checkbox)
+    #print("reservation_list:", reservation_list)
     # for item in reservation_list:
     #     # 生成訂單id，規則為當前時間戳記+一位隨機數
     #     n = random.randint(0, 9)
@@ -129,7 +132,7 @@ def submit_reservations():
     #     reserve.reverse_date = d.strftime('%Y-%m-%d %H:%M:%S')
     #     db.session.add(reserve)
     # db.session.commit()
-    # 清除購物車
+    # 清除預約清單
     session.pop('reservations', None)
     return render_template('reserve_ok.html')
 
