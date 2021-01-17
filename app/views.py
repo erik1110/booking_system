@@ -168,20 +168,8 @@ def add_reservation():
     if 'reservations' not in session.keys():
         session['reservations'] = []  
 
-    reservations = session['reservations']
-    # flag 如果0表示預約單中没有當前商品,1表示預約單代表有當前商品
-    flag = 0
-    for item in reservations:
-        if item[0] == item_id:  # item[0]保存在預約單的物品id
-            item[2] += 1  # item[3]保存在預約單的物品數量,對當前數量+1
-            flag = 1
-            break
-
-    if flag == 0:
-        # 第一次添加商品到預約數量是1
-        reservations.append([item_id, name, 1])
-
-    session['reservations'] = reservations
+    # Add session
+    session['reservations'].append([item_id, name, 1])
 
     flash('已經添加物品【' + name + '】到預約清單')
     return redirect(url_for('show_items_list'))
