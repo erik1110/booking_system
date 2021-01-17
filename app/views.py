@@ -170,3 +170,12 @@ def add_reservation():
 
     flash('已經添加物品【' + name + '】到預約清單')
     return redirect(url_for('show_items_list'))
+
+# 顯示用戶資訊
+@app.route('/account')
+def account():
+    if 'customer' not in session.keys():
+        flash('您還沒有登入哦！')
+        return redirect(url_for('login'))
+    acn = db.session.query(Users).filter_by(user_id=session['customer']['id']).first()
+    return render_template('account.html', acn=acn)
