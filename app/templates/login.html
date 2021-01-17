@@ -2,6 +2,11 @@
 {% block title %}用戶登錄{% endblock %}
 {% block body %}
 
+<style type="text/css">
+	body {font-size: 16px;}
+	table {border-collapse: collapse;}
+</style>
+
 <!-- 顯示錯誤訊息 -->
 <ul>
     {% for field, errors in form.errors.items() %}
