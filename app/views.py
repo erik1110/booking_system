@@ -6,11 +6,16 @@ import config
 import random
 import datetime
 from datetime import date
+from datetime import datetime
+
 
 app = Flask(__name__)
 app.config.from_object(config)
 db = SQLAlchemy(app)
 
+@app.context_processor
+def inject_now():
+    return {'now': datetime.now().strftime('%Y-%m-%d')}
 
 # 註冊
 @app.route('/reg', methods=['GET', 'POST'])
