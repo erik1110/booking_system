@@ -41,7 +41,7 @@
         <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
             <td align="center" > {{ item[0]}} </td>
             <td align="center" > {{ item[1]}} </td>
-            <td align="center"> <input type="checkbox" name="reservation_list" value="{{ item[0]}}"> </td>      
+            <td align="center"> <input type="checkbox" name="check" value={{ item[0] }}> </td>      
         </tr>
       {% endfor %}
     </table>
