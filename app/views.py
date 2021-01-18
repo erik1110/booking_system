@@ -108,18 +108,53 @@ def returns():
         flash('您還沒有登入哦！')
         return redirect(url_for('login'))
     else:
-        records_item = db.session.query(Records_items).filter_by(user_id=session['customer']['id'], status='借出').all()
-        item = db.session.query(Items).filter_by(item_id=item_id).first()
-        session.query(Records_items).join(Items, , Items.id == Address.user_id)
-        return render_template('returns.html', list=records_item)
+        # result = db.session.query(Records_items,).filter(status='借出')
+        result = db.session.query(Items.name, \
+                                  Items.user_id, \
+                                  Items.borrow_date, \
+                                  Items.return_date, \
+                                  Items.status, \
+                                  Records_items.records_id, \
+                                  Records_items.item_id). \
+                                  filter_by(user_id='erik1110', status='已借出'). \
+                            join(Items, Items.item_id==Records_items.item_id)
+        return render_template('returns.html', list=result)
 
 # 歸還成功頁面
-@app.route('/return_ok/<record>', methods=['GET', 'POST'])
-def return_ok(record):
-    c = db.session.query(Records).filter_by(records_id=record).first()
-    c.return_date=date.today()
+@app.route('/submit_returns', methods=['POST'])
+def submit_returns():
+    # 創立單據號碼
+    records = Records()
+    # 創立單據詳細資訊 
+    returns_list = request.form.getlist('check')
+
+    d = datetime.today()
+    records_id = 'RE' + str(d.strftime('%Y%m%d%H%M%s'))
+    records.records_id = records_id
+    records.action = '借閱'
+    records.user_id = session['customer']['id']
+    records.records_date = d
+    records.total =  len(returns_list)
+    db.session.add(records)
+
+    data = []
+    for item in returns_list:
+        records_items = Records_items()
+        records_items.records_id = records_id
+        records_items.item_id = item[0]
+        records_items.user_id = session['customer']['id']
+        records_items.records_date = d
+        records_items.status = '歸還'
+        data.append(records_items)
+        print(data)
+        # 更新物品狀態為未借閱
+        db.session.query(Items).filter_by(item_id=item[0]).update(dict(user_id='',
+                                                                       borrow_date='',
+                                                                       return_date='',
+                                                                       status='未借出'))
+    db.session.add_all(data)
     db.session.commit()
-    return render_template('return_ok.html')
+    return render_template('return_ok.html', records_id=records_id)
 
 # # 添加預約頁面
 # @app.route('/add_reservation')

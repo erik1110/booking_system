@@ -29,8 +29,8 @@ create table items
    location            varchar(10),
    image               varchar(100),
    user_id             varchar(20),
-   borrow_date         date format 'YYYY-MM-DD',
-   return_date         date format 'YYYY-MM-DD',
+   borrow_date         date,
+   return_date         date,
    status              varchar(20)
 );
 
@@ -42,7 +42,8 @@ create table records
    records_id           varchar(100) primary key,
    action               varchar(20),
    user_id              varchar(20) not null references users(user_id),
-   records_date         date format 'YYYY-MM-DD'
+   records_date         DATEFROMPARTS,
+   total                integer
 );
 
 /*==============================================================*/
@@ -50,11 +51,11 @@ create table records
 /*==============================================================*/
 create table records_items
 (
-   id                   integer primary key,
+   id                   integer primary key autoincrement,
    records_id           integer not null references records(records_id),
    item_id              integer not null references items(item_id),
    user_id              varchar(20) not null references users(user_id),
-   records_date          date format 'YYYY-MM-DD',
+   records_date         date,
    status               varchar(20)
 );
 

@@ -23,12 +23,12 @@ insert into items values (11, '投影筆', 170, '', 3,'5A', 'pointer.png', 'penc
 /*==============================================================*/
 /* Table: records  單據                                         */
 /*==============================================================*/
-insert into records values ('BR2021011219261610969182', '借閱', 'erik1110', '2021-01-12');
-insert into records values ('BR2021011319371610969854', '借閱', 'penchaq', '2021-01-13');
-insert into records values ('RE2021011719321610969537', '歸還', 'erik1110', '2021-01-17');
-insert into records values ('RE2021011819321610969537', '歸還', 'erik1110', '2021-01-18');
-insert into records values ('BR2021011819261610969185', '借閱', 'erik1110', '2021-01-18');
-insert into records values ('BR2021011819351610969741', '借閱', 'dannymonkey', '2021-01-09');
+insert into records values ('BR2021011219261610969182', '借閱', 'erik1110', '2021-01-12', 2);
+insert into records values ('BR2021011319371610969854', '借閱', 'penchaq', '2021-01-13', 1);
+insert into records values ('RE2021011719321610969537', '歸還', 'erik1110', '2021-01-17', 1);
+insert into records values ('RE2021011819321610969537', '歸還', 'erik1110', '2021-01-18', 1);
+insert into records values ('BR2021011819261610969185', '借閱', 'erik1110', '2021-01-18',2);
+insert into records values ('BR2021011819351610969741', '借閱', 'dannymonkey', '2021-01-09', 2);
 
 /*==============================================================*/
 /* Table: records_item  單據詳細資訊                              */
