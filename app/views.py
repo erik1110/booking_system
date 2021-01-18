@@ -108,7 +108,6 @@ def returns():
         flash('您還沒有登入哦！')
         return redirect(url_for('login'))
     else:
-        # result = db.session.query(Records_items,).filter(status='借出')
         result = db.session.query(Items.name, \
                                   Items.user_id, \
                                   Items.borrow_date, \
@@ -146,7 +145,6 @@ def submit_returns():
         records_items.records_date = d
         records_items.status = '歸還'
         data.append(records_items)
-        print(data)
         # 更新物品狀態為未借閱
         db.session.query(Items).filter_by(item_id=item[0]).update(dict(user_id='',
                                                                        borrow_date='',
