@@ -275,5 +275,7 @@ def submit_borrows():
                                                                          return_date=record.return_date,
                                                                          status='已借出'))
         db.session.commit()
+    
+    # mail(records_id, borrows_list, records.user_id)
 
     return render_template('borrows_ok.html')
