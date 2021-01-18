@@ -33,15 +33,25 @@ class Items(Base):
 class Records(Base):
     __tablename__ = 'records'
     records_id = Column('records_id', Integer, primary_key=True)
+    action = Column('action', String(20))
+    user_id = Column('user_id', ForeignKey('users.user_id'))
+    records_date = Column('records_date', String(20))
+
+# 定義 Recodes 模型
+class Records_items(Base):
+    __tablename__ = 'records_items'
+    id = Column('id', Integer, primary_key=True)
+    records_id = Column('records_id', ForeignKey('items.item_id'))
     item_id = Column('item_id', ForeignKey('items.item_id'))
     user_id = Column('user_id', ForeignKey('users.user_id'))
     borrow_date = Column('borrow_date', String(20))
     return_date = Column('return_date', String(20))
+    status = Column('status', String(20))
 
-# 定義 Reservation 模型
-class Reservation(Base):
-    __tablename__ = 'reservation'
-    reservation_id = Column('reservation_id', Integer, primary_key=True)
-    item_id = Column('item_id', ForeignKey('items.item_id'))
-    user_id = Column('user_id', ForeignKey('users.user_id'))
-    reverse_date = Column('reverse_date', String(20))
+# # 定義 Reservation 模型
+# class Reservation(Base):
+#     __tablename__ = 'reservation'
+#     reservation_id = Column('reservation_id', Integer, primary_key=True)
+#     item_id = Column('item_id', ForeignKey('items.item_id'))
+#     user_id = Column('user_id', ForeignKey('users.user_id'))
+#     reverse_date = Column('reverse_date', String(20))

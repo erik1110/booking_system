@@ -39,20 +39,34 @@ create table items
 /*==============================================================*/
 create table records
 (
-   records_id           integer primary key autoincrement,
+   records_id           integer primary key,
+   action               varchar(20),
+   user_id              integer not null references users(user_id),
+   records_date         date format 'YYYY-MM-DD'
+);
+
+/*==============================================================*/
+/* Table: records_items                                               */
+/*==============================================================*/
+create table records_items
+(
+   id                   integer primary key,
+   records_id           integer not null references records(records_id),
    item_id              integer not null references items(item_id),
    user_id              integer not null references users(user_id),
    borrow_date          date format 'YYYY-MM-DD',
    return_date          date format 'YYYY-MM-DD',
    status               varchar(20)
 );
-/*==============================================================*/
-/* Table: reservation                                           */
-/*==============================================================*/
-create table reservation
-(
-   reservation_id       integer primary key autoincrement,
-   item_id              integer not null references items(item_id),
-   user_id              varchar(20) not null references users(user_id),
-   reverse_date         date format 'YYYY-MM-DD'
-);
+
+
+-- /*==============================================================*/
+-- /* Table: reservation                                           */
+-- /*==============================================================*/
+-- create table reservation
+-- (
+--    reservation_id       integer primary key autoincrement,
+--    item_id              integer not null references items(item_id),
+--    user_id              varchar(20) not null references users(user_id),
+--    reverse_date         date format 'YYYY-MM-DD'
+-- );
