@@ -108,10 +108,10 @@ def returns():
         flash('您還沒有登入哦！')
         return redirect(url_for('login'))
     else:
-#        c_all = db.session.query(Records).filter_by(user_id=session['customer']['id'],return_date='').all()
-        c_all = db.session.query(Records).filter_by(user_id=session['customer']['id']).all()
-        return render_template('returns.html',c_all=c_all)
-    return render_template('login.html', form=form)
+        records_item = db.session.query(Records_items).filter_by(user_id=session['customer']['id'], status='借出').all()
+        item = db.session.query(Items).filter_by(item_id=item_id).first()
+        session.query(Records_items).join(Items, , Items.id == Address.user_id)
+        return render_template('returns.html', list=records_item)
 
 # 歸還成功頁面
 @app.route('/return_ok/<record>', methods=['GET', 'POST'])

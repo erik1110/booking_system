@@ -33,23 +33,18 @@
 <form action="/submit_order" method="post">
     <table width="100%" border="0" align="center" class="threeboder">
         <tr bgcolor="#A5D3FF">
-            <td height="20" align="center" class="theader">單號</td>
-            <td width="20%" align="center" class="theader">物品代號</td>
+            <td height="20" align="center" class="theader">物品代號</td>
+            <td width="20%" align="center" class="theader">物品名稱</td>
             <td width="20%" align="center" class="theader">借用日</td>
-            <td width="20%" align="center" class="theader">狀態</td>            
+            <td width="20%" align="center" class="theader">到期日</td>
+            <td width="20%" align="center" class="theader">確認</td>            
         </tr>  
-      {% for item in c_all %}
+      {% for record_item in list %}
         <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
-            <td align="center"> {{ item.records_id}} </td>
+            <td align="center"> {{ record_item.records_id}} </td>
             <td align="center"> {{ item.item_id}} </td>
             <td align="center"> {{ item.borrow_date}} </td>      
-            <td align="center">
-                {% if item.return_date =='' %}
-                <a href="{{ url_for('return_ok',record=item.records_id) }}"><font color="#FF0000"><big><big>我要歸還</big></big></font></a>
-                {% else %}
-                {{item.return_date}}已歸還
-                {% endif %}
-            </td>
+            <td align="center"> </td>
         </tr>
       {% endfor %}
     </table>
