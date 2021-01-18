@@ -1,7 +1,7 @@
 drop table if exists users;
 drop table if exists items;
 drop table if exists records;
-drop table if exists reservation;
+drop table if exists records_items;
 
 /*==============================================================*/
 /* Table: users                                                 */
@@ -39,9 +39,9 @@ create table items
 /*==============================================================*/
 create table records
 (
-   records_id           integer primary key,
+   records_id           varchar(100) primary key,
    action               varchar(20),
-   user_id              integer not null references users(user_id),
+   user_id              varchar(20) not null references users(user_id),
    records_date         date format 'YYYY-MM-DD'
 );
 
@@ -53,9 +53,8 @@ create table records_items
    id                   integer primary key,
    records_id           integer not null references records(records_id),
    item_id              integer not null references items(item_id),
-   user_id              integer not null references users(user_id),
-   borrow_date          date format 'YYYY-MM-DD',
-   return_date          date format 'YYYY-MM-DD',
+   user_id              varchar(20) not null references users(user_id),
+   records_date          date format 'YYYY-MM-DD',
    status               varchar(20)
 );
 
