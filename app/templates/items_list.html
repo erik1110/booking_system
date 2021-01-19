@@ -32,7 +32,7 @@
     <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
 		<td class="col"><a href="/detail?item_id={{ item.item_id }}">{{ item.item_id }}</a></td>
         <td class="col"><a href="/detail?item_id={{ item.item_id }}">{{ item.name }}</a></td>
-		<td class="col"> {{ item.status}} </td>
+		<td class="col"> {{ item.booking_status}} </td>
 		<td class="col"> {{ item.borrow_date}} </td>
 		<td class="col">
 			{% if item.booking_status =='未借出' %}
