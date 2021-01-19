@@ -1,7 +1,8 @@
 drop table if exists users;
 drop table if exists items;
-drop table if exists records;
-drop table if exists records_items;
+drop table if exists orders;
+drop table if exists items_hist;
+drop table if exists comments;
 
 /*==============================================================*/
 /* Table: users                                                 */
@@ -14,7 +15,7 @@ create table users
    address             varchar(30),
    phone               varchar(20),
    birthday            varchar(20),
-   available_status    varchar(20),
+   available_status    varchar(20)
 );
 
 /*==============================================================*/
@@ -33,6 +34,8 @@ create table items
    user_id             varchar(30),
    borrow_date         date,
    return_date         date,
+   expected_date       date,
+   reserve_date        date,
    booking_status      varchar(30),
    reserve_status      varchar(30)
 );
@@ -76,5 +79,5 @@ create table comments
    item_id              varchar(30) not null references items(item_id),
    user_id              varchar(30) not null references users(user_id),
    content              varchar(100),
-   comment_date         date,
+   comment_date         date
 );
