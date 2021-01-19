@@ -112,10 +112,10 @@ def returns():
                                   Items.user_id, \
                                   Items.borrow_date, \
                                   Items.return_date, \
-                                  Items.status, \
+                                  Items.booking_status, \
                                   Records_items.records_id, \
                                   Records_items.item_id). \
-                                  filter_by(user_id='erik1110', status='已借出'). \
+                                  filter_by(user_id='erik1110', booking_status='已借出'). \
                             join(Items, Items.item_id==Records_items.item_id)
         return render_template('returns.html', list=result)
 
@@ -149,7 +149,7 @@ def submit_returns():
         db.session.query(Items).filter_by(item_id=item[0]).update(dict(user_id='',
                                                                        borrow_date='',
                                                                        return_date='',
-                                                                       status='未借出'))
+                                                                       action='未借出'))
     db.session.add_all(data)
     db.session.commit()
     return render_template('return_ok.html', records_id=records_id)

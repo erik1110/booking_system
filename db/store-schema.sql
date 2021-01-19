@@ -31,19 +31,20 @@ create table items
    user_id             varchar(20),
    borrow_date         date,
    return_date         date,
-   status              varchar(20)
+   booking_status      varchar(20),
+   reserve_status      varchar(20)
 );
 
 /*==============================================================*/
-/* Table: records                                               */
+/* Table: records （單據）                                       */
 /*==============================================================*/
 create table records
 (
    records_id           varchar(100) primary key,
    action               varchar(20),
    user_id              varchar(20) not null references users(user_id),
-   records_date         DATEFROMPARTS,
-   total                integer
+   total                integer,
+   records_date         date
 );
 
 /*==============================================================*/
@@ -56,7 +57,7 @@ create table records_items
    item_id              integer not null references items(item_id),
    user_id              varchar(20) not null references users(user_id),
    records_date         date,
-   status               varchar(20)
+   action               varchar(20)
 );
 
 

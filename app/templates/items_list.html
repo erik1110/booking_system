@@ -35,7 +35,7 @@
 		<td class="col"> {{ item.status}} </td>
 		<td class="col"> {{ item.borrow_date}} </td>
 		<td class="col">
-			{% if item.status =='未借出' %}
+			{% if item.booking_status =='未借出' %}
 			<a href="/add_borrows?item_id={{ item.item_id }}">
 				<input type="button" value="我要借用"
                         style="background-color:#FAD7A0;
