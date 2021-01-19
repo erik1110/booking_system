@@ -78,15 +78,3 @@ create table comments
    content              varchar(100),
    comment_date         date,
 );
-
-/*==============================================================*/
-/* Table: comment                                               */
-/*==============================================================*/
-create table comments
-(
-   comment_id           varchar(30) primary key,
-   item_id              varchar(30) not null references items(item_id),
-   user_id              varchar(30) not null references users(user_id),
-   content              varchar(100),
-   comment_date         date,
-);  
