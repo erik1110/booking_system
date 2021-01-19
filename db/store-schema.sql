@@ -33,8 +33,9 @@ create table items
    image               varchar(100),
    user_id             varchar(30),
    borrow_date         date,
-   return_date         date,
+   
    expected_date       date,
+   return_date         date,
    reserve_date        date,
    booking_status      varchar(30),
    reserve_status      varchar(30)
@@ -60,10 +61,10 @@ create table items_hist
    hist_id              varchar(30) primary key,
    item_id              varchar(30) not null references items(item_id),
    user_id              varchar(30) not null references users(user_id),
-   borrow_date          date,
-   return_date          date,
-   expected_date        date,
-   reserve_date         date,
+   borrow_date         date,
+   expected_date       date,
+   return_date         date,
+   reserve_date        date,
    borrow_order_id      varchar(30) references orders(order_id),
    return_order_id      varchar(30) references orders(order_id),
    reserve_order_id     varchar(30) references orders(order_id)
