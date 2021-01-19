@@ -1,7 +1,7 @@
 from flask import Flask, request, session, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from app.forms import CustomerRegForm, LoginForm
-from app.models import Users, Items, Orders, ItemsHist, Comments
+from app.models import Users, Items, Orders, ItemsHist
 import config
 import random
 import datetime
@@ -111,48 +111,45 @@ def returns():
         result = db.session.query(Items.name, \
                                   Items.user_id, \
                                   Items.borrow_date, \
-                                  Items.return_date, \
+                                  Items.expected_date, \
                                   Items.booking_status, \
-                                  Records_items.records_id, \
-                                  Records_items.item_id). \
+                                  ItemsHist.borrow_order_id, \
+                                  ItemsHist.item_id). \
                                   filter_by(user_id='erik1110', booking_status='已借出'). \
-                            join(Items, Items.item_id==Records_items.item_id)
+                            join(Items, Items.item_id==ItemsHist.item_id)
         return render_template('returns.html', list=result)
 
 # 歸還成功頁面
 @app.route('/submit_returns', methods=['POST'])
 def submit_returns():
-    # 創立單據號碼
-    records = Records()
-    # 創立單據詳細資訊 
+    # 初始化 Orders 對象
+    orders = Orders() 
+    # 從前端拉回資訊
     returns_list = request.form.getlist('check')
-
-    d = datetime.today()
-    records_id = 'RE' + str(d.strftime('%Y%m%d%H%M%s'))
-    records.records_id = records_id
-    records.action = '借閱'
-    records.user_id = session['customer']['id']
-    records.records_date = d
-    records.total =  len(returns_list)
-    db.session.add(records)
-
-    data = []
-    for item in returns_list:
-        records_items = Records_items()
-        records_items.records_id = records_id
-        records_items.item_id = item[0]
-        records_items.user_id = session['customer']['id']
-        records_items.records_date = d
-        records_items.action = '歸還'
-        data.append(records_items)
-        # 更新物品狀態為未借閱
-        db.session.query(Items).filter_by(item_id=item[0]).update(dict(user_id='',
-                                                                       borrow_date='',
-                                                                       return_date='',
-                                                                       booking_status='未借出'))
-    db.session.add_all(data)
-    db.session.commit()
-    return render_template('return_ok.html', records_id=records_id)
+    # 創立單據號碼 
+    today = datetime.today()
+    order_id = 'RET' + str(today.strftime('%Y%m%d%H%M%s'))
+    orders.order_id = order_id
+    orders.action = '歸還'
+    orders.user_id = session['customer']['id']
+    orders.total = len(returns_list)
+    orders.order_date = today
+    db.session.add(orders)
+    # 更新資訊
+    # for data in returns_list:
+    #     borrow_order_id = data[0]
+    #     # item_id = data[1]
+    #     # 更新 ItemsHist 新增資訊
+    #     db.session.query(ItemsHist).filter_by(borrow_order_id=borrow_order_id, item_id=item_id).update(dict(
+    #                                                                    return_date=today,
+    #                                                                    return_order_id=order_id))
+    #     # 更新物品狀態為未借閱
+    #     db.session.query(Items).filter_by(item_id=item_id).update(dict(user_id='',
+    #                                                                    borrow_date='',
+    #                                                                    return_date='',
+    #                                                                    booking_status='未借出'))
+    # db.session.commit()
+    return render_template('return_ok.html', order_id=order_id, returns_list=returns_list)
 
 # # 添加預約頁面
 # @app.route('/add_reservation')

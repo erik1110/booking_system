@@ -40,14 +40,14 @@
             <td width="10%" align="center" class="theader">到期日</td>
             <td width="10%" align="center" class="theader">確認</td>            
         </tr>  
-      {% for records in list %}
+      {% for data in list %}
         <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
-            <td align="center"> {{ records.records_id}} </td>
-            <td align="center"> {{ records.item_id}} </td>
-            <td align="center"> {{ records.name}} </td>
-            <td align="center"> {{ records.borrow_date}} </td>
-            <td align="center"> {{ records.return_date}} </td>
-            <td align="center"> <input type="checkbox" name="check" value={{ records.item_id }}> </td>
+            <td align="center"> {{ data.borrow_order_id}} </td>
+            <td align="center"> {{ data.item_id}} </td>
+            <td align="center"> {{ data.name}} </td>
+            <td align="center"> {{ data.borrow_date}} </td>
+            <td align="center"> {{ data.expected_date}} </td>
+            <td align="center"> <input type="checkbox" name="check" value="[{{data.borrow_order_id}},{{ data.item_id }}]"> </td>
         </tr>
       {% endfor %}
     </table>
