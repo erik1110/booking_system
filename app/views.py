@@ -1,7 +1,7 @@
 from flask import Flask, request, session, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from app.forms import CustomerRegForm, LoginForm
-from app.models import Users, Items, Records, Records_items
+from app.models import Users, Items, Orders, ItemsHist, Comments
 import config
 import random
 import datetime
