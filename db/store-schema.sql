@@ -33,7 +33,6 @@ create table items
    image               varchar(100),
    user_id             varchar(30),
    borrow_date         date,
-   
    expected_date       date,
    return_date         date,
    reserve_date        date,
