@@ -114,7 +114,8 @@ def returns():
                                   Items.expected_date, \
                                   Items.booking_status, \
                                   ItemsHist.borrow_order_id, \
-                                  ItemsHist.item_id). \
+                                  ItemsHist.item_id, \
+                                  ItemsHist.hist_id). \
                                   filter_by(user_id='erik1110', booking_status='已借出'). \
                             join(Items, Items.item_id==ItemsHist.item_id)
         return render_template('returns.html', list=result)
@@ -136,19 +137,19 @@ def submit_returns():
     orders.order_date = today
     db.session.add(orders)
     # 更新資訊
-    # for data in returns_list:
-    #     borrow_order_id = data[0]
-    #     # item_id = data[1]
-    #     # 更新 ItemsHist 新增資訊
-    #     db.session.query(ItemsHist).filter_by(borrow_order_id=borrow_order_id, item_id=item_id).update(dict(
-    #                                                                    return_date=today,
-    #                                                                    return_order_id=order_id))
-    #     # 更新物品狀態為未借閱
-    #     db.session.query(Items).filter_by(item_id=item_id).update(dict(user_id='',
-    #                                                                    borrow_date='',
-    #                                                                    return_date='',
-    #                                                                    booking_status='未借出'))
-    # db.session.commit()
+    for hist_id in returns_list:
+        # item_id = data[1]
+        # 更新 ItemsHist 新增資訊
+        db.session.query(ItemsHist).filter_by(hist_id=hist_id).update(dict(
+                                                               return_date=today,
+                                                               return_order_id=order_id))
+        item_id = db.session.query(ItemsHist).filter_by(hist_id=hist_id).first().item_id                  
+        # 更新物品狀態為未借閱
+        db.session.query(Items).filter_by(item_id=item_id).update(dict(user_id='',
+                                                                       borrow_date='',
+                                                                       return_date='',
+                                                                       booking_status='未借出'))
+    db.session.commit()
     return render_template('return_ok.html', order_id=order_id, returns_list=returns_list)
 
 # # 添加預約頁面

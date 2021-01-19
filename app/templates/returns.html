@@ -47,7 +47,7 @@
             <td align="center"> {{ data.name}} </td>
             <td align="center"> {{ data.borrow_date}} </td>
             <td align="center"> {{ data.expected_date}} </td>
-            <td align="center"> <input type="checkbox" name="check" value="[{{data.borrow_order_id}},{{ data.item_id }}]"> </td>
+            <td align="center"> <input type="checkbox" name="check" value="{{ data.hist_id }}"> </td>
         </tr>
       {% endfor %}
     </table>
