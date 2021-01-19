@@ -8,10 +8,10 @@ drop table if exists records_items;
 /*==============================================================*/
 create table users
 (
-   user_id             varchar(20) primary key,
-   name                varchar(50) not null,
-   password            varchar(20) not null,
-   address             varchar(100),
+   user_id             varchar(30) primary key,
+   name                varchar(30) not null,
+   password            varchar(30) not null,
+   address             varchar(30),
    phone               varchar(20),
    birthday            varchar(20)
 );
@@ -21,53 +21,58 @@ create table users
 /*==============================================================*/
 create table items
 (
-   item_id             integer primary key autoincrement,
-   name                varchar(100) not null,
+   item_id             varchar(30) primary key,
+   name                varchar(30) not null,
    price               float,
-   description         varchar(200),
+   description         varchar(30),
    available_day       integer,
-   location            varchar(10),
+   location            varchar(30),
    image               varchar(100),
-   user_id             varchar(20),
+   user_id             varchar(30),
    borrow_date         date,
    return_date         date,
-   booking_status      varchar(20),
-   reserve_status      varchar(20)
+   booking_status      varchar(30),
+   reserve_status      varchar(30)
 );
 
 /*==============================================================*/
-/* Table: records （單據）                                       */
+/* Table: orders （單據）                                       */
 /*==============================================================*/
-create table records
+create table orders
 (
-   records_id           varchar(100) primary key,
-   action               varchar(20),
-   user_id              varchar(20) not null references users(user_id),
-   total                integer,
-   records_date         date
+   order_id            varchar(30) primary key,
+   action              varchar(30),
+   user_id             varchar(30) not null references users(user_id),
+   total               integer,
+   order_date          date
 );
 
 /*==============================================================*/
-/* Table: records_items                                               */
+/* Table: items_hist (物品歷史資訊)                               */
 /*==============================================================*/
-create table records_items
+create table items_hist
 (
-   id                   integer primary key autoincrement,
-   records_id           integer not null references records(records_id),
-   item_id              integer not null references items(item_id),
-   user_id              varchar(20) not null references users(user_id),
-   records_date         date,
-   action               varchar(20)
+   hist_id              varchar(30) primary key,
+   item_id              varchar(30) not null references items(item_id),
+   user_id              varchar(30) not null references users(user_id),
+   borrow_date          date,
+   return_date          date,
+   expected_date        date,
+   reserve_date         date,
+   borrow_order_id      varchar(30) references orders(order_id),
+   return_order_id      varchar(30) references orders(order_id),
+   reserve_order_id     varchar(30) references orders(order_id),
 );
 
 
--- /*==============================================================*/
--- /* Table: reservation                                           */
--- /*==============================================================*/
--- create table reservation
--- (
---    reservation_id       integer primary key autoincrement,
---    item_id              integer not null references items(item_id),
---    user_id              varchar(20) not null references users(user_id),
---    reverse_date         date format 'YYYY-MM-DD'
--- );
+/*==============================================================*/
+/* Table: comment                                               */
+/*==============================================================*/
+create table comments
+(
+   comment_id           varchar(30) primary key,
+   item_id              varchar(30) not null references items(item_id),
+   user_id              varchar(30) not null references users(user_id),
+   content              varchar(100),
+   comment_date         date,
+);  
