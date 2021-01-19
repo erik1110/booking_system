@@ -13,7 +13,8 @@ create table users
    password            varchar(30) not null,
    address             varchar(30),
    phone               varchar(20),
-   birthday            varchar(20)
+   birthday            varchar(20),
+   available_status    varchar(20),
 );
 
 /*==============================================================*/
@@ -23,7 +24,8 @@ create table items
 (
    item_id             varchar(30) primary key,
    name                varchar(30) not null,
-   price               float,
+   price               integer,
+   fine                integer,
    description         varchar(30),
    available_day       integer,
    location            varchar(30),
@@ -61,9 +63,21 @@ create table items_hist
    reserve_date         date,
    borrow_order_id      varchar(30) references orders(order_id),
    return_order_id      varchar(30) references orders(order_id),
-   reserve_order_id     varchar(30) references orders(order_id),
+   reserve_order_id     varchar(30) references orders(order_id)
 );
 
+
+/*==============================================================*/
+/* Table: comment (評論)                                         */
+/*==============================================================*/
+create table comments
+(
+   comment_id           varchar(30) primary key,
+   item_id              varchar(30) not null references items(item_id),
+   user_id              varchar(30) not null references users(user_id),
+   content              varchar(100),
+   comment_date         date,
+);
 
 /*==============================================================*/
 /* Table: comment                                               */
