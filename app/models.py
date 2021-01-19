@@ -35,6 +35,7 @@ class Items(Base):
     reserve_status = Column('reserve_status', String(30))
     # 定義一對多的關係
     items_hist = relationship('items_hist')
+    comments = relationship('comments')
 
 # 定義 Orders 模型 (單據)
 class Orders(Base):
@@ -73,3 +74,5 @@ class Comments(Base):
     user_id = Column('user_id', ForeignKey('users.user_id'))
     content = Column('content', String(100))
     comment_date = Column('comment_date', DateTime)
+    # 定義多對一的關係 (Comments -> Items)
+    items = relationship('Items', backref='comments')
