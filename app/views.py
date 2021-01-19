@@ -143,13 +143,13 @@ def submit_returns():
         records_items.item_id = item[0]
         records_items.user_id = session['customer']['id']
         records_items.records_date = d
-        records_items.status = '歸還'
+        records_items.action = '歸還'
         data.append(records_items)
         # 更新物品狀態為未借閱
         db.session.query(Items).filter_by(item_id=item[0]).update(dict(user_id='',
                                                                        borrow_date='',
                                                                        return_date='',
-                                                                       action='未借出'))
+                                                                       booking_status='未借出'))
     db.session.add_all(data)
     db.session.commit()
     return render_template('return_ok.html', records_id=records_id)
