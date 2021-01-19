@@ -13,6 +13,11 @@
 	}	
 </style>
 
+<div align="left">
+    <a href="/list">
+        > 返回 [借用物品列表]
+    </a>
+</div>
 <hr width="100%"/>
 <table width="100%" border="0" align="center">
     <tr>
@@ -51,14 +56,14 @@
                 </tr>
                 <tr>
                     <td class="col">狀態：</td>
-                    <td class="col">{{ item.status }}</td>
+                    <td class="col">{{ item.booking_status }}</td>
                 </tr>
             </tbody>
             </table>
             <br></br>
             <div align="center">
                 <a href="/add?id={{ item.id }}&name={{ item.name }}&price={{ item.price }}">
-                    {% if item.status =='未借出' %}
+                    {% if item.booking_status =='未借出' %}
                     <a href="/add_borrows?item_id={{ item.item_id }}">
                         <input type="button" value="我要借用"
                         style="background-color:#FAD7A0;
@@ -71,7 +76,6 @@
                     {% endif %}
                 </a>
             </div>
-        </td>
     </tr>
 </table>
 {% endblock %}

@@ -273,42 +273,35 @@ def borrows():
 # 借用成功頁面
 @app.route('/submit_borrows', methods=['POST'])
 def submit_borrows():
-    # 從表單中取出數據添加到Orders模式對象中
+    # 創立單據號碼
+    records = Records()
+    # 創立單據詳細資訊 
     borrows_list = request.form.getlist('check')
-    print("borrows_list:", borrows_list)
-    print('session:', session['customer'])
+
+    d = datetime.today()
+    records_id = 'BR' + str(d.strftime('%Y%m%d%H%M%S'))
+    records.records_id = records_id
+    records.action = '借用'
+    records.user_id = session['customer']['id']
+    records.records_date = d
+    records.total =  len(borrows_list)
+    db.session.add(records)
+
     data = []
     for item in borrows_list:
-        # 生成訂單id，規則為當前時間戳記+一位隨機數
-        records = Records()
-        print('yoyo', records)
-        n = random.randint(0, 9)
-        d = datetime.today()
-        records_id = str(int(d.timestamp() * 1e6)) + str(n)
-        records.records_id = records_id
-        records.item_id = int(item)
-        records.user_id = session['customer']['id']
-        records.borrow_date = d.strftime('%Y-%m-%d')
-        records.return_date = ''
-        records.status = '已借出'
-        print('yoyo', records.borrow_date)
-        data.append(records)
-        print(data)
+        records_items = Records_items()
+        records_items.records_id = records_id
+        records_items.item_id = int(item)
+        records_items.user_id = session['customer']['id']
+        records_items.records_date = d
+        records_items.action = '歸還'
+        data.append(records_items)
+        # 更新物品狀態為未借閱
+        db.session.query(Items).filter_by(item_id=int(item)).update(dict(user_id=records_items.user_id,
+                                                                         borrow_date=records_items.records_date.strftime('%Y-%m-%d'),
+                                                                         return_date='',
+                                                                         booking_status='已借出'))
     db.session.add_all(data)
     db.session.commit()
-    # 清除購物車
     session.pop('borrows', None)
-
-    for item in borrows_list:
-        # 生成訂單id，規則為當前時間戳記+一位隨機數
-        record = db.session.query(Records).filter_by(item_id=int(item)).order_by(Records.records_id.desc()).first()
-        print('yoyo', int(item), record.user_id, record.borrow_date, record.return_date)
-        db.session.query(Items).filter_by(item_id=int(item)).update(dict(user_id=record.user_id,
-                                                                         borrow_date=record.borrow_date,
-                                                                         return_date=record.return_date,
-                                                                         status='已借出'))
-        db.session.commit()
-    
-    # mail(records_id, borrows_list, records.user_id)
-
-    return render_template('borrows_ok.html')
+    return render_template('borrows_ok.html', records_id=records_id)
