@@ -290,35 +290,42 @@ def borrows():
 def submit_borrows():
     # 創立單據詳細資訊 
     borrows_list = request.form.getlist('check')
-    # 創立單據號碼
-    orders = Orders()
-    d = datetime.today()
-    order_id = 'BOR' + str(d.strftime('%Y%m%d%H%M%S'))
-    orders.order_id = order_id
-    orders.action = '借用'
-    orders.user_id = session['customer']['id']
-    orders.order_date = d.strftime('%Y-%m-%d')
-    orders.total =  len(borrows_list)
-    db.session.add(orders)
 
-    data = []
-    for item in borrows_list:
-        num_day = db.session.query(Items).filter_by(item_id=int(item)).first().available_day
-        items_hist = ItemsHist()
-        items_hist.hist_id = 'I' + item.zfill(3) + 'D' + str(d.strftime('%Y%m%d%H%M%S'))
-        items_hist.item_id = int(item)
-        items_hist.user_id = session['customer']['id']
-        items_hist.borrow_date = d.strftime('%Y-%m-%d')
-        items_hist.expected_date = (d + relativedelta(days=num_day)).strftime('%Y-%m-%d')
-        items_hist.borrow_order_id = order_id
-        data.append(items_hist)
-        # 更新物品狀態為已借用
-        db.session.query(Items).filter_by(item_id=int(item)).update(dict(user_id=items_hist.user_id,
-                                                                         borrow_date=items_hist.borrow_date,
-                                                                         expected_date=items_hist.expected_date,
-                                                                         return_date='',
-                                                                         booking_status='已借出'))
-    db.session.add_all(data)
-    db.session.commit()
-    session.pop('borrows', None)
-    return render_template('borrows_ok.html', order_id=order_id)
+    if len(borrows_list)==0:
+        flash('未勾選任何物品，無法提交借用單')
+        return redirect(url_for('borrows'))
+    else:
+        # 創立單據號碼
+        orders = Orders()
+        d = datetime.today()
+        order_id = 'BOR' + str(d.strftime('%Y%m%d%H%M%S'))
+        print('yoyoyoyo',order_id)
+        orders.order_id = order_id
+        orders.action = '借用'
+        orders.user_id = session['customer']['id']
+        orders.order_date = d.strftime('%Y-%m-%d')
+        orders.total =  len(borrows_list)
+        db.session.add(orders)
+
+        data = []
+        for item in borrows_list:
+            num_day = db.session.query(Items).filter_by(item_id=int(item)).first().available_day
+            items_hist = ItemsHist()
+            items_hist.hist_id = 'I' + item.zfill(3) + 'D' + str(d.strftime('%Y%m%d%H%M%S'))
+            items_hist.item_id = int(item)
+            items_hist.user_id = session['customer']['id']
+            items_hist.borrow_date = d.strftime('%Y-%m-%d')
+            items_hist.expected_date = (d + relativedelta(days=num_day)).strftime('%Y-%m-%d')
+            items_hist.borrow_order_id = order_id
+            data.append(items_hist)
+            # 更新物品狀態為已借用
+            db.session.query(Items).filter_by(item_id=int(item)).update(dict(user_id=items_hist.user_id,
+                                                                            borrow_date=items_hist.borrow_date,
+                                                                            expected_date=items_hist.expected_date,
+                                                                            return_date='',
+                                                                            booking_status='已借出'))
+        db.session.add_all(data)
+        db.session.commit()
+        session.pop('borrows', None)
+        return render_template('borrows_ok.html', order_id=order_id)
+    
