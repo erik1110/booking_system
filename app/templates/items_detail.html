@@ -15,7 +15,10 @@
 
 <div align="left">
     <a href="/list">
-        > 返回 [借用物品列表]
+        >> [借用物品列表]
+    </a>
+    <a style="color:#303030;font-size:14px;">
+        > {{ item.name }}：{{item.item_id}}
     </a>
 </div>
 <hr width="100%"/>
@@ -66,16 +69,28 @@
                     {% if item.booking_status =='未借出' %}
                     <a href="/add_borrows?item_id={{ item.item_id }}">
                         <input type="button" value="我要借用"
-                        style="background-color:#FAD7A0;
+                        style="background-color:#036d178f;
                                height: 30px;
                                font-size:18px;
                                font-weight:bold;
-                               color:#6E2C00;
+                               color:#ffffff;
+                               font-family:arial,'Microsoft JhengHei','微軟正黑體',sans-serif !important;">
+                    </a>
+                    {% endif %}
+                    {% if item.reserve_status =='未預約' %}
+                    <a href="/add_reserves?item_id={{ item.item_id }}">
+                        <input type="button" value="我要預約"
+                        style="background-color:#1b3cfa;
+                               height: 30px;
+                               font-size:18px;
+                               font-weight:bold;
+                               color:#ffffff;
                                font-family:arial,'Microsoft JhengHei','微軟正黑體',sans-serif !important;">
                     </a>
                     {% endif %}
                 </a>
             </div>
+        </td>        
     </tr>
 </table>
 {% endblock %}

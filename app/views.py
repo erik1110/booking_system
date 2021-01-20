@@ -6,6 +6,7 @@ import config
 import random
 import datetime
 from datetime import date, datetime
+from dateutil.relativedelta import relativedelta
 
 app = Flask(__name__)
 app.config.from_object(config)
@@ -115,7 +116,7 @@ def returns():
                                   ItemsHist.borrow_order_id, \
                                   ItemsHist.item_id, \
                                   ItemsHist.hist_id). \
-                                  filter_by(user_id='erik1110', booking_status='已借出'). \
+                                  filter_by(user_id=session['customer']['id'], booking_status='已借出'). \
                             join(Items, Items.item_id==ItemsHist.item_id)
         return render_template('returns.html', list=result)
 
@@ -250,7 +251,6 @@ def add_borrows():
     item = db.session.query(Items).filter_by(item_id=item_id).first()
     name = item.name
     available_day = item.available_day
-    return_date = item.return_date
     # 判斷Session中是否有購物車數據
     if 'borrows' not in session.keys():
         session['borrows'] = []
@@ -259,7 +259,7 @@ def add_borrows():
         flash('物品ID=【'+str(item_id)+'】的【'+ name + '】：已加入過借用清單')
     else:
         # Add session
-        session['borrows'].append([item_id, name, available_day, return_date])
+        session['borrows'].append([item_id, name, available_day])
         print(session['borrows'])
         flash('物品ID=【'+str(item_id)+'】的【'+ name + '】：成功加入借用清單')
 
@@ -279,7 +279,7 @@ def borrows():
     list = []
     for item in borrows:
         # 購物車每一个元素[商品id, 商品名稱, 商品價格, 商品數量]
-        new_item = (item[0], item[1], item[2], item[3])
+        new_item = (item[0], item[1], item[2])
         list.append(new_item)
     print('list:', list)
     print(list[0][1])
@@ -288,35 +288,37 @@ def borrows():
 # 借用成功頁面
 @app.route('/submit_borrows', methods=['POST'])
 def submit_borrows():
-    # 創立單據號碼
-    records = Records()
     # 創立單據詳細資訊 
     borrows_list = request.form.getlist('check')
-
+    # 創立單據號碼
+    orders = Orders()
     d = datetime.today()
-    records_id = 'BR' + str(d.strftime('%Y%m%d%H%M%S'))
-    records.records_id = records_id
-    records.action = '借用'
-    records.user_id = session['customer']['id']
-    records.records_date = d
-    records.total =  len(borrows_list)
-    db.session.add(records)
+    order_id = 'BOR' + str(d.strftime('%Y%m%d%H%M%S'))
+    orders.order_id = order_id
+    orders.action = '借用'
+    orders.user_id = session['customer']['id']
+    orders.order_date = d.strftime('%Y-%m-%d')
+    orders.total =  len(borrows_list)
+    db.session.add(orders)
 
     data = []
     for item in borrows_list:
-        records_items = Records_items()
-        records_items.records_id = records_id
-        records_items.item_id = int(item)
-        records_items.user_id = session['customer']['id']
-        records_items.records_date = d
-        records_items.action = '歸還'
-        data.append(records_items)
-        # 更新物品狀態為未借閱
-        db.session.query(Items).filter_by(item_id=int(item)).update(dict(user_id=records_items.user_id,
-                                                                         borrow_date=records_items.records_date.strftime('%Y-%m-%d'),
+        num_day = db.session.query(Items).filter_by(item_id=int(item)).first().available_day
+        items_hist = ItemsHist()
+        items_hist.hist_id = 'I' + item.zfill(3) + 'D' + str(d.strftime('%Y%m%d%H%M%S'))
+        items_hist.item_id = int(item)
+        items_hist.user_id = session['customer']['id']
+        items_hist.borrow_date = d.strftime('%Y-%m-%d')
+        items_hist.expected_date = (d + relativedelta(days=num_day)).strftime('%Y-%m-%d')
+        items_hist.borrow_order_id = order_id
+        data.append(items_hist)
+        # 更新物品狀態為已借用
+        db.session.query(Items).filter_by(item_id=int(item)).update(dict(user_id=items_hist.user_id,
+                                                                         borrow_date=items_hist.borrow_date,
+                                                                         expected_date=items_hist.expected_date,
                                                                          return_date='',
                                                                          booking_status='已借出'))
     db.session.add_all(data)
     db.session.commit()
     session.pop('borrows', None)
-    return render_template('borrows_ok.html', records_id=records_id)
+    return render_template('borrows_ok.html', order_id=order_id)
