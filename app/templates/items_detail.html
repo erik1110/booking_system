@@ -13,12 +13,9 @@
 	}	
 </style>
 
-<div align="left">
-    <a href="/list">
-        >> [借用物品列表]
-    </a>
-    <a style="color:#303030;font-size:14px;">
-        > {{ item.name }}：{{item.item_id}}
+<div align="right">
+    <a href="/list"  style="color:#e41212;font-weight: bold">
+        >> 返回 [借用物品列表]
     </a>
 </div>
 <hr width="100%"/>
@@ -27,12 +24,12 @@
         <td width="40%" align="right">
             <div>
                 <img src="{{ url_for('static', filename='images/') }}{{ item.image }}"
-                     width="360px"
-                     height="330px"/>
+                     width="85%"
+                     height="85%"/>
             </div>
         <td width="10%"></td>
         <td width="50%" align="left">
-            <table width="500" height="280">
+            <table width="90%" height="100%">
             <tbody>
                 <tr bgcolor="#b4c8ed">
                     <td class='col' colspan="2"><b>商品詳細資訊</b></td>
