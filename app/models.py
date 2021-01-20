@@ -33,8 +33,9 @@ class Items(Base):
     reserve_date = Column('reserve_date', String(30))
     booking_status = Column('booking_status', String(30))
     reserve_status = Column('reserve_status', String(30))
-    # 定義一對多的關係
+    # 定義一對多的關係 (Items -> ItemsHist)
     items_hist = relationship('ItemsHist')
+    # 定義一對多的關係 (Items -> Comments)
     comments = relationship('Comments')
 
 # 定義 Orders 模型 (單據)
@@ -45,7 +46,7 @@ class Orders(Base):
     user_id = Column('user_id', ForeignKey('users.user_id'))
     total = Column('total', Float)
     order_date = Column('order_date', String(20))
-    # # 定義一對多的關係
+    # # 定義一對多的關係 (Orders -> ItemsHist)
     # items_hist = relationship('ItemsHist')
 
 # 定義 ItemsHist 模型 (單據詳細)
@@ -61,8 +62,8 @@ class ItemsHist(Base):
     borrow_order_id = Column('borrow_order_id', String(30))
     return_order_id = Column('return_order_id', String(30))
     reserve_order_id = Column('reserve_order_id', String(30))
-#    # 定義多對一的關係 (ItemsHist -> Orders)
-#     orders = relationship('Orders', backref='ItemsHist')
+    # # 定義多對一的關係 (ItemsHist -> Orders)
+    # orders = relationship('Orders', backref='ItemsHist')
     # 定義多對一的關係 (ItemsHist -> Items)
     items = relationship('Items', backref='ItemsHist')
 

@@ -127,10 +127,11 @@ def submit_returns():
     orders = Orders() 
     # 從前端拉回資訊
     returns_list = request.form.getlist('check')
-    # 創立單據號碼 
+    # 創立單據號碼
     today = datetime.today()
     order_id = 'RET' + str(today.strftime('%Y%m%d%H%M%s'))
     orders.order_id = order_id
+    orders.hist_id = returns_list
     orders.action = '歸還'
     orders.user_id = session['customer']['id']
     orders.total = len(returns_list)
@@ -138,7 +139,6 @@ def submit_returns():
     db.session.add(orders)
     # 更新資訊
     for hist_id in returns_list:
-        # item_id = data[1]
         # 更新 ItemsHist 新增資訊
         db.session.query(ItemsHist).filter_by(hist_id=hist_id).update(dict(
                                                                return_date=today,
