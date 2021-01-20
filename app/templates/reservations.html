@@ -33,21 +33,31 @@
 <form action="/submit_reservations" method="post">
     <table width="100%" border="0" align="center" class="threeboder">
         <tr bgcolor="#A5D3FF">
-            <td width="10%" align="center" class="theader">借用id</td>
+            <td width="10%" align="center" class="theader">物品代碼</td>
             <td width="20%" align="center" class="theader">物品名稱</td>
+            <td width="20%" align="center" class="theader">物品借用狀態</td>
+            <td width="20%" align="center" class="theader">借用者的到期日</td>
             <td width="10%" align="center" class="theader">確認</td>           
         </tr>  
-      {% for item in list %}
+      {% for data in data_list %}
         <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
-            <td align="center" > {{ item[0]}} </td>
-            <td align="center" > {{ item[1]}} </td>
-            <td align="center"> <input type="checkbox" name="check" value={{ item[0] }}> </td>      
+            <td align="center" > {{ data[0]}} </td>
+            <td align="center" > {{ data[1]}} </td>
+            <td align="center" > {{ data[2]}} </td>
+            <td align="center" > {{ data[3]}} </td>
+            <td align="center"> <input type="checkbox" name="reserve_checked" value={{ data[0] }}> </td>      
         </tr>
       {% endfor %}
     </table>
     <br>
     <div align="center">
-    <input type="submit" value="提交">
+        <input type="submit" value="提交"
+               style="background-color:#c01111;
+                      height: 25px;
+                      font-size:16px;
+                      font-weight:bold;
+                      color:#ffffff;
+                      font-family:arial,'Microsoft JhengHei','微軟正黑體',sans-serif !important;" >
     </div>
     <br>
     <div align="center">

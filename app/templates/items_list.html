@@ -27,6 +27,7 @@
 		<th width="10%">物品狀態</th>
 		<th width="10%">借用日</th>
 		<th width="5%">借用</th>
+		<th width="5%">預約</th>
     </tr>
   {% for item in list %}
     <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
@@ -34,18 +35,33 @@
         <td class="col"><a href="/detail?item_id={{ item.item_id }}">{{ item.name }}</a></td>
 		<td class="col"> {{ item.booking_status}} </td>
 		<td class="col"> {{ item.borrow_date}} </td>
-		<td class="col">
+		<td class="col" >
 			{% if item.booking_status =='未借出' %}
 			<a href="/add_borrows?item_id={{ item.item_id }}">
 				<input type="button" value="我要借用"
-                        style="background-color:#FAD7A0;
+                        style="background-color:#036d178f;
                                height: 30px;
                                font-size:14px;
                                font-weight:bold;
-                               color:#6E2C00;
+                               color:#ffffff;
                                font-family:arial,'Microsoft JhengHei','微軟正黑體',sans-serif !important;">
 			</a>
 			{% endif %}
+		</td>
+		<td class="col" >
+			{% if item.reserve_status =='未預約' %}
+			<a href="/add_reservation?item_id={{ item.item_id }}">
+				<input type="button" value="我要預約"
+                        style="background-color:#1b3cfa;
+                               height: 30px;
+                               font-size:14px;
+                               font-weight:bold;
+                               color:#ffffff;
+                               font-family:arial,'Microsoft JhengHei','微軟正黑體',sans-serif !important;">
+			</a>
+			{% endif %}
+
+			<br>
 		</td>
 	</tr>
   {% endfor %}

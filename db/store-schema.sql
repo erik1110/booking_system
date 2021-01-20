@@ -9,7 +9,7 @@ drop table if exists comments;
 /*==============================================================*/
 create table users
 (
-   user_id             varchar(30) primary key,
+   user_id             varchar(100) primary key,
    name                varchar(30) not null,
    password            varchar(30) not null,
    address             varchar(30),
@@ -23,15 +23,15 @@ create table users
 /*==============================================================*/
 create table items
 (
-   item_id             varchar(30) primary key,
+   item_id             varchar(100) primary key,
    name                varchar(30) not null,
    price               integer,
    fine                integer,
-   description         varchar(30),
+   description         varchar(100),
    available_day       integer,
    location            varchar(30),
    image               varchar(100),
-   user_id             varchar(30),
+   user_id             varchar(100),
    borrow_date         date,
    expected_date       date,
    return_date         date,
@@ -45,9 +45,9 @@ create table items
 /*==============================================================*/
 create table orders
 (
-   order_id            varchar(30) primary key,
+   order_id            varchar(100) primary key,
    action              varchar(30),
-   user_id             varchar(30) not null references users(user_id),
+   user_id             varchar(100) not null references users(user_id),
    total               integer,
    order_date          date
 );
@@ -57,16 +57,16 @@ create table orders
 /*==============================================================*/
 create table items_hist
 (
-   hist_id              varchar(30) primary key,
-   item_id              varchar(30) not null references items(item_id),
-   user_id              varchar(30) not null references users(user_id),
-   borrow_date         date,
-   expected_date       date,
-   return_date         date,
-   reserve_date        date,
-   borrow_order_id      varchar(30) references orders(order_id),
-   return_order_id      varchar(30) references orders(order_id),
-   reserve_order_id     varchar(30) references orders(order_id)
+   hist_id              varchar(100) primary key,
+   item_id              varchar(100) not null references items(item_id),
+   user_id              varchar(100) not null references users(user_id),
+   borrow_date          date,
+   expected_date        date,
+   return_date          date,
+   reserve_date         date,
+   borrow_order_id      varchar(100) references orders(order_id),
+   return_order_id      varchar(100) references orders(order_id),
+   reserve_order_id     varchar(100) references orders(order_id)
 );
 
 
@@ -75,9 +75,9 @@ create table items_hist
 /*==============================================================*/
 create table comments
 (
-   comment_id           varchar(30) primary key,
-   item_id              varchar(30) not null references items(item_id),
-   user_id              varchar(30) not null references users(user_id),
+   comment_id           varchar(100) primary key,
+   item_id              varchar(100) not null references items(item_id),
+   user_id              varchar(100) not null references users(user_id),
    content              varchar(100),
    comment_date         date
 );

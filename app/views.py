@@ -87,7 +87,6 @@ def show_items_list():
     if 'customer' not in session.keys():
         flash('您還沒有登入哦！')
         return redirect(url_for('login'))
-
     items_list = db.session.query(Items).all()
     return render_template('items_list.html', list=items_list)
 
@@ -129,9 +128,9 @@ def submit_returns():
     returns_list = request.form.getlist('check')
     # 創立單據號碼
     today = datetime.today()
-    order_id = 'RET' + str(today.strftime('%Y%m%d%H%M%s'))
+    n = random.randint(0, 9)
+    order_id = 'RET' + str(datetime.today().timestamp() * 1e6) + str(n)
     orders.order_id = order_id
-    orders.hist_id = returns_list
     orders.action = '歸還'
     orders.user_id = session['customer']['id']
     orders.total = len(returns_list)
@@ -147,80 +146,98 @@ def submit_returns():
         # 更新物品狀態為未借閱
         db.session.query(Items).filter_by(item_id=item_id).update(dict(user_id='',
                                                                        borrow_date='',
+                                                                       expected_date='',
                                                                        return_date='',
+                                                                       reserve_date='',
                                                                        booking_status='未借出'))
     db.session.commit()
     return render_template('return_ok.html', order_id=order_id, returns_list=returns_list)
 
-# # 添加預約頁面
-# @app.route('/add_reservation')
-# def add_reservation():
-#     if 'customer' not in session.keys():
-#         flash('您還沒有登入哦！')
-#         return redirect(url_for('login'))
+# 添加預約頁面
+@app.route('/add_reservation')
+def add_reservation():
+    if 'customer' not in session.keys():
+        flash('您還沒有登入哦！')
+        return redirect(url_for('login'))
+    item_id = request.args['item_id']
+    item = db.session.query(Items).filter_by(item_id=item_id).first()
+    name = item.name
+    # 判斷Session中是否有購物車數據
+    if 'reservations' not in session.keys():
+        session['reservations'] = []
+    if item_id in ([x[0] for x in session['reservations']]):
+        flash('物品ID=【'+str(item_id)+'】的【'+ name + '】已加入過預約清單')
+    else:
+        # Add session
+        session['reservations'].append(item_id)
+        flash('物品ID=【'+str(item_id)+'】的【'+ name + '】加入預約清單')
+    return redirect(url_for('show_items_list'))
 
-#     item_id = int(request.args['item_id'])
-#     item = db.session.query(Items).filter_by(item_id=item_id).first()
-#     name = item.name
-#     # 判斷Session中是否有購物車數據
-#     if 'reservations' not in session.keys():
-#         session['reservations'] = []
-#     if item_id in ([x[0] for x in session['reservations']]):
-#         flash('物品ID=【'+str(item_id)+'】的【'+ name + '】：已加入過預約清單')
-#     else:
-#         # Add session
-#         session['reservations'].append([item_id, name])
-#         flash('已經添加物品【' + name + '】到預約清單')
-#     return redirect(url_for('show_items_list'))
-
-# # 預約頁面
-# @app.route('/reservations', methods=['GET', 'POST'])
-# def reservations():
-#     if 'customer' not in session.keys():
-#         flash('您還沒有登入哦！')
-#         return redirect(url_for('login'))
+# 預約頁面
+@app.route('/reservations', methods=['GET', 'POST'])
+def reservations():
+    if 'customer' not in session.keys():
+        flash('您還沒有登入哦！')
+        return redirect(url_for('login'))
   
-#     if 'reservations' not in session.keys():
-#         return render_template('reservations.html', list=[])
+    if 'reservations' not in session.keys():
+        return render_template('reservations.html', list=[])
     
-#     reservations = session['reservations']
-#     list = []
-#     for item in reservations:
-#         # 購物車每一个元素[商品id, 商品名稱, 商品價格, 商品數量]
-#         new_item = (item[0], item[1])
-#         list.append(new_item)
-#     return render_template('reservations.html', list=list)
+    item_ids = session['reservations']
+    data_list = []
+    for item_id in item_ids:
+        items = db.session.query(Items).filter_by(item_id=item_id).first()
+        data_list.append([items.item_id, items.name, items.booking_status, items.expected_date])
     
-# @app.route('/submit_reservations', methods=['POST'])
-# def submit_reservations():
-#     user_id = session['customer']['id']
-#     # 從表單中取出數據添加到 Reservation模式對象中
-#     reservation_list = request.form.getlist("check")
-#     print("reservation_list:", reservation_list)
-#     # 檢查是否有被預約
-#     for item in reservation_list:
-#         query = db.session.query(Reservation).filter_by(user_id=user_id, item_id=item[0])
-#         if query is not None:
-#             item = db.session.query(Items).filter_by(item_id=item[0]).first()
-#             flash('您已經添加過【' + item.name + '】到預約清單')
-#             return redirect(url_for('reservations'))
-#     # 寫入Resevation
-#     data = []
-#     for item in reservation_list:
-#         reserve = Reservation()
-#         # 生成預約id，規則為當前時間戳記+一位隨機數
-#         n = random.randint(0, 9)
-#         d = datetime.today()
-#         reserve.reservation_id = str(int(d.timestamp() * 1e6)) + str(n)
-#         reserve.item_id = item[0]
-#         reserve.user_id = session['customer']['id']
-#         reserve.reverse_date = d.strftime('%Y-%m-%d %H:%M:%S')
-#         data.append(reserve)
-#     db.session.add_all(data)
-#     db.session.commit()
-#     # 清除預約清單
-#     session.pop('reservations', None)
-#     return render_template('reserve_ok.html')
+    return render_template('reservations.html', data_list=data_list)
+    
+@app.route('/submit_reservations', methods=['POST'])
+def submit_reservations():
+    user_id = session['customer']['id']
+    # 從表單中取出數據添加到 Reservation 模式對象中
+    reserve_list = request.form.getlist("reserve_checked")
+    print("reservation_list:", reserve_list)
+    # 檢查是否有被預約
+    for item_id in reserve_list:
+        items = db.session.query(Items).filter_by(item_id=item_id).first()
+        if items.reserve_status=='已預約':
+            flash('有人已經搶先預約過【' + items.name + '】成功了！')
+            return redirect(url_for('reservations'))
+    # 初始化 Orders 對象
+    orders = Orders() 
+    # 創立單據號碼
+    n = random.randint(0, 9)
+    order_id = 'RES' + str(datetime.today().timestamp() * 1e6) + str(n)
+    orders.order_id = order_id
+    orders.action = '預約'
+    orders.user_id = session['customer']['id']
+    orders.total = len(reserve_list)
+    orders.order_date = datetime.today()
+    db.session.add(orders)
+    # 寫入Resevation
+    data＿list = []
+    for item_id in reserve_list:
+        itemshist = ItemsHist()
+        # 寫入物品歷史紀錄
+        n = random.randint(0, 9)
+        itemshist.hist_id = 'HIST' + str(datetime.today().timestamp() * 1e6) + str(n)
+        itemshist.item_id = item_id
+        itemshist.user_id = session['customer']['id']
+        itemshist.reverse_date = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+        itemshist.reserve_order_id = order_id
+        data_list.append(itemshist)
+        # 更新物品資訊為已預約
+        db.session.query(Items).filter_by(item_id=item_id).update(dict(user_id='',
+                                                                       borrow_date='',
+                                                                       expected_date='',
+                                                                       return_date='',
+                                                                       reserve_date='',
+                                                                       reserve_status='已預約'))
+    db.session.add_all(data_list)
+    db.session.commit()
+    # 清除預約清單
+    session.pop('reservations', None)
+    return render_template('reserve_ok.html')
 
 # 添加借用頁面
 @app.route('/add_borrows')
