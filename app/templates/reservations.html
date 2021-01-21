@@ -1,0 +1,67 @@
+{% extends "base2.html" %}
+{% block title %}預約清單{% endblock %}
+{% block body %}
+<style type="text/css">
+       table {
+            border-collapse: collapse;
+        }
+
+        .threeboder {
+            border: 1px solid #5B96D0;
+        }
+
+        .trow {
+            border-right: 1px solid #5B96D0;
+            border-bottom: 1px solid #5A96D6;
+        }
+
+        .theader {
+            background-color: #A5D3FF;
+            font-size: 14px;
+            border-right: 1px solid #5B96D0;
+            border-bottom: 1px solid #5A96D6;
+        }
+
+
+</style>
+
+<table width="100%" border="0" align="center">
+</table>
+<hr width="100%"/>
+<div class="text3" align="center">預約清單</div>
+<br>
+<form action="/submit_reservations" method="post">
+    <table width="100%" border="0" align="center" class="threeboder">
+        <tr bgcolor="#A5D3FF">
+            <td width="10%" align="center" class="theader">物品代碼</td>
+            <td width="20%" align="center" class="theader">物品名稱</td>
+            <td width="20%" align="center" class="theader">物品借用狀態</td>
+            <td width="20%" align="center" class="theader">借用者的到期日</td>
+            <td width="10%" align="center" class="theader">確認</td>           
+        </tr>  
+      {% for data in data_list %}
+        <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
+            <td align="center" > {{ data[0]}} </td>
+            <td align="center" > {{ data[1]}} </td>
+            <td align="center" > {{ data[2]}} </td>
+            <td align="center" > {{ data[3]}} </td>
+            <td align="center"> <input type="checkbox" name="reserve_checked" value={{ data[0] }}> </td>      
+        </tr>
+      {% endfor %}
+    </table>
+    <br>
+    <div align="center">
+        <input type="submit" value="提交"
+               style="background-color:#c01111;
+                      height: 25px;
+                      font-size:16px;
+                      font-weight:bold;
+                      color:#ffffff;
+                      font-family:arial,'Microsoft JhengHei','微軟正黑體',sans-serif !important;" >
+    </div>
+    <br>
+    <div align="center">
+        <a href="/main"><big>返回主頁面</big></a>
+    </div>
+</form>
+{% endblock %}

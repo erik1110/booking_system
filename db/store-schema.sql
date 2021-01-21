@@ -1,20 +1,21 @@
 drop table if exists users;
 drop table if exists items;
-drop table if exists items_info;
-drop table if exists records;
-drop table if exists reservation;
+drop table if exists orders;
+drop table if exists items_hist;
+drop table if exists comments;
 
 /*==============================================================*/
 /* Table: users                                                 */
 /*==============================================================*/
 create table users
 (
-   user_id             varchar(20) primary key,
-   name                varchar(50) not null,
-   password            varchar(20) not null,
-   address             varchar(100),
+   user_id             varchar(100) primary key,
+   name                varchar(30) not null,
+   password            varchar(30) not null,
+   address             varchar(30),
    phone               varchar(20),
-   birthday            varchar(20)
+   birthday            varchar(20),
+   available_status    varchar(20)
 );
 
 /*==============================================================*/
@@ -22,38 +23,61 @@ create table users
 /*==============================================================*/
 create table items
 (
-   item_id             integer primary key autoincrement,
-   name                varchar(100) not null,
-   price               float,
-   description         varchar(200),
+   item_id             varchar(100) primary key,
+   name                varchar(30) not null,
+   price               integer,
+   fine                integer,
+   description         varchar(100),
    available_day       integer,
-   location            varchar(10),
+   location            varchar(30),
    image               varchar(100),
-   user_id             varchar(20),
-   borrow_date         date format 'YYYY-MM-DD',
-   return_date         date format 'YYYY-MM-DD',
-   status              integer default '未借出'
+   user_id             varchar(100),
+   borrow_date         date,
+   expected_date       date,
+   return_date         date,
+   reserve_date        date,
+   booking_status      varchar(30),
+   reserve_status      varchar(30)
 );
 
 /*==============================================================*/
-/* Table: records                                               */
+/* Table: orders （單據）                                       */
 /*==============================================================*/
-create table records
+create table orders
 (
-   records_id           integer primary key autoincrement,
-   item_id              integer not null references items(item_id),
-   user_id              integer not null references users(user_id),
-   borrow_date          date format 'YYYY-MM-DD',
-   return_date          date format 'YYYY-MM-DD',
-   status               integer not null
+   order_id            varchar(100) primary key,
+   action              varchar(30),
+   user_id             varchar(100) not null references users(user_id),
+   total               integer,
+   order_date          date
 );
+
 /*==============================================================*/
-/* Table: reservation                                           */
+/* Table: items_hist (物品歷史資訊)                               */
 /*==============================================================*/
-create table reservation
+create table items_hist
 (
-   reservation_id       integer primary key autoincrement,
-   item_id              integer not null references items(item_id),
-   user_id              integer not null references users(user_id),
-   reverse_date         date format 'YYYY-MM-DD'
+   hist_id              varchar(100) primary key,
+   item_id              varchar(100) not null references items(item_id),
+   user_id              varchar(100) not null references users(user_id),
+   borrow_date          date,
+   expected_date        date,
+   return_date          date,
+   reserve_date         date,
+   borrow_order_id      varchar(100) references orders(order_id),
+   return_order_id      varchar(100) references orders(order_id),
+   reserve_order_id     varchar(100) references orders(order_id)
+);
+
+
+/*==============================================================*/
+/* Table: comment (評論)                                         */
+/*==============================================================*/
+create table comments
+(
+   comment_id           varchar(100) primary key,
+   item_id              varchar(100) not null references items(item_id),
+   user_id              varchar(100) not null references users(user_id),
+   content              varchar(100),
+   comment_date         date
 );

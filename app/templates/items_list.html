@@ -3,74 +3,68 @@
 {% block body %}
 
 <style type="text/css">
-	table {
-		border-collapse: collapse;
-	}
 
+	body {font-size: 14px; /* font-size 1em = 10px */}
+	table {border-collapse: collapse;}
+	
 	/*物品列表第1列*/
-	.col1 {
-		padding-top: 5px;
-		border-top: 1px dashed #666666;
-		text-indent: 40px
-	}
-
-	/*物品列表第2列*/
-	.col2 {
-		padding-top: 5px;
-		border-top: 1px dashed #666666;
-		text-align: right;
-	}
-
-	/*物品列表第3列*/
-	.col3 {
+	.col {
 		padding-top: 5px;
 		border-top: 1px dashed #666666;
 		text-align: center;
 	}
-
-	/*物品列表第4列*/
-	.col4 {
-	padding-top: 5px;
-	border-top: 1px dashed #666666;
-	text-align: center;
-	}
-
-	/*物品列表第5列*/
-	.col5 {
-	padding-top: 5px;
-	border-top: 1px dashed #666666;
-	text-align: center;
-	}
-
+	
 </style>
 
-<table width="100%" border="0" align="center">
-    <tr>
-        <td width="616"><img src="{{ url_for('static', filename='images/list.jpg') }}" align="absmiddle"/></td>
-        {% include 'items_header.html' %}
-    </tr>
-</table>
+
 <hr width="100%"/>
 <div class="text3" align="center">請選擇借用的物品</div>
 <br>
-<table width="100%" border="0" align="center">
+<table width="90%" border="0" align="center">
     <tr bgcolor="#b4c8ed">
+		<th width="10%">物品ID</th>
         <th width="10%">物品名稱</th>
-		<th width="5%">物品狀態</th>
-		<th width="15%">借用日</th>
-		<th width="15%">預約到期日</th>
-		<th width="15%">借用</th>
-		<th width="15%">預約</th>
+		<th width="10%">物品狀態</th>
+		<th width="10%">借用日</th>
+		<th width="5%">借用</th>
+		<th width="5%">預約</th>
     </tr>
   {% for item in list %}
     <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
-        <td class="col1"><a href="/detail?id={{ item.item_id }}">{{ item.name }}</a></td>
-		<td class="col2"> {{ item.status}} </td>
-		<td class="col3"> {{ item.borrow_date}} </td>
-		<td class="col4"> {{ item.return_date}} </td>
-        <td class="col5"><a href="/add?id={{ item.item_id }}"> 我要借用</a></td>
-        <td class="col6"><a href="/add?id={{ item.item_id }}"> 我要預約</a></td>
+		<td class="col"><a href="/detail?item_id={{ item.item_id }}">{{ item.item_id }}</a></td>
+        <td class="col"><a href="/detail?item_id={{ item.item_id }}">{{ item.name }}</a></td>
+		<td class="col"> {{ item.booking_status}} </td>
+		<td class="col"> {{ item.borrow_date}} </td>
+		<td class="col" >
+			{% if item.booking_status =='未借出' %}
+			<a href="/add_borrows?item_id={{ item.item_id }}">
+				<input type="button" value="我要借用"
+                        style="background-color:#036d178f;
+                               height: 30px;
+                               font-size:14px;
+                               font-weight:bold;
+                               color:#ffffff;
+                               font-family:arial,'Microsoft JhengHei','微軟正黑體',sans-serif !important;">
+			</a>
+			{% endif %}
+		</td>
+		<td class="col" >
+			{% if item.reserve_status =='未預約' %}
+			<a href="/add_reservation?item_id={{ item.item_id }}">
+				<input type="button" value="我要預約"
+                        style="background-color:#1b3cfa;
+                               height: 30px;
+                               font-size:14px;
+                               font-weight:bold;
+                               color:#ffffff;
+                               font-family:arial,'Microsoft JhengHei','微軟正黑體',sans-serif !important;">
+			</a>
+			{% endif %}
+
+			<br>
+		</td>
 	</tr>
   {% endfor %}
 </table>
+<br></br>
 {% endblock %}

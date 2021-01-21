@@ -2,56 +2,92 @@
 {% block title %}借用物品詳細資訊{% endblock %}
 {% block body %}
 
+<style type="text/css">
+	body {font-size: 16px;}
+	table {border-collapse: collapse;}
+	/*用戶列表第1列*/
+	.col {
+		padding-top: 5px;
+		border-top: 1px dashed #666666;
+        text-align: center;
+	}	
+</style>
 
-<table width="100%" border="0" align="center">
-    <tr>
-        <td width="616"><img src="{{ url_for('static', filename='images/info.jpg') }}" align="absmiddle"/></td>
-        {% include 'items_header.html' %}
-    </tr>
-</table>
+<div align="right">
+    <a href="/list"  style="color:#e41212;font-weight: bold">
+        >> 返回 [借用物品列表]
+    </a>
+</div>
 <hr width="100%"/>
 <table width="100%" border="0" align="center">
     <tr>
         <td width="40%" align="right">
-            <div><img src="{{ url_for('static', filename='goods_images/') }}{{ goods.image }}" width="360px"
-                      height="360px"/></div>
-            <br></td>
-        <td>
-            <table width="60%" height="200" border="0">
-                <tbody>
-                <tr>
-                    <td class="text5">類型：</td>
-                    <td class="text6">{{ goods.name }}</td>
-                </tr>
-                <tr>
-                    <td class="text5">描述：</td>
-                    <td class="text6">{{ goods.description }}</td>
-                </tr>
-                <tr>
-                    <td class="text5">位置：</td>
-                    <td class="text6">{{ goods.location }}</td>
-                </tr>
-                <tr>
-                    <td class="text5">價格：</td>
-                    <td class="text6">{{ goods.price }}</td>
-                </tr>
-                <tr>
-                    <td class="text5">可借天數：</td>
-                    <td class="text6">{{ goods.available_day }}</td>
-                </tr>
-                <tr>
-                    <td class="text5">狀態：</td>
-                    <td class="text6">{{ goods.status }}</td>
-                </tr>
-                </tbody>
-            </table>
-            <br>
-            <br>
-            <div><a href="/add?id={{ goods.id }}&name={{ goods.name }}&price={{ goods.price }}">
-                <input type="button" value="我要借用" style="width:150px;height:50px;font-size:20px;">
-            </a>
+            <div>
+                <img src="{{ url_for('static', filename='images/') }}{{ item.image }}"
+                     width="85%"
+                     height="85%"/>
             </div>
-        </td>
+        <td width="10%"></td>
+        <td width="50%" align="left">
+            <table width="90%" height="100%">
+            <tbody>
+                <tr bgcolor="#b4c8ed">
+                    <td class='col' colspan="2"><b>商品詳細資訊</b></td>
+                </tr>
+                <tr bgcolor="#edf8ff">
+                    <td class="col">類型：</td>
+                    <td class="col">{{ item.name }}</td>
+                </tr>
+                <tr>
+                    <td class="col">描述：</td>
+                    <td class="col">{{ item.description }}</td>
+                </tr>
+                <tr bgcolor="#edf8ff">
+                    <td class="col">位置：</td>
+                    <td class="col">{{ item.location }}</td>
+                </tr>
+                <tr>
+                    <td class="col">價格：</td>
+                    <td class="col">{{ item.price }}</td>
+                </tr>
+                <tr bgcolor="#edf8ff">
+                    <td class="col">可借天數：</td>
+                    <td class="col">{{ item.available_day }}</td>
+                </tr>
+                <tr>
+                    <td class="col">狀態：</td>
+                    <td class="col">{{ item.booking_status }}</td>
+                </tr>
+            </tbody>
+            </table>
+            <br></br>
+            <div align="center">
+                <a href="/add?id={{ item.id }}&name={{ item.name }}&price={{ item.price }}">
+                    {% if item.booking_status =='未借出' %}
+                    <a href="/add_borrows?item_id={{ item.item_id }}">
+                        <input type="button" value="我要借用"
+                        style="background-color:#036d178f;
+                               height: 30px;
+                               font-size:18px;
+                               font-weight:bold;
+                               color:#ffffff;
+                               font-family:arial,'Microsoft JhengHei','微軟正黑體',sans-serif !important;">
+                    </a>
+                    {% endif %}
+                    {% if item.reserve_status =='未預約' %}
+                    <a href="/add_reserves?item_id={{ item.item_id }}">
+                        <input type="button" value="我要預約"
+                        style="background-color:#1b3cfa;
+                               height: 30px;
+                               font-size:18px;
+                               font-weight:bold;
+                               color:#ffffff;
+                               font-family:arial,'Microsoft JhengHei','微軟正黑體',sans-serif !important;">
+                    </a>
+                    {% endif %}
+                </a>
+            </div>
+        </td>        
     </tr>
 </table>
 {% endblock %}
