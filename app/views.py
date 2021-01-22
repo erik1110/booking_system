@@ -91,6 +91,15 @@ def show_items_list():
     items_list = db.session.query(Items).all()
     return render_template('items_list.html', list=items_list)
 
+# 顯示歷史借用物品列表
+@app.route('/record_history')
+def show_items_list_hist():
+    if 'customer' not in session.keys():
+        flash('您還沒有登入哦！')
+        return redirect(url_for('login'))
+    items_list = db.session.query(ItemsHist.borrow_date, ItemsHist.return_date, Items.item_id, Items.name).filter_by(user_id=session['customer']['id']).join(Items,Items.item_id == ItemsHist.item_id, isouter=True).all()
+    return render_template('record_hist.html', list=items_list)
+
 # 顯示借用物品詳細資訊
 @app.route('/detail')
 def show_items_detail():
@@ -228,9 +237,9 @@ def submit_reservations():
         itemshist.reserve_order_id = order_id
         data_list.append(itemshist)
         # 更新物品資訊為已預約
-        db.session.query(Items).filter_by(item_id=item_id).update(dict(user_id='',
+        db.session.query(Items).filter_by(item_id=item_id).update(dict(user_id=session['customer']['id'],
                                                                        borrow_date='',
-                                                                       expected_date='',
+                                                                       expected_date=datetime.today().strftime('%Y-%m-%d %H:%M:%S'),
                                                                        return_date='',
                                                                        reserve_date='',
                                                                        reserve_status='已預約'))
