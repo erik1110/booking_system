@@ -2,7 +2,6 @@
 {% block title %}借用物品詳細資訊{% endblock %}
 {% block body %}
 
-<<<<<<< HEAD
 <style type="text/css">
 	body {font-size: 16px;}
 	table {border-collapse: collapse;}
@@ -19,20 +18,10 @@
         >> 返回 [借用物品列表]
     </a>
 </div>
-=======
-
-<table width="100%" border="0" align="center">
-    <tr>
-        <td width="616"><img src="{{ url_for('static', filename='images/info.jpg') }}" align="absmiddle"/></td>
-        {% include 'items_header.html' %}
-    </tr>
-</table>
->>>>>>> 1c0eeb2b34844ad231327eb992107b6a4a9ae571
 <hr width="100%"/>
 <table width="100%" border="0" align="center">
     <tr>
         <td width="40%" align="right">
-<<<<<<< HEAD
             <div>
                 <img src="{{ url_for('static', filename='images/') }}{{ item.image }}"
                      width="85%"
@@ -68,41 +57,9 @@
                 <tr>
                     <td class="col">狀態：</td>
                     <td class="col">{{ item.booking_status }}</td>
-=======
-            <div><img src="{{ url_for('static', filename='goods_images/') }}{{ goods.image }}" width="360px"
-                      height="360px"/></div>
-            <br></td>
-        <td>
-            <table width="60%" height="200" border="0">
-                <tbody>
-                <tr>
-                    <td class="text5">類型：</td>
-                    <td class="text6">{{ goods.name }}</td>
-                </tr>
-                <tr>
-                    <td class="text5">描述：</td>
-                    <td class="text6">{{ goods.description }}</td>
-                </tr>
-                <tr>
-                    <td class="text5">位置：</td>
-                    <td class="text6">{{ goods.location }}</td>
-                </tr>
-                <tr>
-                    <td class="text5">價格：</td>
-                    <td class="text6">{{ goods.price }}</td>
-                </tr>
-                <tr>
-                    <td class="text5">可借天數：</td>
-                    <td class="text6">{{ goods.available_day }}</td>
-                </tr>
-                <tr>
-                    <td class="text5">狀態：</td>
-                    <td class="text6">{{ goods.status }}</td>
->>>>>>> 1c0eeb2b34844ad231327eb992107b6a4a9ae571
                 </tr>
             </tbody>
             </table>
-<<<<<<< HEAD
             <br></br>
             <div align="center">
                 <a href="/add?id={{ item.id }}&name={{ item.name }}&price={{ item.price }}">
@@ -129,13 +86,6 @@
                     </a>
                     {% endif %}
                 </a>
-=======
-            <br>
-            <br>
-            <div><a href="/add?id={{ goods.id }}&name={{ goods.name }}&price={{ goods.price }}">
-                <input type="button" value="我要借用" style="width:150px;height:50px;font-size:20px;">
-            </a>
->>>>>>> 1c0eeb2b34844ad231327eb992107b6a4a9ae571
             </div>
         </td>        
     </tr>
