@@ -1,14 +1,21 @@
 drop table if exists users;
 drop table if exists items;
+<<<<<<< HEAD
 drop table if exists orders;
 drop table if exists items_hist;
 drop table if exists comments;
+=======
+drop table if exists items_info;
+drop table if exists records;
+drop table if exists reservation;
+>>>>>>> 1c0eeb2b34844ad231327eb992107b6a4a9ae571
 
 /*==============================================================*/
 /* Table: users                                                 */
 /*==============================================================*/
 create table users
 (
+<<<<<<< HEAD
    user_id             varchar(100) primary key,
    name                varchar(30) not null,
    password            varchar(30) not null,
@@ -16,6 +23,14 @@ create table users
    phone               varchar(20),
    birthday            varchar(20),
    available_status    varchar(20)
+=======
+   user_id             varchar(20) primary key,
+   name                varchar(50) not null,
+   password            varchar(20) not null,
+   address             varchar(100),
+   phone               varchar(20),
+   birthday            varchar(20)
+>>>>>>> 1c0eeb2b34844ad231327eb992107b6a4a9ae571
 );
 
 /*==============================================================*/
@@ -23,6 +38,7 @@ create table users
 /*==============================================================*/
 create table items
 (
+<<<<<<< HEAD
    item_id             varchar(100) primary key,
    name                varchar(30) not null,
    price               integer,
@@ -81,3 +97,40 @@ create table comments
    content              varchar(100),
    comment_date         date
 );
+=======
+   item_id             integer primary key autoincrement,
+   name                varchar(100) not null,
+   price               float,
+   description         varchar(200),
+   available_day       integer,
+   location            varchar(10),
+   image               varchar(100),
+   user_id             varchar(20),
+   borrow_date         date format 'YYYY-MM-DD',
+   return_date         date format 'YYYY-MM-DD',
+   status              integer default '未借出'
+);
+
+/*==============================================================*/
+/* Table: records                                               */
+/*==============================================================*/
+create table records
+(
+   records_id           integer primary key autoincrement,
+   item_id              integer not null references items(item_id),
+   user_id              integer not null references users(user_id),
+   borrow_date          date format 'YYYY-MM-DD',
+   return_date          date format 'YYYY-MM-DD',
+   status               integer not null
+);
+/*==============================================================*/
+/* Table: reservation                                           */
+/*==============================================================*/
+create table reservation
+(
+   reservation_id       integer primary key autoincrement,
+   item_id              integer not null references items(item_id),
+   user_id              integer not null references users(user_id),
+   reverse_date         date format 'YYYY-MM-DD'
+);
+>>>>>>> 1c0eeb2b34844ad231327eb992107b6a4a9ae571
