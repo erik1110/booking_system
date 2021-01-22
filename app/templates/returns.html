@@ -30,32 +30,37 @@
 <hr width="100%"/>
 <div class="text3" align="center">歸還清單</div>
 <br>
-<form action="/submit_order" method="post">
+<form action="/submit_returns" method="post">
     <table width="100%" border="0" align="center" class="threeboder">
         <tr bgcolor="#A5D3FF">
-            <td height="20" align="center" class="theader">單號</td>
-            <td width="20%" align="center" class="theader">物品代號</td>
-            <td width="20%" align="center" class="theader">借用日</td>
-            <td width="20%" align="center" class="theader">狀態</td>            
+            <td width="20%" align="center" class="theader">單據號碼</td>
+            <td width="10%" align="center" class="theader">物品代碼</td>
+            <td width="10%" align="center" class="theader">物品名稱</td>
+            <td width="10%" align="center" class="theader">借用日</td>
+            <td width="10%" align="center" class="theader">到期日</td>
+            <td width="10%" align="center" class="theader">確認</td>            
         </tr>  
-      {% for item in c_all %}
+      {% for data in list %}
         <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
-            <td align="center"> {{ item.records_id}} </td>
-            <td align="center"> {{ item.item_id}} </td>
-            <td align="center"> {{ item.borrow_date}} </td>      
-            <td align="center">
-                {% if item.return_date =='' %}
-                <a href="{{ url_for('return_ok',record=item.records_id) }}"><font color="#FF0000"><big><big>我要歸還</big></big></font></a>
-                {% else %}
-                {{item.return_date}}已歸還
-                {% endif %}
-            </td>
+            <td align="center"> {{ data.borrow_order_id}} </td>
+            <td align="center"> {{ data.item_id}} </td>
+            <td align="center"> {{ data.name}} </td>
+            <td align="center"> {{ data.borrow_date}} </td>
+            <td align="center"> {{ data.expected_date}} </td>
+            <td align="center"> <input type="checkbox" name="check" value="{{ data.hist_id }}"> </td>
         </tr>
       {% endfor %}
     </table>
     <br>
     <div align="center">
-        <a href="/main"><big>返回主頁面</big></a>
+    <input type="submit" value="提交"
+           style="background-color:#FAD7A0;
+                  height: 25px;
+                  font-size:16px;
+                  font-weight:bold;
+                  color:#6E2C00;
+                  font-family:arial,'Microsoft JhengHei','微軟正黑體',sans-serif !important;" >
     </div>
+    <br>
 </form>
 {% endblock %}

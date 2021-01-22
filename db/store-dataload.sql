@@ -1,31 +1,38 @@
 /*==============================================================*/
-/* Table: users                                                 */
+-- /* Table: users                                                 */
 /*==============================================================*/
-insert into users values ('erik1110', 'erik', '123', '5F', '0912345678', '1993-11-10');
-insert into users values ('dannymonkey', 'danny', '123', '5F', '0912345678', '1993-11-11');
-insert into users values ('gansulab', 'gansulab', '123', '12F', '0912345678', '1993-11-12');
-insert into users values ('kyorobert', 'kyorobert', '123', '5F', '0912345678', '1993-11-13');
-insert into users values ('penchaq', 'chinghsuan.chang', '123', '12F', '0912345678', '1993-11-14');
+insert into users values ('erik1110', 'erik', '123', '5F', '0912345678', '1993-11-10', '可借用');
+insert into users values ('dannymonkey', 'danny', '123', '5F', '0912345678', '1993-11-11', '可借用');
+insert into users values ('gansulab', 'gansulab', '123', '12F', '0912345678', '1993-11-12', '可借用');
+insert into users values ('kyorobert', 'kyorobert', '123', '5F', '0912345678', '1993-11-13', '可借用');
+insert into users values ('penchaq', 'chinghsuan.chang', '123', '12F', '0912345678', '1993-11-14', '可借用');
 /*==============================================================*/
 /* Table: items                                                 */
 /*==============================================================*/
-insert into items values (1, '筆電', 30000, 'LC170W001', 5,'5A', '', '', '', '', '未借出');
-insert into items values (2, '筆電', 40000, 'LC170W002', 5,'5A', '', '', '', '', '未借出');
-insert into items values (3, '筆電', 50000, 'LC170W003', 5,'12B', '', 'kyorobert', '2020-01-08', '2020-01-13', '已借出');
-insert into items values (4, '筆電', 30000, 'LC170W004', 5,'12B', '', '', '', '', '未借出');
-insert into items values (5, '轉接頭', 320, 'HDMI轉type-c', 2, '5A', '', '', '', '', '未借出');
-insert into items values (6, '轉接頭', 450, 'HDMI轉Lightning', 2, '12B', '', 'dannymonkey', '2020-01-09', '2020-01-11', '已借出');
-insert into items values (7, '投影機', 54000, '', 3, '5A', '', '', '', '', '未借出');
-insert into items values (8, '拖車', 1700, '', 7, '5A', '', '', '', '', '未借出');
-insert into items values (9, '拖車', 1700, '', 7, '12B', '', 'dannymonkey', '2020-01-09', '2020-01-16', '已借出');
-insert into items values (10, '投影筆', 160, '', 3, '12B', '', '', '', '', '未借出');
-insert into items values (11, '投影筆', 170, '', 3,'5A', '', 'erik1110', '2020-01-09', '2020-01-12', '已借出');
+insert into items values ('1', '筆電', 30000, 100, 'LC170W001', 5,'5A', 'laptop.png', 'erik1110', '2021-01-12', '2021-01-23', '', '', '已借出', '未預約');
+insert into items values ('2', '筆電', 40000, 100, 'LC170W002', 5,'5A', 'laptop.png', '', '', '', '', '', '未借出', '未預約');
+insert into items values ('3', '筆電', 50000, 100, 'LC170W003', 5,'12B', 'laptop.png', 'erik1110', '2021-01-12', '2021-01-23', '', '', '已借出', '未預約');
+insert into items values ('4', '筆電', 30000, 100, 'LC170W004', 5,'12B', 'laptop.png', '', '', '', '', '', '未借出', '未預約');
+insert into items values ('5', '轉接頭', 320, 30, 'HDMI轉type-c', 2, '5A', 'hdmi.png', '', '', '', '', '', '未借出', '未預約');
+insert into items values ('6', '轉接頭', 450, 30, 'HDMI轉Lightning', 2, '12B', 'hdmi.png', '', '', '', '', '', '未借出', '未預約');
+insert into items values ('7', '投影機', 54000, 50, '好用的', 3, '5A', 'projector.png', 'erik1110', '', '', '', '2021-01-10', '未借出', '已預約');
+insert into items values ('8', '拖車', 1700, 60, '藍色', 7, '5A', 'office_cart.png', '', '', '', '', '', '未借出', '未預約');
+insert into items values ('9', '拖車', 1700, 60, '黃色', 7, '12B', 'office_cart.png', '', '', '', '', '', '未借出', '未預約');
+insert into items values ('10', '投影筆', 160, 15, '黑色', 3, '12B', 'pointer.png', '', '', '', '', '', '未借出', '未預約');
+insert into items values ('11', '投影筆', 170, 15, '紅色', 3,'5A', 'pointer.png', 'penchaq', '2021-01-10', '2021-01-15', '', '', '已借出', '未預約');
 /*==============================================================*/
-/* Table: records                                                 */
+/* Table: orders  單據                                         */
 /*==============================================================*/
-insert into records values (1387,6, 'gansulab', '2020-12-09', '2020-12-11', '未借出');
-insert into records values (13786,9, 'gansulab', '2020-01-10', '', '已借出');
-insert into records values (980,6, 'gansulab', '2020-05-09', '2020-05-11', '未借出');
-insert into records values (8765,9, 'gansulab', '2020-06-18', '', '已借出');
-insert into records values (4321,2, 'gansulab', '2020-01-09', '2020-01-11', '未借出');
-insert into records values (11111,8, 'gansulab', '2020-09-28', '', '已借出');
+insert into orders values ('RES2021011017261610969199', '預約', 'erik1110', 1, '2021-01-10');
+insert into orders values ('BOR2021011219261610969182', '借閱', 'erik1110', 2, '2021-01-12');
+insert into orders values ('BOR2021011019261610969182', '借閱', 'penchaq', 1, '2021-01-10');
+
+/*==============================================================*/
+/* Table: items_hist  物品歷史詳細資訊                              */
+/*==============================================================*/
+insert into items_hist values ('HIST2021011019261610969181', '7', 'erik1110', '', '', '', '2021-01-10', '', '', 'RES2021011017261610969199');
+insert into items_hist values ('HIST2021011219261610969182', '1', 'erik1110', '2021-01-12', '2021-01-17', '', '', 'BOR2021011219261610969182', '', '');
+insert into items_hist values ('HIST2021011219261610969982', '3', 'erik1110', '2021-01-12', '2021-01-17', '', '', 'BOR2021011219261610969182', '', '');
+insert into items_hist values ('HIST2021011019261617969982', '11', 'penchaq', '2021-01-10', '2021-01-15', '', '', 'BOR2021011219261610969182', '', '');
+
+

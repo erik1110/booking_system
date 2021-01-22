@@ -77,10 +77,10 @@
 <form action="/submit_order" method="post">
     <table width="100%" border="0" align="center" class="threeboder">
         <tr bgcolor="#A5D3FF">
-            <td height="50" align="center" class="theader">商品名称</td>
-            <td width="8%" align="center" class="theader">数量</td>
-            <td width="15%" align="center" class="theader">单价</td>
-            <td width="15%" align="center" class="theader">小计</td>
+            <td height="50" align="center" class="theader">借用物品名稱</td>
+            <td width="8%" align="center" class="theader">數量</td>
+            <td width="15%" align="center" class="theader">單價</td>
+            <td width="15%" align="center" class="theader">小計</td>
         </tr>
         {% for item in list %}
         <tr>
@@ -95,7 +95,7 @@
         </tr>
         {% endfor %}
         <tr>
-            <td height="50" colspan="5" align="right">合计：&yen;<span id="total">{{ total }}</span>&nbsp;&nbsp;</td>
+            <td height="50" colspan="5" align="right">合計：&yen;<span id="total">{{ total }}</span>&nbsp;&nbsp;</td>
         </tr>
     </table>
     <br>

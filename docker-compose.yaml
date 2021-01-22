@@ -1,0 +1,36 @@
+version: '2'
+services:
+  db:
+    image: postgres:latest
+    container_name: db
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./initdb.d:/docker-entrypoint-initdb.d
+      - ./pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres123
+  jupyter:
+    image: jupyter/datascience-notebook
+    environment:
+      - http.host=0.0.0.0
+      - transport.host=127.0.0.1
+      - TZ=Asia/Taipei
+      - db_host=db
+      - db_name=postgres
+      - db_userid=postgres
+      - db_password=postgres123
+    depends_on:
+      - db
+    volumes:
+      - ./:/home/jovyan
+    ports:
+      - 8888:8888
+      - 8000:8000
+      - 5000:5000
+    command: >
+      bash -c "start.sh jupyter lab --ip=0.0.0.0"
+
