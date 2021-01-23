@@ -46,7 +46,7 @@ create table items
 create table orders
 (
    order_id            varchar(100) primary key,
-   action              varchar(30),
+   order_type          varchar(30),
    user_id             varchar(100) not null references users(user_id),
    total               integer,
    order_date          date
@@ -64,9 +64,11 @@ create table items_hist
    expected_date        date,
    return_date          date,
    reserve_date         date,
-   borrow_order_id      varchar(100) references orders(order_id),
-   return_order_id      varchar(100) references orders(order_id),
-   reserve_order_id     varchar(100) references orders(order_id)
+   borrow_order_id      varchar(100),
+   return_order_id      varchar(100),
+   reserve_order_id     varchar(100),
+   cancel_order_id      varchar(100),
+   order_status         varchar(30)
 );
 
 
