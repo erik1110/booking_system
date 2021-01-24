@@ -1,7 +1,7 @@
 from flask import Flask, request, session, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
-from app.forms import CustomerRegForm, LoginForm
-from app.models import Users, Items, Orders, ItemsHist
+from app.forms import CustomerRegForm, LoginForm, MessageForm
+from app.models import Users, Items, Orders, ItemsHist, Comments
 import config
 import random
 import datetime
@@ -99,6 +99,7 @@ def show_items_list():
         flash('您還沒有登入哦！')
         return redirect(url_for('login'))
     items_list = db.session.query(Items).all()
+
     return render_template('items_list.html', list=items_list, user_id=session['customer']['id'])
 
 # 顯示借用物品詳細資訊
@@ -109,7 +110,25 @@ def show_items_detail():
         return redirect(url_for('login'))
     item_id = request.args['item_id']
     item = db.session.query(Items).filter_by(item_id=item_id).first()
-    return render_template('items_detail.html', item=item, user_id=session['customer']['id'])
+    # 刷留言區
+    form = MessageForm()
+    if form.validate_on_submit():
+        ## 初始化 Comments 對象
+        comments = Comments() 
+        ## 創立單據號碼
+        d = datetime.today()
+        comments.comment_id = 'COM' + str(d.strftime('%Y%m%d%H%M%S'))
+        comments.item_id = item_id
+        comments.user_id = session['customer']['id']
+        comments.content = request.form["content"]
+        comments.comment_date = d
+        flash('留言成功')
+        redirect('/detail')
+    messages = db.session.query(Comments).order_by(Comments.comment_date.desc()).all()
+    return render_template('items_detail.html', 
+                           item=item,
+                           user_id=session['customer']['id'],
+                           form=form, messages=messages)
 
 # 歸還頁面
 @app.route('/returns', methods=['GET', 'POST'])
