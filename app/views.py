@@ -134,7 +134,7 @@ def submit_returns():
     orders.order_type = 'return'
     orders.user_id = session['customer']['id']
     orders.total = len(returns_list)
-    orders.order_date = d
+    orders.order_date = d.strftime('%Y-%m-%d')
     db.session.add(orders)
     # 更新資訊
     for hist_id in returns_list:
@@ -211,7 +211,7 @@ def submit_reservations():
     orders.order_type = 'reserve'
     orders.user_id = session['customer']['id']
     orders.total = len(item_ids)
-    orders.order_date = d
+    orders.order_date = d.strftime('%Y-%m-%d')
     db.session.add(orders)
     # 寫入Resevation
     data_list = []
@@ -228,7 +228,7 @@ def submit_reservations():
         data_list.append(itemshist)
         # 更新物品資訊為已預約
         db.session.query(Items).filter_by(item_id=item_id).update(dict(user_id=session['customer']['id'],
-                                                                       reserve_date=datetime.today(),
+                                                                       reserve_date=datetime.today().strftime('%Y-%m-%d'),
                                                                        reserve_status='已預約'))
     db.session.add_all(data_list)
     db.session.commit()
@@ -274,7 +274,6 @@ def borrows():
     borrows = session['borrows']
     list = []
     for item in borrows:
-        # 購物車每一个元素[商品id, 商品名稱, 商品價格, 商品數量]
         new_item = (item[0], item[1], item[2])
         list.append(new_item)
     print('list:', list)
@@ -297,7 +296,7 @@ def submit_borrows():
         order_id = 'BOR' + str(d.strftime('%Y%m%d%H%M%S'))
         print('yoyoyoyo',order_id)
         orders.order_id = order_id
-        orders.action = '借用'
+        orders.order_type = 'borrow'
         orders.user_id = session['customer']['id']
         orders.order_date = d.strftime('%Y-%m-%d')
         orders.total =  len(borrows_list)
@@ -306,18 +305,20 @@ def submit_borrows():
         data = []
         for item in borrows_list:
             num_day = db.session.query(Items).filter_by(item_id=int(item)).first().available_day
-            items_hist = ItemsHist()
-            items_hist.hist_id = 'I' + item.zfill(3) + 'D' + str(d.strftime('%Y%m%d%H%M%S'))
-            items_hist.item_id = int(item)
-            items_hist.user_id = session['customer']['id']
-            items_hist.borrow_date = d.strftime('%Y-%m-%d')
-            items_hist.expected_date = (d + relativedelta(days=num_day)).strftime('%Y-%m-%d')
-            items_hist.borrow_order_id = order_id
-            data.append(items_hist)
+            itemshist = ItemsHist()
+            n = random.randint(0, 10000)
+            itemshist.hist_id = 'HIST' + str(d.strftime('%Y%m%d%H%M%S')) + str(n)
+            itemshist.item_id = int(item)
+            itemshist.user_id = session['customer']['id']
+            itemshist.borrow_date = d.strftime('%Y-%m-%d')
+            itemshist.expected_date = (d + relativedelta(days=num_day)).strftime('%Y-%m-%d')
+            itemshist.borrow_order_id = order_id
+            itemshist.order_status = 'borrow'
+            data.append(itemshist)
             # 更新物品狀態為已借用
-            db.session.query(Items).filter_by(item_id=int(item)).update(dict(user_id=items_hist.user_id,
-                                                                            borrow_date=items_hist.borrow_date,
-                                                                            expected_date=items_hist.expected_date,
+            db.session.query(Items).filter_by(item_id=int(item)).update(dict(user_id=itemshist.user_id,
+                                                                            borrow_date=itemshist.borrow_date,
+                                                                            expected_date=itemshist.expected_date,
                                                                             return_date='',
                                                                             booking_status='已借出'))
         db.session.add_all(data)
