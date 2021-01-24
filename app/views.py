@@ -145,7 +145,7 @@ def submit_returns():
                                                                order_status='return'))
         item_id = db.session.query(ItemsHist).filter_by(hist_id=hist_id).first().item_id                  
         # 更新物品狀態為未借閱
-        db.session.query(Items).filter_by(item_id=item_id).update(dict(user_id='',
+        db.session.query(Items).filter_by(item_id=item_id).update(dict(borrow_user_id='',
                                                                        borrow_date='',
                                                                        expected_date='',
                                                                        return_date='',
@@ -227,7 +227,7 @@ def submit_reservations():
         itemshist.order_status = 'reserve'
         data_list.append(itemshist)
         # 更新物品資訊為已預約
-        db.session.query(Items).filter_by(item_id=item_id).update(dict(user_id=session['customer']['id'],
+        db.session.query(Items).filter_by(item_id=item_id).update(dict(reserve_user_id=session['customer']['id'],
                                                                        reserve_date=datetime.today().strftime('%Y-%m-%d'),
                                                                        reserve_status='已預約'))
     db.session.add_all(data_list)
@@ -316,7 +316,7 @@ def submit_borrows():
             itemshist.order_status = 'borrow'
             data.append(itemshist)
             # 更新物品狀態為已借用
-            db.session.query(Items).filter_by(item_id=int(item)).update(dict(user_id=itemshist.user_id,
+            db.session.query(Items).filter_by(item_id=int(item)).update(dict(borrow_user_id=itemshist.user_id,
                                                                             borrow_date=itemshist.borrow_date,
                                                                             expected_date=itemshist.expected_date,
                                                                             return_date='',

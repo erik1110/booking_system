@@ -9,17 +9,17 @@ insert into users values ('penchaq', 'chinghsuan.chang', '123', '12F', '09123456
 /*==============================================================*/
 /* Table: items                                                 */
 /*==============================================================*/
-insert into items values ('1', '筆電', 30000, 100, 'LC170W001', 5,'5A', 'laptop.png', 'erik1110', '2021-01-12', '2021-01-23', '', '', '已借出', '未預約');
-insert into items values ('2', '筆電', 40000, 100, 'LC170W002', 5,'5A', 'laptop.png', '', '', '', '', '', '未借出', '未預約');
-insert into items values ('3', '筆電', 50000, 100, 'LC170W003', 5,'12B', 'laptop.png', 'erik1110', '2021-01-12', '2021-01-23', '', '', '已借出', '未預約');
-insert into items values ('4', '筆電', 30000, 100, 'LC170W004', 5,'12B', 'laptop.png', '', '', '', '', '', '未借出', '未預約');
-insert into items values ('5', '轉接頭', 320, 30, 'HDMI轉type-c', 2, '5A', 'hdmi.png', '', '', '', '', '', '未借出', '未預約');
-insert into items values ('6', '轉接頭', 450, 30, 'HDMI轉Lightning', 2, '12B', 'hdmi.png', '', '', '', '', '', '未借出', '未預約');
-insert into items values ('7', '投影機', 54000, 50, '好用的', 3, '5A', 'projector.png', 'erik1110', '', '', '', '2021-01-10', '未借出', '已預約');
-insert into items values ('8', '拖車', 1700, 60, '藍色', 7, '5A', 'office_cart.png', '', '', '', '', '', '未借出', '未預約');
-insert into items values ('9', '拖車', 1700, 60, '黃色', 7, '12B', 'office_cart.png', '', '', '', '', '', '未借出', '未預約');
-insert into items values ('10', '投影筆', 160, 15, '黑色', 3, '12B', 'pointer.png', '', '', '', '', '', '未借出', '未預約');
-insert into items values ('11', '投影筆', 170, 15, '紅色', 3,'5A', 'pointer.png', 'penchaq', '2021-01-10', '2021-01-15', '', '', '已借出', '未預約');
+insert into items values ('1', '筆電', 30000, 100, 'LC170W001', 5,'5A', 'laptop.png', 'erik1110', '','2021-01-12', '2021-01-23', '', '', '已借出', '未預約');
+insert into items values ('2', '筆電', 40000, 100, 'LC170W002', 5,'5A', 'laptop.png', '', '', '', '', '', '', '未借出', '未預約');
+insert into items values ('3', '筆電', 50000, 100, 'LC170W003', 5,'12B', 'laptop.png', 'erik1110', '', '2021-01-12', '2021-01-23', '', '', '已借出', '未預約');
+insert into items values ('4', '筆電', 30000, 100, 'LC170W004', 5,'12B', 'laptop.png', '', '', '', '', '', '', '未借出', '未預約');
+insert into items values ('5', '轉接頭', 320, 30, 'HDMI轉type-c', 2, '5A', 'hdmi.png', '', '', '', '', '', '', '未借出', '未預約');
+insert into items values ('6', '轉接頭', 450, 30, 'HDMI轉Lightning', 2, '12B', 'hdmi.png', '', '', '', '', '', '', '未借出', '未預約');
+insert into items values ('7', '投影機', 54000, 50, '好用的', 3, '5A', 'projector.png', 'erik1110', '', '', '', '', '2021-01-10', '未借出', '已預約');
+insert into items values ('8', '拖車', 1700, 60, '藍色', 7, '5A', 'office_cart.png', '', '', '', '', '', '', '未借出', '未預約');
+insert into items values ('9', '拖車', 1700, 60, '黃色', 7, '12B', 'office_cart.png', '', '', '', '', '', '', '未借出', '未預約');
+insert into items values ('10', '投影筆', 160, 15, '黑色', 3, '12B', 'pointer.png', '', '', '', '', '', '', '未借出', '未預約');
+insert into items values ('11', '投影筆', 170, 15, '紅色', 3,'5A', 'pointer.png', 'penchaq', '', '2021-01-10', '2021-01-15', '', '', '已借出', '未預約');
 /*==============================================================*/
 /* Table: orders  單據                                         */
 /*==============================================================*/

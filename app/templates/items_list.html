@@ -23,18 +23,22 @@
 <table width="90%" border="0" align="center">
     <tr bgcolor="#b4c8ed">
 		<th width="10%">物品ID</th>
-        <th width="10%">物品名稱</th>
-		<th width="10%">物品狀態</th>
+		<th width="10%">物品名稱</th>
+		<th width="10%">借用人</th>
+		<th width="10%">預約人</th>
 		<th width="10%">借用日</th>
+		<th width="10%">可借用天數</th>
 		<th width="5%">借用</th>
 		<th width="5%">預約</th>
     </tr>
   {% for item in list %}
     <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
 		<td class="col"><a href="/detail?item_id={{ item.item_id }}">{{ item.item_id }}</a></td>
-        <td class="col"><a href="/detail?item_id={{ item.item_id }}">{{ item.name }}</a></td>
-		<td class="col"> {{ item.booking_status}} </td>
+		<td class="col"><a href="/detail?item_id={{ item.item_id }}">{{ item.name }}</a></td>
+		<td class="col"> {{ item.borrow_user_id}} </td>
+		<td class="col"> {{ item.reserve_user_id}} </td>
 		<td class="col"> {{ item.borrow_date}} </td>
+		<td class="col"> {{ item.available_day}} </td>
 		<td class="col" >
 			{% if item.booking_status == '未借出' %}
 			<a href="/add_borrows?item_id={{ item.item_id }}">
@@ -49,7 +53,7 @@
 			{% endif %}
 		</td>
 		<td class="col" >
-			{% if item.reserve_status =='未預約' and item.booking_status == '已借出' and item.user_id != user_id %}
+			{% if item.reserve_status =='未預約' and item.booking_status == '已借出' and item.borrow_user_id != user_id %}
 			<a href="/add_reservation?item_id={{ item.item_id }}">
 				<input type="button" value="我要預約"
                         style="background-color:#1b3cfa;
