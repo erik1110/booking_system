@@ -108,16 +108,15 @@ def returns():
         flash('您還沒有登入哦！')
         return redirect(url_for('login'))
     else:
-        result = db.session.query(Items.name, \
-                                  Items.user_id, \
-                                  Items.borrow_date, \
-                                  Items.expected_date, \
-                                  Items.booking_status, \
+        result = db.session.query(ItemsHist.item_id, \
                                   ItemsHist.borrow_order_id, \
-                                  ItemsHist.item_id, \
-                                  ItemsHist.hist_id). \
-                                  filter_by(user_id=session['customer']['id'], booking_status='已借出'). \
-                            join(Items, Items.item_id==ItemsHist.item_id)
+                                  Items.name, \
+                                  ItemsHist.user_id, \
+                                  ItemsHist.borrow_date, \
+                                  ItemsHist.expected_date, \
+                                  ItemsHist.order_status). \
+                                  filter_by(user_id=session['customer']['id'], order_status='borrow'). \
+                            join(ItemsHist, ItemsHist.item_id==Items.item_id)
         return render_template('returns.html', list=result)
 
 # 歸還成功頁面

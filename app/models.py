@@ -42,14 +42,12 @@ class Items(Base):
 class Orders(Base):
     __tablename__ = 'orders'
     order_id = Column('order_id', String(100), primary_key=True)
-    action = Column('action', String(20))
+    order_type = Column('action', String(30))
     user_id = Column('user_id', ForeignKey('users.user_id'))
     total = Column('total', Float)
     order_date = Column('order_date', String(20))
-    # # 定義一對多的關係 (Orders -> ItemsHist)
-    # items_hist = relationship('ItemsHist')
 
-# 定義 ItemsHist 模型 (單據詳細)
+# 定義 ItemsHist 模型 (物品歷史紀錄表)
 class ItemsHist(Base):
     __tablename__ = 'items_hist'
     hist_id = Column('hist_id', String(100), primary_key=True)
@@ -62,8 +60,8 @@ class ItemsHist(Base):
     borrow_order_id = Column('borrow_order_id', String(100))
     return_order_id = Column('return_order_id', String(100))
     reserve_order_id = Column('reserve_order_id', String(100))
-    # # 定義多對一的關係 (ItemsHist -> Orders)
-    # orders = relationship('Orders', backref='ItemsHist')
+    cancel_order_id = Column('cancel_order_id', String(100))
+    order_status = Column('order_status', String(30))
     # 定義多對一的關係 (ItemsHist -> Items)
     items = relationship('Items', backref='ItemsHist')
 
