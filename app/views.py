@@ -89,7 +89,7 @@ def show_items_list():
         flash('您還沒有登入哦！')
         return redirect(url_for('login'))
     items_list = db.session.query(Items).all()
-    return render_template('items_list.html', list=items_list)
+    return render_template('items_list.html', list=items_list, user_id=session['customer']['id'])
 
 # 顯示借用物品詳細資訊
 @app.route('/detail')

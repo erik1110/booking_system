@@ -36,7 +36,7 @@
 		<td class="col"> {{ item.booking_status}} </td>
 		<td class="col"> {{ item.borrow_date}} </td>
 		<td class="col" >
-			{% if item.booking_status =='未借出' %}
+			{% if item.booking_status == '未借出' %}
 			<a href="/add_borrows?item_id={{ item.item_id }}">
 				<input type="button" value="我要借用"
                         style="background-color:#036d178f;
@@ -49,7 +49,7 @@
 			{% endif %}
 		</td>
 		<td class="col" >
-			{% if item.reserve_status =='未預約' %}
+			{% if item.reserve_status =='未預約' and item.booking_status == '已借出' and item.user_id != user_id %}
 			<a href="/add_reservation?item_id={{ item.item_id }}">
 				<input type="button" value="我要預約"
                         style="background-color:#1b3cfa;
