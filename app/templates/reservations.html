@@ -24,11 +24,35 @@
 
 
 </style>
-
 <table width="100%" border="0" align="center">
 </table>
 <hr width="100%"/>
-<div class="text3" align="center">預約清單</div>
+<div class="text3" align="center">目前您的預約清單</div>
+<br>
+<form action="/submit_reservations" method="post">
+    <table width="100%" border="0" align="center" class="threeboder">
+        <tr bgcolor="#A5D3FF">
+            <td width="10%" align="center" class="theader">物品代碼</td>
+            <td width="20%" align="center" class="theader">物品名稱</td>
+            <td width="20%" align="center" class="theader">借用人</td>
+            <td width="20%" align="center" class="theader">借用者的到期日</td>
+            <td width="20%" align="center" class="theader">您預約日期</td>    
+        </tr>  
+      {% for data in data_list1 %}
+        <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
+            <td align="center" > {{ data.item_id}} </td>
+            <td align="center" > {{ data.name}} </td>
+            <td align="center" > {{ data.borrow_user_id}} </td>
+            <td align="center" > {{ data.expected_date}} </td>
+            <td align="center" > {{ data.reserve_date}} </td>
+            </tr>
+      {% endfor %}
+    </table>
+</form>
+<table width="100%" border="0" align="center">
+</table>
+<br>
+<div class="text3" align="center">本次您想預約清單</div>
 <br>
 <form action="/submit_reservations" method="post">
     <table width="100%" border="0" align="center" class="threeboder">
@@ -37,9 +61,9 @@
             <td width="20%" align="center" class="theader">物品名稱</td>
             <td width="20%" align="center" class="theader">物品借用狀態</td>
             <td width="20%" align="center" class="theader">借用者的到期日</td>
-            <td width="10%" align="center" class="theader">確認</td>           
+            <td width="20%" align="center" class="theader">確認</td>           
         </tr>  
-      {% for data in data_list %}
+      {% for data in data_list2 %}
         <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
             <td align="center" > {{ data[0]}} </td>
             <td align="center" > {{ data[1]}} </td>
@@ -50,18 +74,21 @@
       {% endfor %}
     </table>
     <br>
+    {% if data_list2 |length > 0 %}
     <div align="center">
-        <input type="submit" value="提交"
-               style="background-color:#c01111;
-                      height: 25px;
-                      font-size:16px;
-                      font-weight:bold;
-                      color:#ffffff;
-                      font-family:arial,'Microsoft JhengHei','微軟正黑體',sans-serif !important;" >
+    <input type="submit" value="提交"
+           style="background-color:#FAD7A0;
+                  height: 25px;
+                  font-size:16px;
+                  font-weight:bold;
+                  color:#6E2C00;
+                  font-family:arial,'Microsoft JhengHei','微軟正黑體',sans-serif !important;" >
     </div>
+    {% endif %}
     <br>
     <div align="center">
         <a href="/main"><big>返回主頁面</big></a>
     </div>
 </form>
+
 {% endblock %}

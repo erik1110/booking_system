@@ -32,7 +32,7 @@
             <table width="90%" height="100%">
             <tbody>
                 <tr bgcolor="#b4c8ed">
-                    <td class='col' colspan="2"><b>商品詳細資訊</b></td>
+                    <td class='col' colspan="2"><b>物品詳細資訊</b></td>
                 </tr>
                 <tr bgcolor="#edf8ff">
                     <td class="col">類型：</td>
@@ -55,8 +55,24 @@
                     <td class="col">{{ item.available_day }}</td>
                 </tr>
                 <tr>
-                    <td class="col">狀態：</td>
+                    <td class="col">逾期罰金(天)：</td>
+                    <td class="col">{{ item.fine }}</td>
+                </tr>
+                <tr>
+                    <td class="col">目前借用人：</td>
+                    <td class="col"><a href="/other_account?user_id={{ item.borrow_user_id }}"> {{ item.borrow_user_id }} </a></td>
+                </tr>
+                <tr>
+                    <td class="col">目前預約人：</td>
+                    <td class="col"><a href="/other_account?user_id={{ item.reserve_user_id }}"> {{ item.reserve_user_id }} </a></td>
+                </tr>
+                <tr>
+                    <td class="col">借用狀態：</td>
                     <td class="col">{{ item.booking_status }}</td>
+                </tr>
+                <tr>
+                    <td class="col">預約狀態：</td>
+                    <td class="col">{{ item.reserve_status }}</td>
                 </tr>
             </tbody>
             </table>
@@ -74,7 +90,7 @@
                                font-family:arial,'Microsoft JhengHei','微軟正黑體',sans-serif !important;">
                     </a>
                     {% endif %}
-                    {% if item.reserve_status =='未預約' %}
+                    {% if item.reserve_status =='未預約' and item.booking_status == '已借出' and item.borrow_user_id != user_id %}
                     <a href="/add_reserves?item_id={{ item.item_id }}">
                         <input type="button" value="我要預約"
                         style="background-color:#1b3cfa;
@@ -90,4 +106,19 @@
         </td>        
     </tr>
 </table>
+<body>
+    <div class="container">
+      <form method="post" action="/posts">
+        <div class="form-group">
+          <label for="author">作者</label>
+          <input name="author" class="form-control" id="author" placeholder="author">
+        </div>
+        <div class="form-group">
+          <label >內容</label>
+          <textarea name="content"></textarea>
+        </div>
+        <button type="submit" class="btn btn-default">送出</button>
+      </form>
+    </div>
+  </body>
 {% endblock %}
