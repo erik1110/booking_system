@@ -35,8 +35,8 @@
     <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
 		<td class="col"><a href="/detail?item_id={{ item.item_id }}">{{ item.item_id }}</a></td>
 		<td class="col"><a href="/detail?item_id={{ item.item_id }}">{{ item.name }}</a></td>
-		<td class="col"> {{ item.borrow_user_id}} </td>
-		<td class="col"> {{ item.reserve_user_id}} </td>
+		<td class="col"><a href="/other_account?user_id={{ item.borrow_user_id }}">{{ item.borrow_user_id}}</a></td>
+		<td class="col"><a href="/other_account?user_id={{ item.reserve_user_id }}">{{ item.reserve_user_id}}</a></td>
 		<td class="col"> {{ item.borrow_date}} </td>
 		<td class="col"> {{ item.available_day}} </td>
 		<td class="col" >

@@ -82,6 +82,16 @@ def account():
     acn = db.session.query(Users).filter_by(user_id=session['customer']['id']).first()
     return render_template('account.html', acn=acn)
 
+# 顯示其他用戶資訊
+@app.route('/other_account')
+def other_account():
+    if 'customer' not in session.keys():
+        flash('您還沒有登入哦！')
+        return redirect(url_for('login'))
+    user_id = request.args['user_id']
+    acn = db.session.query(Users).filter_by(user_id=user_id).first()
+    return render_template('account.html', acn=acn)
+
 # 顯示借用物品列表
 @app.route('/list')
 def show_items_list():
@@ -99,7 +109,7 @@ def show_items_detail():
         return redirect(url_for('login'))
     item_id = request.args['item_id']
     item = db.session.query(Items).filter_by(item_id=item_id).first()
-    return render_template('items_detail.html', item=item)
+    return render_template('items_detail.html', item=item, user_id=session['customer']['id'])
 
 # 歸還頁面
 @app.route('/returns', methods=['GET', 'POST'])
@@ -294,7 +304,6 @@ def submit_borrows():
         orders = Orders()
         d = datetime.today()
         order_id = 'BOR' + str(d.strftime('%Y%m%d%H%M%S'))
-        print('yoyoyoyo',order_id)
         orders.order_id = order_id
         orders.order_type = 'borrow'
         orders.user_id = session['customer']['id']
@@ -317,10 +326,10 @@ def submit_borrows():
             data.append(itemshist)
             # 更新物品狀態為已借用
             db.session.query(Items).filter_by(item_id=int(item)).update(dict(borrow_user_id=itemshist.user_id,
-                                                                            borrow_date=itemshist.borrow_date,
-                                                                            expected_date=itemshist.expected_date,
-                                                                            return_date='',
-                                                                            booking_status='已借出'))
+                                                                             borrow_date=itemshist.borrow_date,
+                                                                             expected_date=itemshist.expected_date,
+                                                                             return_date='',
+                                                                             booking_status='已借出'))
         db.session.add_all(data)
         db.session.commit()
         session.pop('borrows', None)
