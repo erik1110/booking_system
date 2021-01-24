@@ -42,7 +42,7 @@ class Items(Base):
 class Orders(Base):
     __tablename__ = 'orders'
     order_id = Column('order_id', String(100), primary_key=True)
-    order_type = Column('action', String(30))
+    order_type = Column('order_type', String(30))
     user_id = Column('user_id', ForeignKey('users.user_id'))
     total = Column('total', Float)
     order_date = Column('order_date', String(20))

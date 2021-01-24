@@ -114,7 +114,8 @@ def returns():
                                   ItemsHist.user_id, \
                                   ItemsHist.borrow_date, \
                                   ItemsHist.expected_date, \
-                                  ItemsHist.order_status). \
+                                  ItemsHist.order_status,
+                                  ItemsHist.hist_id). \
                                   filter_by(user_id=session['customer']['id'], order_status='borrow'). \
                             join(ItemsHist, ItemsHist.item_id==Items.item_id)
         return render_template('returns.html', list=result)
@@ -127,21 +128,21 @@ def submit_returns():
     # 從前端拉回資訊
     returns_list = request.form.getlist('check')
     # 創立單據號碼
-    today = datetime.today()
-    n = random.randint(0, 9)
-    order_id = 'RET' + str(datetime.today().timestamp() * 1e6) + str(n)
+    d = datetime.today()
+    order_id = 'RET' + str(d.strftime('%Y%m%d%H%M%S'))
     orders.order_id = order_id
-    orders.action = '歸還'
+    orders.order_type = 'return'
     orders.user_id = session['customer']['id']
     orders.total = len(returns_list)
-    orders.order_date = today
+    orders.order_date = d
     db.session.add(orders)
     # 更新資訊
     for hist_id in returns_list:
         # 更新 ItemsHist 新增資訊
         db.session.query(ItemsHist).filter_by(hist_id=hist_id).update(dict(
-                                                               return_date=today,
-                                                               return_order_id=order_id))
+                                                               return_date=datetime.today(),
+                                                               return_order_id=order_id,
+                                                               order_status='return'))
         item_id = db.session.query(ItemsHist).filter_by(hist_id=hist_id).first().item_id                  
         # 更新物品狀態為未借閱
         db.session.query(Items).filter_by(item_id=item_id).update(dict(user_id='',
@@ -162,7 +163,7 @@ def add_reservation():
     item_id = request.args['item_id']
     item = db.session.query(Items).filter_by(item_id=item_id).first()
     name = item.name
-    # 判斷Session中是否有購物車數據
+    # 判斷Session中是否有預約單數據
     if 'reservations' not in session.keys():
         session['reservations'] = []
     if item_id in ([x[0] for x in session['reservations']]):
@@ -170,7 +171,7 @@ def add_reservation():
     else:
         # Add session
         session['reservations'].append(item_id)
-        flash('物品ID=【'+str(item_id)+'】的【'+ name + '】加入預約清單')
+        flash('物品ID=【'+str(item_id)+'】的【'+ name + '】成功加入預約清單')
     return redirect(url_for('show_items_list'))
 
 # 預約頁面
@@ -182,7 +183,6 @@ def reservations():
   
     if 'reservations' not in session.keys():
         return render_template('reservations.html', list=[])
-    
     item_ids = session['reservations']
     data_list = []
     for item_id in item_ids:
@@ -195,10 +195,9 @@ def reservations():
 def submit_reservations():
     user_id = session['customer']['id']
     # 從表單中取出數據添加到 Reservation 模式對象中
-    reserve_list = request.form.getlist("reserve_checked")
-    print("reservation_list:", reserve_list)
+    item_ids = request.form.getlist("reserve_checked")
     # 檢查是否有被預約
-    for item_id in reserve_list:
+    for item_id in item_ids:
         items = db.session.query(Items).filter_by(item_id=item_id).first()
         if items.reserve_status=='已預約':
             flash('有人已經搶先預約過【' + items.name + '】成功了！')
@@ -206,38 +205,36 @@ def submit_reservations():
     # 初始化 Orders 對象
     orders = Orders() 
     # 創立單據號碼
-    n = random.randint(0, 9)
-    order_id = 'RES' + str(datetime.today().timestamp() * 1e6) + str(n)
+    d = datetime.today()
+    order_id = 'RES' + str(d.strftime('%Y%m%d%H%M%S'))
     orders.order_id = order_id
-    orders.action = '預約'
+    orders.order_type = 'reserve'
     orders.user_id = session['customer']['id']
-    orders.total = len(reserve_list)
-    orders.order_date = datetime.today()
+    orders.total = len(item_ids)
+    orders.order_date = d
     db.session.add(orders)
     # 寫入Resevation
-    data＿list = []
-    for item_id in reserve_list:
+    data_list = []
+    for item_id in item_ids:
         itemshist = ItemsHist()
         # 寫入物品歷史紀錄
-        n = random.randint(0, 9)
-        itemshist.hist_id = 'HIST' + str(datetime.today().timestamp() * 1e6) + str(n)
+        n = random.randint(0, 10000)
+        itemshist.hist_id = 'HIST' + str(d.strftime('%Y%m%d%H%M%S')) + str(n)
         itemshist.item_id = item_id
         itemshist.user_id = session['customer']['id']
-        itemshist.reverse_date = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+        itemshist.reserve_date = datetime.today()
         itemshist.reserve_order_id = order_id
+        itemshist.order_status = 'reserve'
         data_list.append(itemshist)
         # 更新物品資訊為已預約
-        db.session.query(Items).filter_by(item_id=item_id).update(dict(user_id='',
-                                                                       borrow_date='',
-                                                                       expected_date='',
-                                                                       return_date='',
-                                                                       reserve_date='',
+        db.session.query(Items).filter_by(item_id=item_id).update(dict(user_id=session['customer']['id'],
+                                                                       reserve_date=datetime.today(),
                                                                        reserve_status='已預約'))
     db.session.add_all(data_list)
     db.session.commit()
     # 清除預約清單
     session.pop('reservations', None)
-    return render_template('reserve_ok.html')
+    return render_template('reserve_ok.html', order_id=order_id)
 
 # 添加借用頁面
 @app.route('/add_borrows')
