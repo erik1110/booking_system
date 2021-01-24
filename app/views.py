@@ -190,16 +190,26 @@ def reservations():
     if 'customer' not in session.keys():
         flash('您還沒有登入哦！')
         return redirect(url_for('login'))
-  
+    # 目前您的預約清單
+    data_list1 = db.session.query(ItemsHist.item_id, \
+                              ItemsHist.borrow_order_id, \
+                              Items.name, \
+                              Items.borrow_user_id, \
+                              Items.expected_date, \
+                              ItemsHist.reserve_date, \
+                              ItemsHist.order_status). \
+                              filter_by(user_id=session['customer']['id'], order_status='reserve'). \
+                    join(ItemsHist, ItemsHist.item_id==Items.item_id)
+    # 本次您想預約清單
     if 'reservations' not in session.keys():
         return render_template('reservations.html', list=[])
     item_ids = session['reservations']
-    data_list = []
+    data_list2 = []
     for item_id in item_ids:
         items = db.session.query(Items).filter_by(item_id=item_id).first()
-        data_list.append([items.item_id, items.name, items.booking_status, items.expected_date])
+        data_list2.append([items.item_id, items.name, items.booking_status, items.expected_date])
     
-    return render_template('reservations.html', data_list=data_list)
+    return render_template('reservations.html', data_list1=data_list1, data_list2=data_list2)
     
 @app.route('/submit_reservations', methods=['POST'])
 def submit_reservations():

@@ -15,7 +15,7 @@ insert into items values ('3', '筆電', 50000, 100, 'LC170W003', 5,'12B', 'lapt
 insert into items values ('4', '筆電', 30000, 100, 'LC170W004', 5,'12B', 'laptop.png', '', '', '', '', '', '', '未借出', '未預約');
 insert into items values ('5', '轉接頭', 320, 30, 'HDMI轉type-c', 2, '5A', 'hdmi.png', '', '', '', '', '', '', '未借出', '未預約');
 insert into items values ('6', '轉接頭', 450, 30, 'HDMI轉Lightning', 2, '12B', 'hdmi.png', '', '', '', '', '', '', '未借出', '未預約');
-insert into items values ('7', '投影機', 54000, 50, '好用的', 3, '5A', 'projector.png', 'erik1110', '', '', '', '', '2021-01-10', '未借出', '已預約');
+insert into items values ('7', '投影機', 54000, 50, '好用的', 3, '5A', 'projector.png', 'dannymonkey', 'erik1110', '2021-01-09', '2021-01-12', '', '2021-01-10', '已借出', '已預約');
 insert into items values ('8', '拖車', 1700, 60, '藍色', 7, '5A', 'office_cart.png', '', '', '', '', '', '', '未借出', '未預約');
 insert into items values ('9', '拖車', 1700, 60, '黃色', 7, '12B', 'office_cart.png', '', '', '', '', '', '', '未借出', '未預約');
 insert into items values ('10', '投影筆', 160, 15, '黑色', 3, '12B', 'pointer.png', '', '', '', '', '', '', '未借出', '未預約');
@@ -23,6 +23,7 @@ insert into items values ('11', '投影筆', 170, 15, '紅色', 3,'5A', 'pointer
 /*==============================================================*/
 /* Table: orders  單據                                         */
 /*==============================================================*/
+insert into orders values ('BOR2021010917261610969156', 'borrow', 'dannymonkey', 1, '2021-01-09');
 insert into orders values ('RES2021011017261610969199', 'reserve', 'erik1110', 1, '2021-01-10');
 insert into orders values ('BOR2021011219261610969182', 'borrow', 'erik1110', 2, '2021-01-12');
 insert into orders values ('BOR2021011019261610969182', 'borrow', 'penchaq', 1, '2021-01-10');
@@ -30,6 +31,7 @@ insert into orders values ('BOR2021011019261610969182', 'borrow', 'penchaq', 1, 
 /*==============================================================*/
 /* Table: items_hist  物品歷史詳細資訊                              */
 /*==============================================================*/
+insert into items_hist values ('HIST2021010919261610939481', '7', 'dannymonkey', '2021-01-09', '', '', '', '', '', 'BOR2021010917261610969156', '', 'borrow');
 insert into items_hist values ('HIST2021011019261610969181', '7', 'erik1110', '', '', '', '2021-01-10', '', '', 'RES2021011017261610969199', '', 'reserve');
 insert into items_hist values ('HIST2021011219261610969182', '1', 'erik1110', '2021-01-12', '2021-01-17', '', '', 'BOR2021011219261610969182', '', '', '', 'borrow');
 insert into items_hist values ('HIST2021011219261610969982', '3', 'erik1110', '2021-01-12', '2021-01-17', '', '', 'BOR2021011219261610969182', '', '', '', 'borrow');
