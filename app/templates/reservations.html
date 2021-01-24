@@ -73,17 +73,18 @@
         </tr>
       {% endfor %}
     </table>
-</form>
     <br>
+    {% if data_list2 |length > 0 %}
     <div align="center">
-        <input type="submit" value="提交"
-               style="background-color:#c01111;
-                      height: 25px;
-                      font-size:16px;
-                      font-weight:bold;
-                      color:#ffffff;
-                      font-family:arial,'Microsoft JhengHei','微軟正黑體',sans-serif !important;" >
+    <input type="submit" value="提交"
+           style="background-color:#FAD7A0;
+                  height: 25px;
+                  font-size:16px;
+                  font-weight:bold;
+                  color:#6E2C00;
+                  font-family:arial,'Microsoft JhengHei','微軟正黑體',sans-serif !important;" >
     </div>
+    {% endif %}
     <br>
     <div align="center">
         <a href="/main"><big>返回主頁面</big></a>

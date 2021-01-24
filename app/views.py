@@ -296,8 +296,6 @@ def borrows():
     for item in borrows:
         new_item = (item[0], item[1], item[2])
         list.append(new_item)
-    print('list:', list)
-    print(list[0][1])
     return render_template('borrows.html', list=list)
 
 # 借用成功頁面
