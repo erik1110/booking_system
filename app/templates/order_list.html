@@ -1,0 +1,40 @@
+{% extends "base2.html" %}
+{% block title %}單據管理{% endblock %}
+{% block body %}
+
+<style type="text/css">
+
+	body {font-size: 14px; /* font-size 1em = 10px */}
+	table {border-collapse: collapse;}
+	
+	/*物品列表第1列*/
+	.col {
+		padding-top: 5px;
+		border-top: 1px dashed #666666;
+		text-align: center;
+	}
+	
+</style>
+
+
+<hr width="100%"/>
+<div class="text3" align="center">請選擇借用的物品</div>
+<br>
+<table width="90%" border="0" align="center">
+    <tr bgcolor="#b4c8ed">
+		<th width="10%">單據編號</th>
+		<th width="10%">單據種類</th>
+		<th width="10%">物品數量</th>
+		<th width="10%">單據日期</th>
+    </tr>
+  {% for order in list %}
+    <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
+		<td class="col"><a href="/order_list?order_id={{ order.order_id }}&order_status={{ order.order_type}}">{{ order.order_id }}</a></td>
+		<td class="col">{{ order.order_type }}</td>
+		<td class="col">{{ order.total }}</td>
+		<td class="col">{{ order.order_date }}</td>
+	</tr>
+  {% endfor %}
+</table>
+<br></br>
+{% endblock %}

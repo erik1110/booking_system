@@ -129,6 +129,29 @@ def show_items_detail():
                            item=item,
                            user_id=session['customer']['id'],
                            form=form, messages=messages)
+# 單據管理頁面
+@app.route('/order_list')
+def show_order_list():
+    if 'customer' not in session.keys():
+        flash('您還沒有登入哦！')
+        return redirect(url_for('login'))
+    order_list = db.session.query(Orders).filter_by(user_id=session['customer']['id']).all()
+
+    return render_template('order_list.html', list=order_list)
+
+# 單據管理詳細頁面
+@app.route('/order_list?order_id=<order_id>&order_status=<order_status>', methods=['GET', 'POST'])
+def show_order_detail():
+    if 'customer' not in session.keys():
+        flash('您還沒有登入哦！')
+        return redirect(url_for('login'))
+    order_id = request.args.get('order_id')
+    order_status = request.args.get('order_status')
+    print("order_id:", order_id)
+    if order_status == 'borrow':
+        hist_list = db.session.query(ItemsHist).filter_by(order_id=order_id, order_status='borrow').all()
+        return render_template('order_detail_borrow.html', list=hist_list)
+
 
 # 歸還頁面
 @app.route('/returns', methods=['GET', 'POST'])
@@ -195,7 +218,7 @@ def add_reservation():
     # 判斷Session中是否有預約單數據
     if 'reservations' not in session.keys():
         session['reservations'] = []
-    if item_id in ([x[0] for x in session['reservations']]):
+    if item_id in ([x for x in session['reservations']]):
         flash('物品ID=【'+str(item_id)+'】的【'+ name + '】已加入過預約清單')
     else:
         # Add session
