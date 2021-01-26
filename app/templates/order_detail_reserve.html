@@ -1,0 +1,39 @@
+{% extends "base2.html" %}
+{% block title %}單據管理詳細頁面{% endblock %}
+{% block body %}
+
+<style type="text/css">
+
+	body {font-size: 14px; /* font-size 1em = 10px */}
+	table {border-collapse: collapse;}
+	
+	/*物品列表第1列*/
+	.col {
+		padding-top: 5px;
+		border-top: 1px dashed #666666;
+		text-align: center;
+	}
+	
+</style>
+
+
+<hr width="100%"/>
+<div class="text3" align="center">預約物品一覽表</div>
+<div class="text3" align="center">單據編號: {{ order_id }}</div>
+<br>
+<table width="90%" border="0" align="center">
+    <tr bgcolor="#b4c8ed">
+		<th width="10%">物品代號</th>
+		<th width="10%">物品名稱</th>
+		<th width="10%">預約日</th>
+    </tr>
+  {% for item in list %}
+    <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
+		<td class="col"> {{ item.item_id }} </td>
+		<td class="col"> {{ item.item_id }} </td>
+		<td class="col"> {{ item.reserve_date}} </td>
+	</tr>
+  {% endfor %}
+</table>
+
+{% endblock %}
