@@ -29,7 +29,7 @@
     </tr>
   {% for order in list %}
     <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
-		<td class="col"><a href="/order_list?order_id={{ order.order_id }}&order_status={{ order.order_type}}">{{ order.order_id }}</a></td>
+		<td class="col"><a href="/order_list_detail?order_id={{ order.order_id }}&order_status={{ order.order_type}}">{{ order.order_id }}</a></td>
 		<td class="col">{{ order.order_type }}</td>
 		<td class="col">{{ order.total }}</td>
 		<td class="col">{{ order.order_date }}</td>

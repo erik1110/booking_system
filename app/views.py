@@ -140,17 +140,22 @@ def show_order_list():
     return render_template('order_list.html', list=order_list)
 
 # 單據管理詳細頁面
-@app.route('/order_list?order_id=<order_id>&order_status=<order_status>', methods=['GET', 'POST'])
+@app.route('/order_list_detail', methods=['GET'])
 def show_order_detail():
     if 'customer' not in session.keys():
         flash('您還沒有登入哦！')
         return redirect(url_for('login'))
     order_id = request.args.get('order_id')
     order_status = request.args.get('order_status')
-    print("order_id:", order_id)
     if order_status == 'borrow':
-        hist_list = db.session.query(ItemsHist).filter_by(order_id=order_id, order_status='borrow').all()
-        return render_template('order_detail_borrow.html', list=hist_list)
+        hist_list = db.session.query(ItemsHist).filter_by(borrow_order_id=order_id).all()
+        return render_template('order_detail_borrow.html', list=hist_list, order_id=order_id)
+    elif order_status == 'return':
+        hist_list = db.session.query(ItemsHist).filter_by(return_order_id=order_id).all()
+        return render_template('order_detail_return.html', list=hist_list, order_id=order_id)
+    elif order_status == 'reserve':
+        hist_list = db.session.query(ItemsHist).filter_by(reserve_order_id=order_id).all()
+        return render_template('order_detail_reserve.html', list=hist_list, order_id=order_id)
 
 
 # 歸還頁面
