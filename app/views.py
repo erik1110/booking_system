@@ -303,16 +303,7 @@ def submit_reservations():
         itemshist.order_status = 'reserve'
         data_list.append(itemshist)
         # 更新物品資訊為已預約
-<<<<<<< HEAD
-        db.session.query(Items).filter_by(item_id=item_id).update(dict(user_id=session['customer']['id'],
-                                                                       borrow_date='',
-                                                                       expected_date=datetime.today().strftime('%Y-%m-%d %H:%M:%S'),
-                                                                       return_date='',
-                                                                       reserve_date='',
-=======
         db.session.query(Items).filter_by(item_id=item_id).update(dict(reserve_user_id=session['customer']['id'],
-                                                                       reserve_date=datetime.today().strftime('%Y-%m-%d'),
->>>>>>> develop
                                                                        reserve_status='已預約'))
     db.session.add_all(data_list)
     db.session.commit()
