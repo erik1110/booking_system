@@ -2,53 +2,146 @@
 {% block title %}主頁面{% endblock %}
 {% block body %}
 <style type="text/css">
-a:link {
-	font-size: 18px;
-	color: #DB8400;
-	text-decoration: none;
-	font-weight: bolder;
+.button {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    padding: 13px 25px;
+    border: 0px solid #aba7a5;
+    border-radius: 20px;
+    background: #f4efeb;
+    background: -webkit-gradient(linear, left top, left bottom, from(#f4efeb), to(#aba7a5));
+    background: -moz-linear-gradient(top, #f4efeb, #aba7a5);
+    background: linear-gradient(to bottom, #f4efeb, #aba7a5);
+    -webkit-box-shadow: #ffffff 0px 0px 0px 0px;
+    -moz-box-shadow: #ffffff 0px 0px 0px 0px;
+    box-shadow: #ffffff 0px 0px 0px 0px;
+    text-shadow: #ffffff 0px 0px 0px;
+    font: normal normal bold 26px arial;
+    color: #574957;
+    text-decoration: none;
 }
-a:visited {
-	font-size: 18px;
-	color: #DB8400;
-	text-decoration: none;
-	font-weight: bolder;
+.button:hover,
+.button:focus {
+    border: 0px solid ##f4efeb;
+    background: #ffffff;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#cdc8c6));
+    background: -moz-linear-gradient(top, #ffffff, #cdc8c6);
+    background: linear-gradient(to bottom, #ffffff, #cdc8c6);
+    color: #574957;
+    text-decoration: none;
+}
+.button:active {
+    background: #aba7a5;
+    background: -webkit-gradient(linear, left top, left bottom, from(#aba7a5), to(#aba7a5));
+    background: -moz-linear-gradient(top, #aba7a5, #aba7a5);
+    background: linear-gradient(to bottom, #aba7a5, #aba7a5);
 }
 
 
-input{border:0;
-  background-color:#6495ED;
-  color:#fff;
-  border-radius:10px;
-  cursor:pointer;}
 
-input:hover{
-  color:#6495ED;
-  background-color:#fff;
-  border:2px #6495ED solid;
+.button2 {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    padding: 13px 40px;
+    border: 0px solid #141414;
+    border-radius: 20px;
+    background: #98dcd8;
+    background: -webkit-gradient(linear, left top, left bottom, from(#98dcd8), to(#9bccca));
+    background: -moz-linear-gradient(top, #98dcd8, #9bccca);
+    background: linear-gradient(to bottom, #98dcd8, #9bccca);
+    -webkit-box-shadow: #9ee5e2 0px 0px 0px 0px;
+    -moz-box-shadow: #9ee5e2 0px 0px 0px 0px;
+    box-shadow: #9ee5e2 0px 0px 0px 0px;
+    text-shadow: #42605e 0px 0px 0px;
+    font: normal normal normal 26px arial;
+    color: #362d36;
+    text-decoration: none;
 }
+.button2:hover,
+.button2:focus {
+    border: 0px solid #646464;
+    background: #b6ffff;
+    background: -webkit-gradient(linear, left top, left bottom, from(#b6ffff), to(#baf5f2));
+    background: -moz-linear-gradient(top, #b6ffff, #baf5f2);
+    background: linear-gradient(to bottom, #b6ffff, #baf5f2);
+    color: #362d36;
+    text-decoration: none;
+}
+.button2:active {
+    background: #5c8684;
+    background: -webkit-gradient(linear, left top, left bottom, from(#5c8684), to(#9bccca));
+    background: -moz-linear-gradient(top, #5c8684, #9bccca);
+    background: linear-gradient(to bottom, #5c8684, #9bccca);
+}
+
+
+
+
+
+
+.button3 {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    padding: 13px 25px;
+    border: 0px solid #afa594;
+    border-radius: 20px;
+    background: #faebd4;
+    background: -webkit-gradient(linear, left top, left bottom, from(#faebd4), to(#baaf9c));
+    background: -moz-linear-gradient(top, #faebd4, #baaf9c);
+    background: linear-gradient(to bottom, #faebd4, #baaf9c);
+    -webkit-box-shadow: #fffffe 0px 0px 0px 0px;
+    -moz-box-shadow: #fffffe 0px 0px 0px 0px;
+    box-shadow: #fffffe 0px 0px 0px 0px;
+    text-shadow: #ffffff 0px 0px 0px;
+    font: normal normal bold 26px arial;
+    color: #636063;
+    text-decoration: none;
+}
+.button3:hover,
+.button3:focus {
+    border: 0px solid ##faebd4;
+    background: #fffffe;
+    background: -webkit-gradient(linear, left top, left bottom, from(#fffffe), to(#dfd2bb));
+    background: -moz-linear-gradient(top, #fffffe, #dfd2bb);
+    background: linear-gradient(to bottom, #fffffe, #dfd2bb);
+    color: #636063;
+    text-decoration: none;
+}
+.button3:active {
+    background: #afa594;
+    background: -webkit-gradient(linear, left top, left bottom, from(#afa594), to(#baaf9c));
+    background: -moz-linear-gradient(top, #afa594, #baaf9c);
+    background: linear-gradient(to bottom, #afa594, #baaf9c);
+}
+
+
+
+
+
 
 </style>
 
 <div>
-  <p class="text1"> <img src="{{ url_for('static', filename='images/iconfinder_history.png') }}" width="30"  align="absmiddle" /> <a href="/list"><input type="button" value="借用物品列表" name="借用物品列表" style="position:relative; left:10px; top: 0px; width:150px;height:50px;font-size:20px;"></a> </p>
+    <a class="button" href="/list"><img src="{{ url_for('static', filename='images/iconfinder_Artboard.png') }}"  width="30"   align="absmiddle" /><span style="font-family: fantasy;"> 借用物品列表</span></a>
 </div>
     <br><br />
 <hr width="100%" />
 <div>
-  <p class="text1"> <img src="{{ url_for('static', filename='images/iconfinder_Cart2.png') }}" width="30"  align="absmiddle"  />
-      <a href="/borrows"><input class='class1' type="button" value="借用單" name="借用單" style="position:relative; left:10px; top: 0px;width:150px;height:50px;font-size:20px;"></a>
-    <a href="/returns"><input type="button" value="歸還單" name="歸還單" style="position:relative; left:10px; top: 0px;width:150px;height:50px;font-size:20px;"></a>
-    <a href="/reservations"><input type="button" value="預約單" name="預約單" style="position:relative; left:10px; top: 0px;width:150px;height:50px;font-size:20px;"></a> </p>
+    <a class="button2" href="/borrows"><img src="{{ url_for('static', filename='images/iconfinder_Cart2.png') }}"  width="30"   align="absmiddle" /><span style="font-family: monospace;"> 借用單</span></a>
+    <a class="button2" href="/returns"><img src="{{ url_for('static', filename='images/iconfinder_Cart2.png') }}"  width="30"   align="absmiddle" /><span style="font-family: monospace;"> 歸還單</span></a>
+    <a class="button2" href="/reservations"><img src="{{ url_for('static', filename='images/iconfinder_Cart2.png') }}"  width="30"   align="absmiddle" /><span style="font-family: monospace;"> 預約單</span></a>
 </div>
     <br><br />
 <div>
-	<p class="text1"> <img src="{{ url_for('static', filename='images/iconfinder_List.png') }}" width="30"  align="absmiddle"  /> <a href="/record_history"><input type="button" value="借還歷史紀錄" name="借還歷史紀錄" style="position:relative; left:10px; top: 0px;width:150px;height:50px;font-size:20px;"></a> </p>
+    <a class="button3" href="/record_history"><img src="{{ url_for('static', filename='images/iconfinder_General_Office.png') }}"  width="30"   align="absmiddle" /><span style="font-family: fantasy;"> 借還歷史紀錄</span></a>
 </div>
     <br><br />
 <hr width="100%" />
 <div>
-  <p class="text1"> <img src="{{ url_for('static', filename='images/user.png') }}"  width="30"   align="absmiddle" /> <a href="/account"><input type="button" value="用戶資訊" name="用戶資訊" style="position:relative; left:10px; top: 0px;width:150px;height:50px;font-size:20px;"></a> </p>
+    <a class="button3" href="/account"><img src="{{ url_for('static', filename='images/user.png') }}"  width="30"   align="absmiddle" /><span style="font-family: fantasy;"> 用戶資訊</span></a>
 </div>
     <br><br />
 {% endblock %}
