@@ -1,6 +1,6 @@
 from flask_wtf import Form
-from wtforms import StringField, PasswordField, validators
-
+from wtforms import StringField, PasswordField, SubmitField, validators
+from wtforms.fields import simple
 
 class LoginForm(Form):
     '''渲染用户登入HTML表單'''
@@ -22,3 +22,10 @@ class CustomerRegForm(Form):
     birthday = StringField('出生日期：', [validators.Regexp(reg_date, message='輸入的日期無效')])
     address = StringField('通訊地址：')
     phone = StringField('電話號碼：')
+
+# 留言板表单
+class MessageForm(Form):
+    msg = simple.TextAreaField(
+        label='輸入留言',
+        validators=[validators.DataRequired()])
+    submit = SubmitField(label=u'提交留言' )
