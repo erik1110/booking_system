@@ -4,7 +4,10 @@
 
 <style type="text/css">
 	body {font-size: 16px;}
-	table {border-collapse: collapse;}
+    table {border-collapse: collapse;}
+    ul{
+    background-color: white;
+}
 </style>
 
 <!-- 顯示錯誤訊息 -->
@@ -15,7 +18,7 @@
         {% endfor %}
     {% endfor %}
 </ul>
-
+<div style="background-color: snow;">
 <form action="/login" method="post">
     <!--CSRF令牌-->
     {{ form.hidden_tag() }}
@@ -38,4 +41,5 @@
         </tr>
     </table>
 </form>
+</div>
 {% endblock %}
