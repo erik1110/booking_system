@@ -31,13 +31,10 @@ def register():
             new_customer.address = form.address.data
             new_customer.birthday = form.birthday.data
             new_customer.phone = form.phone.data
-
             db.session.add(new_customer)
             db.session.commit()
-
             print('註冊成功')
             return render_template('customer_reg_success.html', form=form)
-
     return render_template('customer_reg.html', form=form)
 
 # 登入頁面
@@ -59,12 +56,17 @@ def login():
                 customer['birthday'] = c.birthday
                 # customer保持到HTTP Session
                 session['customer'] = customer
-
                 return redirect(url_for('main'))
             else:
                 flash('您輸入的帳號密碼有錯！')
                 return render_template('login.html', form=form)
     return render_template('login.html', form=form)
+
+# 登出
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
 
 # 主頁面
 @app.route('/main')
