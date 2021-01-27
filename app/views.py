@@ -267,14 +267,15 @@ def reservations():
                     join(ItemsHist, ItemsHist.item_id==Items.item_id)
     # 本次您想預約清單
     if 'reservations' not in session.keys():
-        return render_template('reservations.html', list=[])
-    item_ids = session['reservations']
-    data_list2 = []
-    for item_id in item_ids:
-        items = db.session.query(Items).filter_by(item_id=item_id).first()
-        data_list2.append([items.item_id, items.name, items.booking_status, items.expected_date])
-    
-    return render_template('reservations.html', data_list1=data_list1, data_list2=data_list2)
+        return render_template('reservations.html', data_list1=data_list1, data_list2=[])
+    else:
+        item_ids = session['reservations']
+        data_list2 = []
+        for item_id in item_ids:
+            items = db.session.query(Items).filter_by(item_id=item_id).first()
+            data_list2.append([items.item_id, items.name, items.booking_status, items.expected_date])
+        
+        return render_template('reservations.html', data_list1=data_list1, data_list2=data_list2)
     
 @app.route('/submit_reservations', methods=['POST'])
 def submit_reservations():
