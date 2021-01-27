@@ -14,34 +14,41 @@ a:visited {
 	text-decoration: none;
 	font-weight: bolder;
 }
-a:hover {
-	font-size: 18px;
-	color: #DB8400;
-	text-decoration: underline;
-	font-weight: bolder;
+
+
+input{border:0;
+  background-color:#6495ED;
+  color:#fff;
+  border-radius:10px;
+  cursor:pointer;}
+
+input:hover{
+  color:#6495ED;
+  background-color:#fff;
+  border:2px #6495ED solid;
 }
+
 </style>
 
 <div>
-  <p class="text1"> <img src="{{ url_for('static', filename='images/4.jpg') }}"   align="absmiddle" /> <a href="/list">借用物品列表</a> </p>
-  <p class="text2"> 借用物品一覽表 </p>
+  <p class="text1"> <img src="{{ url_for('static', filename='images/iconfinder_history.png') }}" width="30"  align="absmiddle" /> <a href="/list"><input type="button" value="借用物品列表" name="借用物品列表" style="position:relative; left:10px; top: 0px; width:150px;height:50px;font-size:20px;"></a> </p>
 </div>
+    <br><br />
 <hr width="100%" />
 <div>
-  <p class="text1"> <img src="{{ url_for('static', filename='images/mycar1.jpg') }}" align="absmiddle"  /> <a href="/borrows">借用單</a> </p>
-  <p class="text2"> 查看借用單 </p>
+  <p class="text1"> <img src="{{ url_for('static', filename='images/iconfinder_Cart2.png') }}" width="30"  align="absmiddle"  />
+      <a href="/borrows"><input class='class1' type="button" value="借用單" name="借用單" style="position:relative; left:10px; top: 0px;width:150px;height:50px;font-size:20px;"></a>
+    <a href="/returns"><input type="button" value="歸還單" name="歸還單" style="position:relative; left:10px; top: 0px;width:150px;height:50px;font-size:20px;"></a>
+    <a href="/reservations"><input type="button" value="預約單" name="預約單" style="position:relative; left:10px; top: 0px;width:150px;height:50px;font-size:20px;"></a> </p>
 </div>
+    <br><br />
 <div>
-	<p class="text1"> <img src="{{ url_for('static', filename='images/mycar1.jpg') }}" align="absmiddle"  /> <a href="/returns">歸還單</a> </p>
-	<p class="text2"> 查看歸還單 </p>
+	<p class="text1"> <img src="{{ url_for('static', filename='images/iconfinder_List.png') }}" width="30"  align="absmiddle"  /> <a href="/record_history"><input type="button" value="借還歷史紀錄" name="借還歷史紀錄" style="position:relative; left:10px; top: 0px;width:150px;height:50px;font-size:20px;"></a> </p>
 </div>
-<div>
-	<p class="text1"> <img src="{{ url_for('static', filename='images/mycar1.jpg') }}" align="absmiddle"  /> <a href="/reservations">預約單</a> </p>
-	<p class="text2"> 查看預約單 </p>
-</div>
+    <br><br />
 <hr width="100%" />
 <div>
-  <p class="text1"> <img src="{{ url_for('static', filename='images/profile.png') }}"   align="absmiddle" /> <a href="/account">用戶資訊</a> </p>
-  <p class="text2"> 檢視用戶資訊 </p>
+  <p class="text1"> <img src="{{ url_for('static', filename='images/user.png') }}"  width="30"   align="absmiddle" /> <a href="/account"><input type="button" value="用戶資訊" name="用戶資訊" style="position:relative; left:10px; top: 0px;width:150px;height:50px;font-size:20px;"></a> </p>
 </div>
+    <br><br />
 {% endblock %}

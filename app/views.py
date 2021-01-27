@@ -1,5 +1,6 @@
 from flask import Flask, request, session, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 from app.forms import CustomerRegForm, LoginForm, MessageForm
 from app.models import Users, Items, Orders, ItemsHist, Comments
 import config
@@ -92,15 +93,26 @@ def other_account():
     acn = db.session.query(Users).filter_by(user_id=user_id).first()
     return render_template('account.html', acn=acn)
 
-# 顯示借用物品列表
 @app.route('/list')
 def show_items_list():
     if 'customer' not in session.keys():
         flash('您還沒有登入哦！')
         return redirect(url_for('login'))
     items_list = db.session.query(Items).all()
+    popular = db.session.query( ItemsHist.user_id , func.count('*').label('times') ).group_by( ItemsHist.user_id ).order_by(func.count('*').desc())
+    item_popu = (db.session.query(Items.name, Items.description, func.count(ItemsHist.item_id).label('times'))
+                                .join(ItemsHist, Items.item_id == ItemsHist.item_id)
+                                .group_by(ItemsHist.item_id)).order_by(func.count(ItemsHist.item_id).desc())
+    return render_template('items_list.html', list=items_list, popular=popular, item_popu=item_popu)
 
-    return render_template('items_list.html', list=items_list, user_id=session['customer']['id'])
+# 顯示歷史借用物品列表
+@app.route('/record_history')
+def show_items_list_hist():
+    if 'customer' not in session.keys():
+        flash('您還沒有登入哦！')
+        return redirect(url_for('login'))
+    items_list = db.session.query(ItemsHist.borrow_date, ItemsHist.return_date, Items.item_id, Items.name).filter_by(user_id=session['customer']['id']).join(Items,Items.item_id == ItemsHist.item_id, isouter=True).all()
+    return render_template('record_hist.html', list=items_list)
 
 # 顯示借用物品詳細資訊
 @app.route('/detail')
@@ -295,7 +307,6 @@ def submit_reservations():
         data_list.append(itemshist)
         # 更新物品資訊為已預約
         db.session.query(Items).filter_by(item_id=item_id).update(dict(reserve_user_id=session['customer']['id'],
-                                                                       reserve_date=datetime.today().strftime('%Y-%m-%d'),
                                                                        reserve_status='已預約'))
     db.session.add_all(data_list)
     db.session.commit()
