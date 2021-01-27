@@ -127,7 +127,7 @@ def show_items_detail():
     
     # 刷留言區
     if request.method == 'GET':
-        result = db.session.query(Comments).filter_by(item_id=item_id).all()
+        result = db.session.query(Comments).filter_by(item_id=item_id).order_by(Comments.comment_date.desc()).all()
         return render_template("items_detail.html", result=result, item=item)
     else:
         data = []
