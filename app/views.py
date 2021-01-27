@@ -117,16 +117,22 @@ def show_items_list_hist():
     return render_template('record_hist.html', list=items_list)
 
 # 顯示借用物品詳細資訊
-@app.route('/detail')
+@app.route('/detail', methods=['GET', 'POST'])
 def show_items_detail():
     if 'customer' not in session.keys():
         flash('您還沒有登入哦！')
         return redirect(url_for('login'))
+    
+    # 物品資訊
     item_id = request.args['item_id']
     item = db.session.query(Items).filter_by(item_id=item_id).first()
+    
     # 刷留言區
-    form = MessageForm()
-    if form.validate_on_submit():
+    if request.method == 'GET':
+        result = db.session.query(Comments).filter_by(item_id=item_id).order_by(Comments.comment_date.desc()).all()
+        return render_template("items_detail.html", result=result, item=item)
+    else:
+        data = []
         ## 初始化 Comments 對象
         comments = Comments() 
         ## 創立單據號碼
@@ -135,14 +141,14 @@ def show_items_detail():
         comments.item_id = item_id
         comments.user_id = session['customer']['id']
         comments.content = request.form["content"]
-        comments.comment_date = d
+        comments.comment_date = d.strftime('%Y-%m-%d')
         flash('留言成功')
-        redirect('/detail')
-    messages = db.session.query(Comments).order_by(Comments.comment_date.desc()).all()
-    return render_template('items_detail.html', 
-                           item=item,
-                           user_id=session['customer']['id'],
-                           form=form, messages=messages)
+        data.append(comments)
+        db.session.add_all(data)
+        db.session.commit()
+        result = db.session.query(Comments).filter_by(item_id=item_id).order_by(Comments.comment_date.desc()).all()
+        return render_template("items_detail.html", result=result, item=item)
+
 # 單據管理頁面
 @app.route('/order_list')
 def show_order_list():
@@ -263,14 +269,15 @@ def reservations():
                     join(ItemsHist, ItemsHist.item_id==Items.item_id)
     # 本次您想預約清單
     if 'reservations' not in session.keys():
-        return render_template('reservations.html', list=[])
-    item_ids = session['reservations']
-    data_list2 = []
-    for item_id in item_ids:
-        items = db.session.query(Items).filter_by(item_id=item_id).first()
-        data_list2.append([items.item_id, items.name, items.booking_status, items.expected_date])
-    
-    return render_template('reservations.html', data_list1=data_list1, data_list2=data_list2)
+        return render_template('reservations.html', data_list1=data_list1, data_list2=[])
+    else:
+        item_ids = session['reservations']
+        data_list2 = []
+        for item_id in item_ids:
+            items = db.session.query(Items).filter_by(item_id=item_id).first()
+            data_list2.append([items.item_id, items.name, items.booking_status, items.expected_date])
+        
+        return render_template('reservations.html', data_list1=data_list1, data_list2=data_list2)
     
 @app.route('/submit_reservations', methods=['POST'])
 def submit_reservations():
@@ -403,3 +410,4 @@ def submit_borrows():
         session.pop('borrows', None)
         return render_template('borrows_ok.html', order_id=order_id)
     
+
