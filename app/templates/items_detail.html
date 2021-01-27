@@ -27,6 +27,33 @@
                      width="85%"
                      height="85%"/>
             </div>
+            <div class="container">
+                <form method="post" action="/detail?item_id={{ item.item_id }}">
+                  <div class="form-group">
+                    <label>我的留言</label>
+                    <textarea name="content" rows="1"  cols="32" style="line-height: 12px;"></textarea>
+                    <button type="submit" class="btn btn-default"
+                            style="background-color:#f3b2518f; font-size:16px;
+                                   font-weight:bold; color:#4e1f00;
+                                   font-family:'Microsoft JhengHei';">送出</button>
+                  </div>
+                </form>
+            </div>
+            <table width="85%" border="0" align="right">
+                <tr bgcolor="#F0F0F0">
+                    <th width="10%" style="font-size:12px;">借用人</th>
+                    <th width="70%" style="font-size:12px;">留言內容</th>
+                    <th width="15%" style="font-size:12px;">留言日期</th>
+                </tr>
+            {% for com in result %}
+                <tr bgcolor={{ loop.cycle('#ffffff', '#FCFCFC') }}>
+                    <td class="col" style="font-size:12px;"> {{ com.user_id}} </td>
+                    <td class="col" style="font-size:12px;"> {{ com.content}} </td>
+                    <td class="col" style="font-size:12px;"> {{ com.comment_date}} </td>
+                </tr>
+            {% endfor %}
+            </table>
+        </td>
         <td width="10%"></td>
         <td width="50%" align="left">
             <table width="90%" height="100%">
@@ -58,7 +85,7 @@
                     <td class="col">逾期罰金(天)：</td>
                     <td class="col">{{ item.fine }}</td>
                 </tr>
-                <tr>
+                <tr bgcolor="#edf8ff">
                     <td class="col">目前借用人：</td>
                     <td class="col"><a href="/other_account?user_id={{ item.borrow_user_id }}"> {{ item.borrow_user_id }} </a></td>
                 </tr>
@@ -66,7 +93,7 @@
                     <td class="col">目前預約人：</td>
                     <td class="col"><a href="/other_account?user_id={{ item.reserve_user_id }}"> {{ item.reserve_user_id }} </a></td>
                 </tr>
-                <tr>
+                <tr bgcolor="#edf8ff">
                     <td class="col">借用狀態：</td>
                     <td class="col">{{ item.booking_status }}</td>
                 </tr>
@@ -106,19 +133,5 @@
         </td>        
     </tr>
 </table>
-<body>
-    <div class="container">
-      <form method="post" action="/posts">
-        <div class="form-group">
-          <label for="author">作者</label>
-          <input name="author" class="form-control" id="author" placeholder="author">
-        </div>
-        <div class="form-group">
-          <label >內容</label>
-          <textarea name="content"></textarea>
-        </div>
-        <button type="submit" class="btn btn-default">送出</button>
-      </form>
-    </div>
-  </body>
+
 {% endblock %}
