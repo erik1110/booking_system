@@ -211,7 +211,7 @@ def submit_returns():
     returns_list = request.form.getlist('check')
     # 創立單據號碼
     d = datetime.today().strftime('%Y-%m-%d')
-    order_id = 'RET' + str(d.strftime('%Y%m%d%H%M%S'))
+    order_id = 'RET' + str(datetime.today().strftime('%Y%m%d%H%M%S'))
     orders.order_id = order_id
     orders.order_type = 'return'
     orders.user_id = session['customer']['id']
