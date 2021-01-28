@@ -105,7 +105,7 @@ def show_items_list():
     item_popu = (db.session.query(Items.name, Items.description, func.count(ItemsHist.item_id).label('times'))
                                 .join(ItemsHist, Items.item_id == ItemsHist.item_id)
                                 .group_by(ItemsHist.item_id)).order_by(func.count(ItemsHist.item_id).desc())
-    return render_template('items_list.html', list=items_list, popular=popular, item_popu=item_popu)
+    return render_template('items_list.html', list=items_list, popular=popular, item_popu=item_popu, user_id=session['customer']['id'])
 
 # 顯示歷史借用物品列表
 @app.route('/record_history')
@@ -113,7 +113,12 @@ def show_items_list_hist():
     if 'customer' not in session.keys():
         flash('您還沒有登入哦！')
         return redirect(url_for('login'))
-    items_list = db.session.query(ItemsHist.borrow_date, ItemsHist.return_date, Items.item_id, Items.name).filter_by(user_id=session['customer']['id']).join(Items,Items.item_id == ItemsHist.item_id, isouter=True).all()
+    items_list = db.session.query(ItemsHist.borrow_date, \
+                                  ItemsHist.return_date, \
+                                  Items.item_id, \
+                                  Items.name). \
+                                  filter_by(user_id=session['customer']['id']). \
+                                  join(ItemsHist, Items.item_id == ItemsHist.item_id).all()
     return render_template('record_hist.html', list=items_list)
 
 # 顯示借用物品詳細資訊
@@ -205,19 +210,19 @@ def submit_returns():
     # 從前端拉回資訊
     returns_list = request.form.getlist('check')
     # 創立單據號碼
-    d = datetime.today()
+    d = datetime.today().strftime('%Y-%m-%d')
     order_id = 'RET' + str(d.strftime('%Y%m%d%H%M%S'))
     orders.order_id = order_id
     orders.order_type = 'return'
     orders.user_id = session['customer']['id']
     orders.total = len(returns_list)
-    orders.order_date = d.strftime('%Y-%m-%d')
+    orders.order_date = d
     db.session.add(orders)
     # 更新資訊
     for hist_id in returns_list:
         # 更新 ItemsHist 新增資訊
         db.session.query(ItemsHist).filter_by(hist_id=hist_id).update(dict(
-                                                               return_date=datetime.today(),
+                                                               return_date=d,
                                                                return_order_id=order_id,
                                                                order_status='return'))
         item_id = db.session.query(ItemsHist).filter_by(hist_id=hist_id).first().item_id                  
@@ -310,7 +315,13 @@ def submit_reservations():
         itemshist.hist_id = 'HIST' + str(d.strftime('%Y%m%d%H%M%S')) + str(n)
         itemshist.item_id = item_id
         itemshist.user_id = session['customer']['id']
-        itemshist.reserve_date = datetime.today()
+        itemshist.borrow_date = ''
+        itemshist.expected_date = ''
+        itemshist.return_date = ''
+        itemshist.reserve_date = d
+        itemshist.borrow_order_id = ''
+        itemshist.return_order_id = ''
+        itemshist.cancel_order_id = ''
         itemshist.reserve_order_id = order_id
         itemshist.order_status = 'reserve'
         data_list.append(itemshist)
@@ -398,6 +409,11 @@ def submit_borrows():
             itemshist.expected_date = (d + relativedelta(days=num_day)).strftime('%Y-%m-%d')
             itemshist.borrow_order_id = order_id
             itemshist.order_status = 'borrow'
+            itemshist.return_date = ''
+            itemshist.reserve_date = ''
+            itemshist.return_order_id = ''
+            itemshist.reserve_order_id = ''
+            itemshist.cancel_order_id = ''
             data.append(itemshist)
             # 更新物品狀態為已借用
             db.session.query(Items).filter_by(item_id=int(item)).update(dict(borrow_user_id=itemshist.user_id,
