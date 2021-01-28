@@ -24,15 +24,21 @@
     <tr bgcolor="#b4c8ed">
         <th width="10%">物品編號</th>
 		<th width="10%">物品名稱</th>
+		<th width="10%">種類</th>
 		<th width="10%">借用日</th>
-        <th width="10%">歸還日</th>
+		<th width="10%">到期日</th>
+		<th width="10%">歸還日</th>
+		<th width="10%">預約日</th>
     </tr>
   {% for item in list %}
     <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
 		<td class="col"><a href="/detail?item_id={{ item.item_id }}">{{ item.item_id }}</a></td>
 		<td class="col"><a href="/detail?item_id={{ item.item_id }}">{{ item.name }}</td>
+		<td class="col"> {{ item.order_status}} </td>
 		<td class="col"> {{ item.borrow_date}} </td>
+		<td class="col"> {{ item.expected_date}} </td>
 		<td class="col"> {{ item.return_date}} </td>
+		<td class="col"> {{ item.reserve_date}} </td>
 	</tr>
   {% endfor %}
 </table>
