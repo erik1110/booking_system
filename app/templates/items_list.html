@@ -161,7 +161,7 @@
 			{% endif %}
 		</td>
 		<td class="col" >
-			{% if item.reserve_status =='未預約' and item.booking_status=='已預約'%}
+			{% if item.reserve_status =='未預約' and item.booking_status=='已借出' and item.borrow_user_id!=user_id%}
 			<a href="/add_reservation?item_id={{ item.item_id }}">
 				<input type="button" value="我要預約"
                         style="background-color:#1b3cfa;

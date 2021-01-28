@@ -105,7 +105,7 @@ def show_items_list():
     item_popu = (db.session.query(Items.name, Items.description, func.count(ItemsHist.item_id).label('times'))
                                 .join(ItemsHist, Items.item_id == ItemsHist.item_id)
                                 .group_by(ItemsHist.item_id)).order_by(func.count(ItemsHist.item_id).desc())
-    return render_template('items_list.html', list=items_list, popular=popular, item_popu=item_popu)
+    return render_template('items_list.html', list=items_list, popular=popular, item_popu=item_popu, user_id=session['customer']['id'])
 
 # 顯示歷史借用物品列表
 @app.route('/record_history')
