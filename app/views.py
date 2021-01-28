@@ -31,13 +31,10 @@ def register():
             new_customer.address = form.address.data
             new_customer.birthday = form.birthday.data
             new_customer.phone = form.phone.data
-
             db.session.add(new_customer)
             db.session.commit()
-
             print('註冊成功')
             return render_template('customer_reg_success.html', form=form)
-
     return render_template('customer_reg.html', form=form)
 
 # 登入頁面
@@ -59,12 +56,17 @@ def login():
                 customer['birthday'] = c.birthday
                 # customer保持到HTTP Session
                 session['customer'] = customer
-
                 return redirect(url_for('main'))
             else:
                 flash('您輸入的帳號密碼有錯！')
                 return render_template('login.html', form=form)
     return render_template('login.html', form=form)
+
+# 登出
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
 
 # 主頁面
 @app.route('/main')
@@ -103,7 +105,7 @@ def show_items_list():
     item_popu = (db.session.query(Items.name, Items.description, func.count(ItemsHist.item_id).label('times'))
                                 .join(ItemsHist, Items.item_id == ItemsHist.item_id)
                                 .group_by(ItemsHist.item_id)).order_by(func.count(ItemsHist.item_id).desc())
-    return render_template('items_list.html', list=items_list, popular=popular, item_popu=item_popu)
+    return render_template('items_list.html', list=items_list, popular=popular, item_popu=item_popu, user_id=session['customer']['id'])
 
 # 顯示歷史借用物品列表
 @app.route('/record_history')
@@ -111,20 +113,31 @@ def show_items_list_hist():
     if 'customer' not in session.keys():
         flash('您還沒有登入哦！')
         return redirect(url_for('login'))
-    items_list = db.session.query(ItemsHist.borrow_date, ItemsHist.return_date, Items.item_id, Items.name).filter_by(user_id=session['customer']['id']).join(Items,Items.item_id == ItemsHist.item_id, isouter=True).all()
+    items_list = db.session.query(ItemsHist.borrow_date, \
+                                  ItemsHist.return_date, \
+                                  Items.item_id, \
+                                  Items.name). \
+                                  filter_by(user_id=session['customer']['id']). \
+                                  join(ItemsHist, Items.item_id == ItemsHist.item_id).all()
     return render_template('record_hist.html', list=items_list)
 
 # 顯示借用物品詳細資訊
-@app.route('/detail')
+@app.route('/detail', methods=['GET', 'POST'])
 def show_items_detail():
     if 'customer' not in session.keys():
         flash('您還沒有登入哦！')
         return redirect(url_for('login'))
+    
+    # 物品資訊
     item_id = request.args['item_id']
     item = db.session.query(Items).filter_by(item_id=item_id).first()
+    
     # 刷留言區
-    form = MessageForm()
-    if form.validate_on_submit():
+    if request.method == 'GET':
+        result = db.session.query(Comments).filter_by(item_id=item_id).order_by(Comments.comment_date.desc()).all()
+        return render_template("items_detail.html", result=result, item=item)
+    else:
+        data = []
         ## 初始化 Comments 對象
         comments = Comments() 
         ## 創立單據號碼
@@ -133,14 +146,14 @@ def show_items_detail():
         comments.item_id = item_id
         comments.user_id = session['customer']['id']
         comments.content = request.form["content"]
-        comments.comment_date = d
+        comments.comment_date = d.strftime('%Y-%m-%d')
         flash('留言成功')
-        redirect('/detail')
-    messages = db.session.query(Comments).order_by(Comments.comment_date.desc()).all()
-    return render_template('items_detail.html', 
-                           item=item,
-                           user_id=session['customer']['id'],
-                           form=form, messages=messages)
+        data.append(comments)
+        db.session.add_all(data)
+        db.session.commit()
+        result = db.session.query(Comments).filter_by(item_id=item_id).order_by(Comments.comment_date.desc()).all()
+        return render_template("items_detail.html", result=result, item=item)
+
 # 單據管理頁面
 @app.route('/order_list')
 def show_order_list():
@@ -197,19 +210,19 @@ def submit_returns():
     # 從前端拉回資訊
     returns_list = request.form.getlist('check')
     # 創立單據號碼
-    d = datetime.today()
+    d = datetime.today().strftime('%Y-%m-%d')
     order_id = 'RET' + str(d.strftime('%Y%m%d%H%M%S'))
     orders.order_id = order_id
     orders.order_type = 'return'
     orders.user_id = session['customer']['id']
     orders.total = len(returns_list)
-    orders.order_date = d.strftime('%Y-%m-%d')
+    orders.order_date = d
     db.session.add(orders)
     # 更新資訊
     for hist_id in returns_list:
         # 更新 ItemsHist 新增資訊
         db.session.query(ItemsHist).filter_by(hist_id=hist_id).update(dict(
-                                                               return_date=datetime.today(),
+                                                               return_date=d,
                                                                return_order_id=order_id,
                                                                order_status='return'))
         item_id = db.session.query(ItemsHist).filter_by(hist_id=hist_id).first().item_id                  
@@ -261,14 +274,15 @@ def reservations():
                     join(ItemsHist, ItemsHist.item_id==Items.item_id)
     # 本次您想預約清單
     if 'reservations' not in session.keys():
-        return render_template('reservations.html', list=[])
-    item_ids = session['reservations']
-    data_list2 = []
-    for item_id in item_ids:
-        items = db.session.query(Items).filter_by(item_id=item_id).first()
-        data_list2.append([items.item_id, items.name, items.booking_status, items.expected_date])
-    
-    return render_template('reservations.html', data_list1=data_list1, data_list2=data_list2)
+        return render_template('reservations.html', data_list1=data_list1, data_list2=[])
+    else:
+        item_ids = session['reservations']
+        data_list2 = []
+        for item_id in item_ids:
+            items = db.session.query(Items).filter_by(item_id=item_id).first()
+            data_list2.append([items.item_id, items.name, items.booking_status, items.expected_date])
+        
+        return render_template('reservations.html', data_list1=data_list1, data_list2=data_list2)
     
 @app.route('/submit_reservations', methods=['POST'])
 def submit_reservations():
@@ -301,7 +315,13 @@ def submit_reservations():
         itemshist.hist_id = 'HIST' + str(d.strftime('%Y%m%d%H%M%S')) + str(n)
         itemshist.item_id = item_id
         itemshist.user_id = session['customer']['id']
-        itemshist.reserve_date = datetime.today()
+        itemshist.borrow_date = ''
+        itemshist.expected_date = ''
+        itemshist.return_date = ''
+        itemshist.reserve_date = d
+        itemshist.borrow_order_id = ''
+        itemshist.return_order_id = ''
+        itemshist.cancel_order_id = ''
         itemshist.reserve_order_id = order_id
         itemshist.order_status = 'reserve'
         data_list.append(itemshist)
@@ -389,6 +409,11 @@ def submit_borrows():
             itemshist.expected_date = (d + relativedelta(days=num_day)).strftime('%Y-%m-%d')
             itemshist.borrow_order_id = order_id
             itemshist.order_status = 'borrow'
+            itemshist.return_date = ''
+            itemshist.reserve_date = ''
+            itemshist.return_order_id = ''
+            itemshist.reserve_order_id = ''
+            itemshist.cancel_order_id = ''
             data.append(itemshist)
             # 更新物品狀態為已借用
             db.session.query(Items).filter_by(item_id=int(item)).update(dict(borrow_user_id=itemshist.user_id,
@@ -401,3 +426,4 @@ def submit_borrows():
         session.pop('borrows', None)
         return render_template('borrows_ok.html', order_id=order_id)
     
+

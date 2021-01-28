@@ -85,6 +85,47 @@
 
 
 <hr width="100%"/>
+<table width="90%" border="0" align="center">
+	<td>
+		<table class="popu" width="50%" border="0" align="center" style="display:inline">
+		<br>
+		<caption class="text3">工具人排行榜 </caption>
+		<thead>
+		<tr>
+			<th >工具人</th>        
+			<th >借用次數</th>
+		</tr>
+		</thead>
+		{% for pop in popular %}
+		<tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
+			<td align="center"> {{ pop.user_id}} </td>
+			<td align="center"> {{ pop.times}} </td>
+		</tr>
+		{% endfor %}
+		</table>
+	</td>
+	<td>
+		<table class="popu" width="100%" border="0" align="center" style="display:inline">
+		<br>
+		<caption class="text3">借用物品排行榜 </caption>
+		<thead>
+		<tr>
+			<th>物品</th>
+			<th>描述</th>
+			<th>借用次數</th>
+		</tr>
+		</thead>
+		{% for i_pop in item_popu %}
+		<tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
+			<td align="center"> {{ i_pop.name}} </td>
+			<td align="center"> {{ i_pop.description}} </td>
+			<td align="center"> {{ i_pop.times}} </td>
+		</tr>
+		{% endfor %}
+		</table>
+	</td>
+</table>
+<hr width="100%"/>
 <div class="text3" align="center">請選擇借用的物品</div>
 <br>
 <table width="90%" border="0" align="center">
@@ -120,7 +161,7 @@
 			{% endif %}
 		</td>
 		<td class="col" >
-			{% if item.reserve_status =='未預約' %}
+			{% if item.reserve_status =='未預約' and item.booking_status=='已借出' and item.borrow_user_id!=user_id%}
 			<a href="/add_reservation?item_id={{ item.item_id }}">
 				<input type="button" value="我要預約"
                         style="background-color:#1b3cfa;
@@ -138,38 +179,5 @@
   {% endfor %}
     </table>
 <hr width="100%"/>
-    <table class="popu" width="15%" border="0" align="center">
-    <caption class="text3">工具人排行榜 </caption>
-    <thead>
-    <tr>
-        <th >工具人</th>        
-        <th >借用次數</th>
-    </tr>
-    </thead>
-    {% for pop in popular %}
-    <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
-        <td align="center"> {{ pop.user_id}} </td>
-        <td align="center"> {{ pop.times}} </td>
-    </tr>
-    {% endfor %}
-    <table class="popu" width="20%" border="0" align="center">
-                <br>
-    <caption class="text3">借用物品排行榜 </caption>
-    <thead>
-    <tr>
-        <th>物品</th>
-        <th>描述</th>
-        <th>借用次數</th>
-    </tr>
-    </thead>
-    {% for i_pop in item_popu %}
-    <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
-        <td align="center"> {{ i_pop.name}} </td>
-        <td align="center"> {{ i_pop.description}} </td>
-        <td align="center"> {{ i_pop.times}} </td>
-    </tr>
-    {% endfor %}
-        </table>
-</table>
 <br>
 {% endblock %}
