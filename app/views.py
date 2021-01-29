@@ -9,6 +9,12 @@ import datetime
 from datetime import date, datetime
 from dateutil.relativedelta import relativedelta
 
+import io
+import base64
+
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
+
 app = Flask(__name__)
 app.config.from_object(config)
 db = SQLAlchemy(app)
@@ -105,7 +111,8 @@ def show_items_list():
     item_popu = (db.session.query(Items.name, Items.description, func.count(ItemsHist.item_id).label('times'))
                                 .join(ItemsHist, Items.item_id == ItemsHist.item_id)
                                 .group_by(ItemsHist.item_id)).order_by(func.count(ItemsHist.item_id).desc())
-    return render_template('items_list.html', list=items_list, popular=popular[:5], item_popu=item_popu[:5], user_id=session['customer']['id'])
+    images = plotView()
+    return render_template('items_list.html', list=items_list, popular=popular[:5], item_popu=item_popu[:5], user_id=session['customer']['id'], images=images)
 
 # 顯示歷史借用物品列表
 @app.route('/record_history')
@@ -445,4 +452,28 @@ def submit_borrows():
         session.pop('borrows', None)
         return render_template('borrows_ok.html', order_id=order_id)
     
+def plotView():
 
+    stat = db.session.query(ItemsHist.borrow_date, func.count(ItemsHist.borrow_order_id)) \
+                     .group_by(ItemsHist.borrow_date) \
+                     .filter(ItemsHist.borrow_date!='').all()
+    x = [i[0] for i in stat]
+    y = [i[1] for i in stat]
+    # Generate plot
+    fig = Figure(figsize=(10,4))
+    axis = fig.add_subplot(1, 1, 1)
+    axis.set_ylim([0,max(y)+1])
+    axis.set_xlabel("borrow date")
+    axis.set_ylabel("total number of borrowings")
+    axis.grid(False)
+    axis.plot(x, y, "ro-")
+    
+    # Convert plot to PNG image
+    pngImage = io.BytesIO()
+    FigureCanvas(fig).print_png(pngImage)
+    
+    # Encode PNG image to base64 string
+    pngImageB64String = "data:image/png;base64,"
+    pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
+    
+    return pngImageB64String
