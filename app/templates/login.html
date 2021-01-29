@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}用戶登錄{% endblock %}
+{% block body %}
+
+<style type="text/css">
+	body {font-size: 16px;}
+    table {border-collapse: collapse;}
+    ul{
+    background-color: white;
+}
+</style>
+
+<!-- 顯示錯誤訊息 -->
+<ul>
+    {% for field, errors in form.errors.items() %}
+        {% for message in errors %}
+            <li class="error">{{ message }}</li>
+        {% endfor %}
+    {% endfor %}
+</ul>
+<div style="background-color: snow;">
+<form action="/login" method="post">
+    <!--CSRF令牌-->
+    {{ form.hidden_tag() }}
+    <table width="100%" align="center">
+        <tr height="40">
+            <td colspan="2" align="center"><strong>請您登錄</strong></td>
+        </tr>
+        <tr height="40">
+            <td width="50%" align="right"><img src="{{ url_for('static', filename='images/3.jpg') }}" align="absmiddle"/>&nbsp;&nbsp;用戶帳號：</td>
+            <td>{{ form.userid }}</td>
+        </tr>
+        <tr height="40">
+            <td width="50%" align="right"><img src="{{ url_for('static', filename='images/2.jpg') }}" align="absmiddle"/>&nbsp;&nbsp;用戶密碼：</td>
+            <td>{{ form.password }}</td>
+        </tr>
+        <tr height="40">
+            <td align="right">&nbsp;</td>
+            <td><input type="image" src="{{ url_for('static', filename='images/login_button.jpg') }}" onclick="document.forms[0].fn.value='login'"/>
+                &nbsp;&nbsp;&nbsp;&nbsp; <a href="/reg"><img src="{{ url_for('static', filename='images/reg_button.jpg') }}" border="0"/></a></td>
+        </tr>
+    </table>
+</form>
+</div>
+{% endblock %}

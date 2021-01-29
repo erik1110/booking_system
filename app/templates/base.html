@@ -1,0 +1,37 @@
+<!doctype html>
+<font style="font-family:arial,'Microsoft JhengHei','微軟正黑體',sans-serif !important;">
+<html>
+<head>
+<meta charset="utf-8">
+<title>{% block title %}{% endblock %}</title>
+{#  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/public.css') }}">#}
+</head>
+{#<body bgcolor="#FFFAFA">#}
+{#<body background="https://images.unsplash.com/photo-1432821596592-e2c18b78144f?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80">#}
+<body background="{{ url_for('static', filename='images/photo-background.jpeg') }}">
+{#<div class="header" style="color:#708090;padding:50px;text-align: center;font-weight:300;font-size:50px;font-family: cursive;background-image: url( 'https://images.unsplash.com/photo-1586084531072-e03cbf17afa6?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2383&q=80' );">公用物品借閱系統</div>#}
+<div class="header" style="color:#708090;padding:50px;text-align: center;font-weight:300;font-size:50px;font-family: cursive;background-image: url('static/images/photo-brand.jpeg');">公用物品借閱系統</div>
+<hr width="100%" />
+<!-- 顯示訊息 -->
+<ul>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+       {% for message in messages %}
+       <li class="error">{{ message }}</li>
+       {% endfor %}
+{% endif %}
+{% endwith %}
+</ul>
+
+<!-- 頁面内容訊息 -->
+{% block body %}
+{% endblock %}
+<div class="footer" style="color:#ffffff;text-align: center;">
+  <hr width="100%"/>
+  <a style="font-size:14px;">
+      Copyright © Flask第一組 All Rights Reserved
+  </a>
+</div>
+</body>
+</html>
+</font>

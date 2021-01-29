@@ -1,0 +1,68 @@
+{% extends "base2.html" %}
+{% block title %}借用清單{% endblock %}
+{% block body %}
+<style type="text/css">
+       table {
+            border-collapse: collapse;
+        }
+
+        .threeboder {
+            border: 1px solid #5B96D0;
+            font-size: 14px;
+        }
+
+        .trow {
+            border-right: 1px solid #5B96D0;
+            border-bottom: 1px solid #5A96D6;
+        }
+
+        .theader {
+            background-color: #A5D3FF;
+            font-size: 14px;
+            border-right: 1px solid #5B96D0;
+            border-bottom: 1px solid #5A96D6;
+            font-weight: bold;
+        }
+
+
+</style>
+
+<hr width="100%"/>
+<div class="text3" align="center">借用清單</div>
+<br>
+
+<form action="/submit_borrows" method="post">
+    <table width="90%" border="0" align="center" class="threeboder">
+        <tr bgcolor="#A5D3FF">
+            <td width="20%" align="center" class="theader">物品代碼</td>
+            <td width="20%" align="center" class="theader">物品名稱</td>
+            <td width="20%" align="center" class="theader">可借用天數</td>
+            <td width="20%" align="center" class="theader">借用</td>            
+        </tr>  
+      {% for item in list %}
+        <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
+            <td align="center"> {{ item[0]}} </td>
+            <td align="center"> {{ item[1]}} </td>
+            <td align="center"> {{ item[2]}} </td>
+            <td align="center">
+                <input type="checkbox" name="check" value={{ item[0] }}>
+            </td>
+        </tr>
+      {% endfor %}
+    </table>
+    <br>
+
+    {% if list|length > 0 %}
+    <div align="center">
+    <input type="submit" value="提交"
+           style="background-color:#FAD7A0;
+                  height: 25px;
+                  font-size:16px;
+                  font-weight:bold;
+                  color:#6E2C00;
+                  font-family:arial,'Microsoft JhengHei','微軟正黑體',sans-serif !important;" >
+    </div>
+    {% endif %}
+    <br>
+</form>
+{% endblock %}

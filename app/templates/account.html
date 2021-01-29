@@ -1,0 +1,57 @@
+{% extends "base2.html" %}
+{% block title %}用戶資訊{% endblock %}
+{% block body %}
+
+<style type="text/css">
+	body {font-size: 16px;}
+	table {border-collapse: collapse;}
+	/*用戶列表第1列*/
+	.col {
+		padding-top: 5px;
+		border-top: 1px dashed #666666;
+        text-align: center;
+	}	
+</style>
+
+<hr width="100%"/>
+<table width="100%" border="0" align="center">
+    <tr>
+        <td width="40%" align="right">
+            <div>
+                <img src="/static/images/user_pic.png"
+                     width="90%"
+                     height="100%"/>
+            </div>
+        <td width="10%"></td>
+        <td width="50%" align="left">
+            <table width="90%" height="100%">
+            <tbody>
+                <tr bgcolor="#b4c8ed">
+                    <td class='col' colspan="2"><b>用戶資訊</b></td>
+                </tr>
+                <tr bgcolor="#edf8ff">
+                    <td class='col'>員工編號：</td>
+                    <td class='col'>{{ acn.user_id }}</td>
+                </tr>
+                <tr>
+                    <td class='col'>姓名：</td>
+                    <td class='col'>{{ acn.name }}</td>
+                </tr>
+                <tr bgcolor="#edf8ff">
+                    <td class='col'>位置：</td>
+                    <td class='col'>{{ acn.address }}</td>
+                </tr>
+                <tr>
+                    <td class='col'>電話：</td>
+                    <td class='col'>{{ acn.phone }}</td>
+                </tr>
+                <tr bgcolor="#edf8ff">
+                    <td class='col'>生日：</td>
+                    <td class='col'>{{ acn.birthday }}</td>
+                </tr>
+            </tbody>
+            </table>
+        </td>
+    </tr>
+</table>
+{% endblock %}

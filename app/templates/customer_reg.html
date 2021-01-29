@@ -1,0 +1,96 @@
+{% extends "base2.html" %}
+{% block title %}用戶註冊{% endblock %}
+{% block body %}
+
+<style type="text/css">
+        table {
+            border-collapse: collapse;
+        }
+
+        .boder {
+            border: 1px solid #5B96D0;
+        }
+
+        .col1 {
+            background-color: #A6D2FF;
+            text-align: right;
+            padding-right: 10px;
+            border: 1px solid #5B96D0;
+            line-height: 50px;
+        }
+
+        .col2 {
+            padding-left: 10px;
+            border: 1px solid #5B96D0;
+            line-height: 50px;
+        }
+
+        .textfield {
+            height: 20px;
+            width: 200px;
+            border: 1px solid #999999;
+            text-align: left;
+            font-size: medium;
+            line-height: 50px;
+        }
+
+
+</style>
+
+<!-- <div><img src="{{ url_for('static', filename='images/reg.jpg') }}" align="absmiddle"/></div> -->
+<div><img src="{{ url_for('static', filename='images/register.jpg') }}" align="absmiddle" width="5%" height="5%"></div>
+
+<br>
+<hr width="100%"/>
+<!-- 顯示登入錯誤訊息 -->
+<ul>
+    {% for field, errors in form.errors.items() %}
+        {% for message in errors %}
+            <li class="error">{{ message }}</li>
+        {% endfor %}
+    {% endfor %}
+</ul>
+
+<div class="text3" align="center">請填寫以下資訊</div>
+<br>
+<form action="/reg" method="POST">
+    <!--CSRF令牌-->
+    {{ form.hidden_tag() }}
+    <table width="60%" border="0" align="center" class="boder">
+        <tr>
+            <td width="35%" height="27" class="col1">用戶帳號：</td>
+            <td class="col2">{{ form.userid }}*</td>
+        </tr>
+        <tr>
+            <td height="27" class="col1">用戶姓名：</td>
+            <td class="col2">{{ form.name }}*</td>
+        </tr>
+        <tr>
+            <td height="27" class="col1">用戶密碼：</td>
+            <td class="col2">{{ form.password }}*</td>
+        </tr>
+        <tr>
+            <td height="27" class="col1">再次輸入密碼：</td>
+            <td class="col2">{{ form.password2 }}*</td>
+        </tr>
+        <tr>
+            <td height="27" class="col1">出生日期：</td>
+            <td class="col2">{{ form.birthday }}*
+                格式（YYYY-MM-DD）
+            </td>
+        </tr>
+        <tr>
+            <td height="27" class="col1">通訊地址：</td>
+            <td class="col2">{{ form.address }}</td>
+        </tr>
+        <tr>
+            <td height="27" class="col1">電話號碼：</td>
+            <td class="col2">{{ form.phone }}</td>
+        </tr>
+    </table>
+    <br>
+    <div align="center">
+        <input type="image" src="{{ url_for('static', filename='images/submit_button.jpg') }}"/>
+    </div>
+</form>
+{% endblock %}

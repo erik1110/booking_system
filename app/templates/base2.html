@@ -1,0 +1,52 @@
+<!doctype html>
+<font style="font-family:arial,'Microsoft JhengHei','微軟正黑體',sans-serif !important;">
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/public.css') }}">
+</head>
+<div class="header" style="background-image: url('static/images/photo-brand.jpeg');">
+<table width="100%" border="0" align="center">
+    <tr>
+        {% include 'items_header.html' %}
+    </tr>
+</table>
+<p align="right" style="font-size:14px;margin-right:10px">今天日期 {{ now }}</p>
+</div>
+{#<body background="{{ url_for('static', filename='images/photo-background.jpeg') }}">#}
+<body>
+<!-- 顯示訊息 -->
+{% with messages = get_flashed_messages() %}
+ {% if messages %}
+    <ul>
+       {% for message in messages %}
+       <li class="success">{{ message }}</li>
+       {% endfor %}
+    </ul>
+ {% endif %}
+{% endwith %}
+
+<!--頁面内容訊息-->
+{% block body %}{% endblock %}
+
+<hr width="100%" />
+<div align="center">
+    <a href="/main" style=";
+                  height: 25px;
+                  font-size: 20px;
+                  font-weight: bold;
+                  color: #6E2C00;
+                  font-family:arial,'Microsoft JhengHei','微軟正黑體',sans-serif !important;">
+        返回主頁面
+    </a>
+</div>
+<div class="footer">
+    <hr width="100%"/>
+    <a style="font-size:14px;">
+        Copyright © Flask第一組 All Rights Reserved
+    </a>
+</div>
+</body>
+</html>
+</font>

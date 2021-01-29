@@ -1,0 +1,137 @@
+{% extends "base2.html" %}
+{% block title %}借用物品詳細資訊{% endblock %}
+{% block body %}
+
+<style type="text/css">
+	body {font-size: 16px;}
+	table {border-collapse: collapse;}
+	/*用戶列表第1列*/
+	.col {
+		padding-top: 5px;
+		border-top: 1px dashed #666666;
+        text-align: center;
+	}	
+</style>
+
+<div align="right">
+    <a href="/list"  style="color:#e41212;font-weight: bold">
+        >> 返回 [借用物品列表]
+    </a>
+</div>
+<hr width="100%"/>
+<table width="100%" border="0" align="center">
+    <tr>
+        <td width="40%" align="right">
+            <div>
+                <img src="{{ url_for('static', filename='images/') }}{{ item.image }}"
+                     width="85%"
+                     height="85%"/>
+            </div>
+            <div class="container">
+                <form method="post" action="/detail?item_id={{ item.item_id }}">
+                  <div class="form-group">
+                    <label>我的留言</label>
+                    <textarea name="content" rows="1"  cols="32" style="line-height: 12px;"></textarea>
+                    <button type="submit" class="btn btn-default"
+                            style="background-color:#f3b2518f; font-size:16px;
+                                   font-weight:bold; color:#4e1f00;
+                                   font-family:'Microsoft JhengHei';">送出</button>
+                  </div>
+                </form>
+            </div>
+            <table width="85%" border="0" align="right">
+                <tr bgcolor="#F0F0F0">
+                    <th width="10%" style="font-size:12px;">留言者</th>
+                    <th width="70%" style="font-size:12px;">留言內容</th>
+                    <th width="15%" style="font-size:12px;">留言日期</th>
+                </tr>
+            {% for com in result %}
+                <tr bgcolor={{ loop.cycle('#ffffff', '#FCFCFC') }}>
+                    <td class="col" style="font-size:12px;"> {{ com.user_id}} </td>
+                    <td class="col" style="font-size:12px;"> {{ com.content}} </td>
+                    <td class="col" style="font-size:12px;"> {{ com.comment_date}} </td>
+                </tr>
+            {% endfor %}
+            </table>
+        </td>
+        <td width="10%"></td>
+        <td width="50%" align="left">
+            <table width="90%" height="100%">
+            <tbody>
+                <tr bgcolor="#b4c8ed">
+                    <td class='col' colspan="2"><b>物品詳細資訊</b></td>
+                </tr>
+                <tr bgcolor="#edf8ff">
+                    <td class="col">類型：</td>
+                    <td class="col">{{ item.name }}</td>
+                </tr>
+                <tr>
+                    <td class="col">描述：</td>
+                    <td class="col">{{ item.description }}</td>
+                </tr>
+                <tr bgcolor="#edf8ff">
+                    <td class="col">位置：</td>
+                    <td class="col">{{ item.location }}</td>
+                </tr>
+                <tr>
+                    <td class="col">價格：</td>
+                    <td class="col">{{ item.price }}</td>
+                </tr>
+                <tr bgcolor="#edf8ff">
+                    <td class="col">可借天數：</td>
+                    <td class="col">{{ item.available_day }}</td>
+                </tr>
+                <tr>
+                    <td class="col">逾期罰金(天)：</td>
+                    <td class="col">{{ item.fine }}</td>
+                </tr>
+                <tr bgcolor="#edf8ff">
+                    <td class="col">目前借用人：</td>
+                    <td class="col"><a href="/other_account?user_id={{ item.borrow_user_id }}"> {{ item.borrow_user_id }} </a></td>
+                </tr>
+                <tr>
+                    <td class="col">目前預約人：</td>
+                    <td class="col"><a href="/other_account?user_id={{ item.reserve_user_id }}"> {{ item.reserve_user_id }} </a></td>
+                </tr>
+                <tr bgcolor="#edf8ff">
+                    <td class="col">借用狀態：</td>
+                    <td class="col">{{ item.booking_status }}</td>
+                </tr>
+                <tr>
+                    <td class="col">預約狀態：</td>
+                    <td class="col">{{ item.reserve_status }}</td>
+                </tr>
+            </tbody>
+            </table>
+            <br></br>
+            <div align="center">
+                <a href="/add?id={{ item.id }}&name={{ item.name }}&price={{ item.price }}">
+                    {% if item.booking_status =='未借出' %}
+                    <a href="/add_borrows?item_id={{ item.item_id }}">
+                        <input type="button" value="我要借用"
+                        style="background-color:#036d178f;
+                               height: 30px;
+                               font-size:18px;
+                               font-weight:bold;
+                               color:#ffffff;
+                               font-family:arial,'Microsoft JhengHei','微軟正黑體',sans-serif !important;">
+                    </a>
+                    {% endif %}
+                    {% if item.reserve_status =='未預約' and item.booking_status == '已借出' and item.borrow_user_id != user_id %}
+                    <a href="/add_reservation?item_id={{ item.item_id }}">
+                        <input type="button" value="我要預約"
+                        style="background-color:#1b3cfa;
+                               height: 30px;
+                               font-size:18px;
+                               font-weight:bold;
+                               color:#ffffff;
+                               font-family:arial,'Microsoft JhengHei','微軟正黑體',sans-serif !important;">
+                    </a>
+                    {% endif %}
+                </a>
+            </div>
+        </td>        
+    </tr>
+</table>
+
+{% endblock %}
