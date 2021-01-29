@@ -114,7 +114,10 @@ def show_items_list_hist():
         flash('您還沒有登入哦！')
         return redirect(url_for('login'))
     items_list = db.session.query(ItemsHist.borrow_date, \
+                                  ItemsHist.expected_date, \
                                   ItemsHist.return_date, \
+                                  ItemsHist.reserve_date, \
+                                  ItemsHist.order_status, \
                                   Items.item_id, \
                                   Items.name). \
                                   filter_by(user_id=session['customer']['id']). \

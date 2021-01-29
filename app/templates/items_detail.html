@@ -41,7 +41,7 @@
             </div>
             <table width="85%" border="0" align="right">
                 <tr bgcolor="#F0F0F0">
-                    <th width="10%" style="font-size:12px;">借用人</th>
+                    <th width="10%" style="font-size:12px;">留言者</th>
                     <th width="70%" style="font-size:12px;">留言內容</th>
                     <th width="15%" style="font-size:12px;">留言日期</th>
                 </tr>
@@ -118,7 +118,7 @@
                     </a>
                     {% endif %}
                     {% if item.reserve_status =='未預約' and item.booking_status == '已借出' and item.borrow_user_id != user_id %}
-                    <a href="/add_reserves?item_id={{ item.item_id }}">
+                    <a href="/add_reservation?item_id={{ item.item_id }}">
                         <input type="button" value="我要預約"
                         style="background-color:#1b3cfa;
                                height: 30px;
