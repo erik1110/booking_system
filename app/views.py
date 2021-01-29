@@ -176,13 +176,29 @@ def show_order_detail():
     order_id = request.args.get('order_id')
     order_status = request.args.get('order_status')
     if order_status == 'borrow':
-        hist_list = db.session.query(ItemsHist).filter_by(borrow_order_id=order_id).all()
+        hist_list = db.session.query(ItemsHist.item_id, \
+                                     Items.name, \
+                                     ItemsHist.borrow_date, \
+                                     ItemsHist.expected_date, \
+                                     ItemsHist.return_date
+                                    ).filter_by(borrow_order_id=order_id). \
+                            join(ItemsHist, ItemsHist.item_id==Items.item_id).all()
         return render_template('order_detail_borrow.html', list=hist_list, order_id=order_id)
     elif order_status == 'return':
-        hist_list = db.session.query(ItemsHist).filter_by(return_order_id=order_id).all()
+        hist_list = db.session.query(ItemsHist.item_id, \
+                                    Items.name, \
+                                    ItemsHist.borrow_date, \
+                                    ItemsHist.expected_date, \
+                                    ItemsHist.return_date
+                            ).filter_by(return_order_id=order_id). \
+                    join(ItemsHist, ItemsHist.item_id==Items.item_id).all()
         return render_template('order_detail_return.html', list=hist_list, order_id=order_id)
     elif order_status == 'reserve':
-        hist_list = db.session.query(ItemsHist).filter_by(reserve_order_id=order_id).all()
+        hist_list = db.session.query(ItemsHist.item_id, \
+                                    Items.name, \
+                                    ItemsHist.reserve_date
+                                    ).filter_by(reserve_order_id=order_id). \
+                            join(ItemsHist, ItemsHist.item_id==Items.item_id).all()
         return render_template('order_detail_reserve.html', list=hist_list, order_id=order_id)
 
 
@@ -321,7 +337,7 @@ def submit_reservations():
         itemshist.borrow_date = ''
         itemshist.expected_date = ''
         itemshist.return_date = ''
-        itemshist.reserve_date = d
+        itemshist.reserve_date = d.strftime('%Y-%m-%d')
         itemshist.borrow_order_id = ''
         itemshist.return_order_id = ''
         itemshist.cancel_order_id = ''
