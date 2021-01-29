@@ -30,7 +30,7 @@
   {% for item in list %}
     <tr bgcolor={{ loop.cycle('#ffffff', '#edf8ff') }}>
 		<td class="col"> {{ item.item_id }} </td>
-		<td class="col"> {{ item.item_id }} </td>
+		<td class="col"> {{ item.name }} </td>
 		<td class="col"> {{ item.reserve_date}} </td>
 	</tr>
   {% endfor %}
