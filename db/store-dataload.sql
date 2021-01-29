@@ -40,8 +40,15 @@ insert into items_hist values ('HIST2021011019261617969982', '11', 'penchaq', '2
 /*==============================================================*/
 /* Table: comments  評論                                        */
 /*==============================================================*/
-insert into comments values ('COM2021010919261610939481', '1', 'dannymonkey', '鍵盤縫隙藏了好多屑屑@@', '2021-01-09');
-insert into comments values ('COM2021011019261610969181', '1', 'erik1110', '(〒︿〒)', '2021-01-10');
-insert into comments values ('COM2021011219261610969182', '10', 'penchaq', '這個是不是壞了(((ﾟДﾟ;)))', '2021-01-12');
-insert into comments values ('COM2021011219261610969982', '7', 'erik1110', '......', '2021-01-12');
-insert into comments values ('COM2021011019261617969982', '9', 'penchaq', '輪子在某個角度會有點卡卡的，班很重的物品會有點吃力', '2021-01-10');
+insert into comments values ('COM20210101118201', '1', 'gansulab', '頭香', '2021-01-01');
+insert into comments values ('COM20210102138202', '1', 'gansulab', '啊這個怎麼這麼lag 扣分', '2021-01-02');
+insert into comments values ('COM20210103118403', '1', 'kyorobert', '4樓用壞的啦', '2021-01-03');
+insert into comments values ('COM20210108788204', '1', 'dannymonkey', '這邊好熱鬧', '2021-01-08');
+insert into comments values ('COM20210109116205', '1', 'dannymonkey', '鍵盤縫隙藏了好多屑屑@@', '2021-01-09');
+insert into comments values ('COM20210110118206', '1', 'erik1110', '(〒︿〒)', '2021-01-10');
+insert into comments values ('COM20210111118407', '1', 'erik1110', '聽說5樓最近有老鼠 好可怕', '2021-01-11');
+insert into comments values ('COM20210112148208', '1', 'kyorobert', '漏水是老鼠要的嗎？', '2021-01-12');
+insert into comments values ('COM20210113118209', '1', 'dannymonkey', '放了黏鼠板也抓不到R 怎辦', '2021-01-13');
+insert into comments values ('COM20210112148210', '10', 'penchaq', '這個是不是壞了(((ﾟДﾟ;)))', '2021-01-12');
+insert into comments values ('COM20210112113311', '7', 'erik1110', '......', '2021-01-12');
+insert into comments values ('COM20210110114412', '9', 'penchaq', '輪子在某個角度會有點卡卡的，班很重的物品會有點吃力', '2021-01-10');
